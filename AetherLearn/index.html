@@ -16,122 +16,160 @@
     <header>
         <nav>
             <div class="logo">AetherLearn</div>
-            <div class="nav-links">
-                <a href="#home">Home</a>
-                <a href="#features">Features</a>
-                <a href="#testimonials">Testimonials</a>
-                <a href="#cta">Join Now</a>
-                <a href="login.html">Login</a>
-            </div>
             <div class="search-bar">
-                <input type="text" placeholder="Search for courses, playlists...">
+                <input type="text" placeholder="What do you want to learn today?">
                 <button><i class="fas fa-search"></i></button>
+            </div>
+            <div class="nav-links">
+                <a href="#courses">Courses</a>
+                <a href="#instructors">Instructors</a>
+                <a href="#about">About Us</a>
+                <a href="login.html">Login</a>
             </div>
             <button class="cta-button">Sign Up</button>
         </nav>
     </header>
 
     <main>
-        <section id="home" class="hero">
+        <section id="hero" class="hero">
             <div class="hero-content">
-                <h1>Welcome to AetherLearn</h1>
-                <p>Discover a universe of free educational resources powered by AI.</p>
-                <div class="stats-counter">
-                    <div class="stat">
-                        <span class="counter" data-target="50000">0</span>
-                        <span>Active Learners</span>
-                    </div>
-                    <div class="stat">
-                        <span class="counter" data-target="1000">0</span>
-                        <span>Courses</span>
-                    </div>
-                    <div class="stat">
-                        <span class="counter" data-target="2000000">0</span>
-                        <span>Learning Hours</span>
-                    </div>
-                </div>
+                <h1>Learn Anything, Learn Anywhere</h1>
+                <p>Free education for everyone. Discover courses in programming, design, business, and more.</p>
                 <div class="cta-wrapper">
-                    <button class="cta-button">Start Learning</button>
-                    <div class="ai-mascot">
-                        <img src="https://api.dicebear.com/6.x/bottts/svg?seed=aether" alt="AI Guide">
-                        <div class="mascot-speech">Hey! Let me guide you through your learning journey!</div>
-                    </div>
+                    <input type="text" placeholder="Search for any skill, course, or topic..." class="hero-search-input">
+                    <button class="cta-button hero-search-button">Start Learning</button>
                 </div>
             </div>
             <div id="globe-container"></div>
         </section>
 
-        <section id="features">
-            <h2>Feature Highlights</h2>
+        <section id="courses" class="courses">
+            <h2>Popular Learning Paths</h2>
+            <p>Explore our most in-demand courses across various disciplines</p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <i class="fas fa-code"></i>
+                    <h3>Programming & Development</h3>
+                    <p>Master coding with hands-on projects and real-world applications.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-palette"></i>
+                    <h3>Digital Art & Design</h3>
+                    <p>Create stunning digital artwork and design professional interfaces.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-gamepad"></i>
+                    <h3>Game Development</h3>
+                    <p>Build exciting games while learning core programming concepts.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-robot"></i>
+                    <h3>AI & Machine Learning</h3>
+                    <p>Dive into the world of artificial intelligence and data science.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="instructors" class="instructors">
+            <h2>Learn from Industry Experts</h2>
+            <p>Our instructors bring real-world experience to every lesson</p>
+            <div class="testimonial-container">
+                <div class="testimonial instructor">
+                    <img src="https://i.pravatar.cc/150?img=4" alt="Instructor Avatar" class="testimonial-avatar">
+                    <div class="instructor-info">
+                        <span class="name">Dr. Sarah Miller</span>
+                        <span class="role">AI & Machine Learning</span>
+                    </div>
+                </div>
+                <div class="testimonial instructor">
+                    <img src="https://i.pravatar.cc/150?img=5" alt="Instructor Avatar" class="testimonial-avatar">
+                    <div class="instructor-info">
+                        <span class="name">James Chen</span>
+                        <span class="role">Full-Stack Development</span>
+                    </div>
+                </div>
+                <div class="testimonial instructor">
+                    <img src="https://i.pravatar.cc/150?img=6" alt="Instructor Avatar" class="testimonial-avatar">
+                    <div class="instructor-info">
+                        <span class="name">Elena Rodriguez</span>
+                        <span class="role">Digital Art & Design</span>
+                    </div>
+                </div>
+                <div class="testimonial instructor">
+                    <img src="https://i.pravatar.cc/150?img=7" alt="Instructor Avatar" class="testimonial-avatar">
+                    <div class="instructor-info">
+                        <span class="name">Marcus Thompson</span>
+                        <span class="role">Game Development</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="about">
+            <h2>Why Choose AetherLearn?</h2>
+            <p>Empowering learners worldwide with quality education</p>
             <div class="feature-grid">
                 <div class="feature-card">
                     <i class="fas fa-brain"></i>
-                    <h3>AI Learning Assistant</h3>
-                    <p>Get personalized learning support with our advanced AI system.</p>
-                    <video class="feature-preview" autoplay loop muted playsinline>
-                        <source src="https://cdn.coverr.co/videos/coverr-typing-on-computer-1559/preview/video-preview.mp4" type="video/mp4">
-                    </video>
+                    <h3>AI-Powered Learning</h3>
+                    <p>Personalized learning paths adapted to your pace and style.</p>
                 </div>
                 <div class="feature-card">
                     <i class="fas fa-users"></i>
                     <h3>Community Learning</h3>
                     <p>Learn together with peers from around the world.</p>
-                    <video class="feature-preview" autoplay loop muted playsinline>
-                        <source src="https://cdn.coverr.co/videos/coverr-a-group-of-friends-talking-4584/preview/video-preview.mp4" type="video/mp4">
-                    </video>
                 </div>
                 <div class="feature-card">
-                    <i class="fas fa-chart-line"></i>
-                    <h3>Progress Tracking</h3>
-                    <p>Monitor your learning journey with detailed analytics.</p>
-                    <video class="feature-preview" autoplay loop muted playsinline>
-                        <source src="https://cdn.coverr.co/videos/coverr-looking-at-analytics-5028/preview/video-preview.mp4" type="video/mp4">
-                    </video>
+                    <i class="fas fa-certificate"></i>
+                    <h3>Free Certification</h3>
+                    <p>Earn certificates to showcase your achievements.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-clock"></i>
+                    <h3>Learn at Your Pace</h3>
+                    <p>Access content anytime, anywhere, on any device.</p>
                 </div>
             </div>
         </section>
 
-        <section id="testimonials">
-            <h2>What Our Learners Say</h2>
+        <section id="testimonials" class="testimonials">
+            <h2>Student Success Stories</h2>
+            <p>Hear from our global community of learners</p>
             <div class="testimonial-container">
                 <div class="testimonial">
                     <img src="https://i.pravatar.cc/150?img=1" alt="User Avatar" class="testimonial-avatar">
-                    <p>"AetherLearn transformed my learning experience. The AI assistance is incredible!"</p>
+                    <p>"AetherLearn helped me transition into tech. The AI-guided learning made it so much easier!"</p>
                     <div class="testimonial-info">
-                        <span class="name">Sarah Johnson</span>
-                        <span class="role">Data Science Student</span>
+                        <span class="name">Michael Chen</span>
+                        <span class="role">Software Engineer</span>
                     </div>
                 </div>
                 <div class="testimonial">
                     <img src="https://i.pravatar.cc/150?img=2" alt="User Avatar" class="testimonial-avatar">
-                    <p>"The community features make learning so much more engaging and fun."</p>
+                    <p>"The project-based learning approach gave me practical skills I use every day."</p>
                     <div class="testimonial-info">
-                        <span class="name">Michael Chen</span>
-                        <span class="role">Software Developer</span>
+                        <span class="name">Emma Watson</span>
+                        <span class="role">UX Designer</span>
                     </div>
                 </div>
                 <div class="testimonial">
                     <img src="https://i.pravatar.cc/150?img=3" alt="User Avatar" class="testimonial-avatar">
-                    <p>"Finally, a learning platform that adapts to my pace and style!"</p>
+                    <p>"From beginner to professional game developer in just 6 months. Amazing platform!"</p>
                     <div class="testimonial-info">
-                        <span class="name">Emily Martinez</span>
-                        <span class="role">Web Designer</span>
+                        <span class="name">Alex Thompson</span>
+                        <span class="role">Game Developer</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="cta">
+        <section id="start" class="cta">
             <div class="cta-content">
                 <h2>Start Your Learning Journey Today</h2>
-                <p>Join thousands of learners and begin your path to success.</p>
+                <p>Join millions of learners worldwide and transform your career</p>
                 <div class="cta-buttons">
-                    <button class="cta-button">Get Started</button>
-                    <button class="cta-button secondary">Explore Courses</button>
-                </div>
-                <div class="ai-mascot large">
-                    <img src="https://api.dicebear.com/6.x/bottts/svg?seed=aether" alt="AI Guide">
-                    <div class="mascot-speech">Ready to transform your learning experience?</div>
+                    <button class="cta-button">Get Started Free</button>
+                    <button class="cta-button secondary">Browse Courses</button>
                 </div>
             </div>
         </section>
@@ -141,28 +179,28 @@
         <div class="footer-content">
             <div class="footer-section">
                 <h3>About Us</h3>
-                <p>AetherLearn is a free educational platform dedicated to making learning accessible to everyone.</p>
+                <p>AetherLearn is a free educational platform dedicated to making quality education accessible to everyone.</p>
             </div>
             <div class="footer-section">
                 <h3>Quick Links</h3>
-                <a href="#home">Home</a>
-                <a href="#features">Features</a>
-                <a href="#testimonials">Testimonials</a>
-                <a href="#cta">Join Now</a>
+                <a href="#courses">Courses</a>
+                <a href="#instructors">Instructors</a>
+                <a href="#about">About Us</a>
+                <a href="#testimonials">Success Stories</a>
             </div>
             <div class="footer-section">
                 <h3>Connect With Us</h3>
                 <div class="social-icons">
-                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
                     <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
                     <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-discord"></i></a>
                 </div>
             </div>
         </div>
         <div class="footer-bottom">
             <p>&copy; 2025 AetherLearn. All rights reserved.</p>
-            <p>Made with &#10084; by Lav</p>
+            <p>Made with &#10084; by Team AetherLearn</p>
         </div>
     </footer>
 
