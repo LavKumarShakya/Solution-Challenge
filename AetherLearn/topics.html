@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="AetherLearn - Explore Learning Topics">
+    <meta name="description" content="AetherLearn - Learning Topics">
     <title>Topics - AetherLearn</title>
     
     <!-- Stylesheets -->
@@ -17,41 +17,21 @@
         <div class="loader"></div>
     </div>
 
-    <!-- Header Section -->
-    <header>
-        <nav>
-            <a href="/" class="logo">
-                <span>Aether</span>Learn
-            </a>
-            <div class="nav-links">
-                <a href="courses.html">Courses</a>
-                <a href="ai-assistant.html">AI Assistant</a>
-                <a href="topics.html" class="active">Topics</a>
-                <a href="resources.html">Resources</a>
-            </div>
-            <div class="search-bar">
-                <input type="text" placeholder="Search topics...">
-                <button><i class="fas fa-search"></i></button>
-            </div>
-            <div class="auth-buttons">
-                <a href="login.html" class="cta-button secondary">Log In</a>
-                <a href="login.html" class="cta-button">Sign Up</a>
-            </div>
-        </nav>
-    </header>
+    <!-- Navbar Placeholder -->
+    <div id="navbar-placeholder"></div>
 
     <main class="topics-page">
         <!-- Topics Overview Section -->
         <section class="topics-overview">
             <div class="section-header">
-                <h1>Explore Learning Topics</h1>
-                <p>Browse through our comprehensive collection of learning topics and start your journey</p>
+                <h1>Learning Topics</h1>
+                <p>Explore curated topics and build your knowledge</p>
             </div>
 
             <!-- Topic Categories -->
             <div class="topic-categories">
                 <button class="category-btn active" data-category="all">All Topics</button>
-                <button class="category-btn" data-category="technology">Technology</button>
+                <button class="category-btn" data-category="programming">Programming</button>
                 <button class="category-btn" data-category="design">Design</button>
                 <button class="category-btn" data-category="business">Business</button>
                 <button class="category-btn" data-category="science">Science</button>
@@ -61,24 +41,25 @@
             <!-- Topics Grid -->
             <div class="topics-grid">
                 <!-- Technology Topics -->
-                <div class="topic-card" data-category="technology">
+                <div class="topic-card" data-category="programming">
                     <div class="topic-icon">
                         <i class="fas fa-code"></i>
                     </div>
                     <div class="topic-content">
                         <h3>Web Development</h3>
-                        <p>Master frontend and backend development, build responsive websites and web applications</p>
+                        <p>Learn front-end and back-end development</p>
                         <div class="topic-stats">
-                            <span><i class="fas fa-book"></i> 50+ Courses</span>
-                            <span><i class="fas fa-users"></i> 25K+ Learners</span>
+                            <span><i class="fas fa-book"></i> 25 Courses</span>
+                            <span><i class="fas fa-user-graduate"></i> 10k+ Learners</span>
                         </div>
                         <div class="topic-skills">
-                            <span>HTML & CSS</span>
+                            <span>HTML</span>
+                            <span>CSS</span>
                             <span>JavaScript</span>
                             <span>React</span>
                             <span>Node.js</span>
                         </div>
-                        <a href="topics-details.html?topic=web-development" class="cta-button">Start Learning</a>
+                        <a href="topics-details.html?topic=web-development" class="cta-button">Explore Topic</a>
                     </div>
                 </div>
 
@@ -149,11 +130,7 @@
 
         <!-- Suggested Learning Paths -->
         <section class="suggested-paths">
-            <div class="section-header">
-                <h2>Recommended Learning Paths</h2>
-                <p>Structured paths to help you achieve your career goals</p>
-            </div>
-
+            <h2>Recommended Learning Paths</h2>
             <div class="paths-slider">
                 <div class="path-card">
                     <div class="path-header">
@@ -208,11 +185,11 @@
                 <h3>Quick Links</h3>
                 <a href="courses.html">Courses</a>
                 <a href="ai-assistant.html">AI Assistant</a>
-                <a href="community.html">Community</a>
+                <a href="topics.html">Topics</a>
                 <a href="about.html">About Us</a>
             </div>
 
-            <div class="footer-section"></div>
+            <div class="footer-section">
                 <h3>Resources</h3>
                 <a href="blog.html">Blog</a>
                 <a href="faq.html">FAQs</a>
@@ -232,6 +209,8 @@
     </footer>
 
     <!-- Scripts -->
+    <script src="navbar.js"></script>
+    <script src="topics.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

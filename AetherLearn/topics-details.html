@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="AetherLearn - Detailed Topic View">
+    <meta name="description" content="AetherLearn - Topic Details">
     <title>Topic Details - AetherLearn</title>
     
     <!-- Stylesheets -->
@@ -17,219 +17,83 @@
         <div class="loader"></div>
     </div>
 
-    <!-- Header Section -->
-    <header>
-        <nav>
-            <a href="/" class="logo">
-                <span>Aether</span>Learn
-            </a>
-            <div class="search-bar">
-                <input type="text" placeholder="Search within this topic...">
-                <button><i class="fas fa-search"></i></button>
-            </div>
-            <div class="nav-links">
-                <a href="courses.html">Courses</a>
-                <a href="ai-assistant.html">AI Assistant</a>
-                <a href="community.html">Community</a>
-                <a href="resources.html">Resources</a>
-                <a href="topics.html" class="active">Topics</a>
-            </div>
-            <div class="auth-buttons">
-                <a href="login.html" class="cta-button secondary">Log In</a>
-                <a href="login.html" class="cta-button">Sign Up Free</a>
-            </div>
-        </nav>
-    </header>
+    <!-- Navbar Placeholder -->
+    <div id="navbar-placeholder"></div>
 
     <main class="topic-details-page">
-        <!-- Topic Hero Section -->
-        <section class="topic-hero">
-            <div class="topic-hero-content">
+        <!-- Topic Overview -->
+        <section class="topic-overview">
+            <div class="topic-header">
                 <div class="topic-icon">
                     <i class="fas fa-code"></i>
                 </div>
-                <h1>Web Development</h1>
-                <p>Master the art of building modern websites and web applications with our comprehensive learning path</p>
-                <div class="topic-meta">
-                    <span><i class="fas fa-users"></i> 50K+ Learners</span>
-                    <span><i class="fas fa-book"></i> 200+ Resources</span>
-                    <span><i class="fas fa-clock"></i> 6 months</span>
+                <div class="topic-info">
+                    <h1>Web Development</h1>
+                    <p>Master modern web development with comprehensive learning paths</p>
+                    <div class="topic-stats">
+                        <span><i class="fas fa-book"></i> 25 Courses</span>
+                        <span><i class="fas fa-clock"></i> 120+ Hours</span>
+                        <span><i class="fas fa-user-graduate"></i> 10k+ Learners</span>
+                        <span><i class="fas fa-star"></i> 4.8 Average Rating</span>
+                    </div>
                 </div>
-                <div class="hero-cta">
-                    <button class="cta-button">Start Learning Path</button>
-                    <button class="cta-button secondary">Explore Resources</button>
+            </div>
+
+            <!-- Topic Content -->
+            <div class="topic-content">
+                <!-- Path Progress -->
+                <div class="path-progress">
+                    <h2>Your Learning Progress</h2>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 45%"></div>
+                    </div>
+                    <span class="progress-text">45% Complete</span>
+                </div>
+
+                <!-- Skills Coverage -->
+                <div class="skills-coverage">
+                    <h2>Skills You'll Learn</h2>
+                    <div class="skills-grid">
+                        <div class="skill-item">
+                            <i class="fab fa-html5"></i>
+                            <span>HTML5</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fab fa-css3-alt"></i>
+                            <span>CSS3</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fab fa-js"></i>
+                            <span>JavaScript</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fab fa-react"></i>
+                            <span>React</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fab fa-node-js"></i>
+                            <span>Node.js</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Topic Content -->
-        <div class="topic-content">
-            <!-- Left Sidebar - Learning Path -->
-            <aside class="topic-sidebar">
-                <div class="path-overview">
-                    <h3>Learning Path</h3>
-                    <div class="path-progress">
-                        <div class="progress-circle">0%</div>
-                        <p>Your Progress</p>
-                    </div>
-                </div>
+        <!-- Learning Path Section -->
+        <section class="learning-path">
+            <h2>Recommended Learning Path</h2>
+            <div class="path-timeline">
+                <!-- Timeline entries will be dynamically populated -->
+            </div>
+        </section>
 
-                <div class="path-modules">
-                    <div class="module">
-                        <div class="module-header">
-                            <h4>1. Foundations</h4>
-                            <span class="duration">20 hours</span>
-                        </div>
-                        <ul class="module-items">
-                            <li><i class="fas fa-check-circle"></i> HTML Basics</li>
-                            <li><i class="fas fa-circle"></i> CSS Fundamentals</li>
-                            <li><i class="fas fa-circle"></i> JavaScript Introduction</li>
-                        </ul>
-                    </div>
-
-                    <div class="module">
-                        <div class="module-header">
-                            <h4>2. Frontend Development</h4>
-                            <span class="duration">40 hours</span>
-                        </div>
-                        <ul class="module-items">
-                            <li><i class="fas fa-circle"></i> Advanced CSS</li>
-                            <li><i class="fas fa-circle"></i> JavaScript Deep Dive</li>
-                            <li><i class="fas fa-circle"></i> React Fundamentals</li>
-                        </ul>
-                    </div>
-
-                    <div class="module">
-                        <div class="module-header">
-                            <h4>3. Backend Development</h4>
-                            <span class="duration">35 hours</span>
-                        </div>
-                        <ul class="module-items">
-                            <li><i class="fas fa-circle"></i> Node.js Basics</li>
-                            <li><i class="fas fa-circle"></i> Express.js</li>
-                            <li><i class="fas fa-circle"></i> Database Design</li>
-                        </ul>
-                    </div>
-                </div>
-            </aside>
-
-            <!-- Main Content Area -->
-            <section class="topic-main-content">
-                <!-- Topic Overview -->
-                <div class="content-section">
-                    <h2>What You'll Learn</h2>
-                    <div class="learning-objectives">
-                        <div class="objective">
-                            <i class="fas fa-check"></i>
-                            <p>Build responsive websites using HTML5, CSS3, and JavaScript</p>
-                        </div>
-                        <div class="objective">
-                            <i class="fas fa-check"></i>
-                            <p>Master modern frontend frameworks like React</p>
-                        </div>
-                        <div class="objective">
-                            <i class="fas fa-check"></i>
-                            <p>Create backend APIs using Node.js and Express</p>
-                        </div>
-                        <div class="objective">
-                            <i class="fas fa-check"></i>
-                            <p>Work with databases and build full-stack applications</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Curated Resources -->
-                <div class="content-section">
-                    <h2>Curated Resources</h2>
-                    <div class="resources-tabs">
-                        <button class="tab-btn active">All</button>
-                        <button class="tab-btn">Courses</button>
-                        <button class="tab-btn">Tutorials</button>
-                        <button class="tab-btn">Tools</button>
-                        <button class="tab-btn">Projects</button>
-                    </div>
-
-                    <div class="resources-grid">
-                        <!-- Resource cards will be dynamically populated -->
-                        <div class="resource-card">
-                            <div class="resource-thumbnail">
-                                <img src="https://via.placeholder.com/300x200" alt="Course thumbnail">
-                                <span class="resource-type">Course</span>
-                            </div>
-                            <div class="resource-content">
-                                <h3>Complete Web Development Bootcamp</h3>
-                                <p>Learn web development from scratch with hands-on projects</p>
-                                <div class="resource-meta">
-                                    <span><i class="fas fa-star"></i> 4.8</span>
-                                    <span><i class="fas fa-user-graduate"></i> Beginner</span>
-                                    <span><i class="fas fa-clock"></i> 40h</span>
-                                </div>
-                                <a href="#" class="cta-button">Start Learning</a>
-                            </div>
-                        </div>
-                        <!-- More resource cards... -->
-                    </div>
-                </div>
-
-                <!-- Career Paths -->
-                <div class="content-section">
-                    <h2>Career Opportunities</h2>
-                    <div class="career-paths">
-                        <div class="career-card">
-                            <div class="career-icon">
-                                <i class="fas fa-laptop-code"></i>
-                            </div>
-                            <h3>Frontend Developer</h3>
-                            <p>Build user interfaces and implement website designs</p>
-                            <span class="salary-range">$60K - $120K/year</span>
-                        </div>
-
-                        <div class="career-card">
-                            <div class="career-icon">
-                                <i class="fas fa-server"></i>
-                            </div>
-                            <h3>Backend Developer</h3>
-                            <p>Create server-side logic and manage databases</p>
-                            <span class="salary-range">$70K - $130K/year</span>
-                        </div>
-
-                        <div class="career-card">
-                            <div class="career-icon">
-                                <i class="fas fa-code-branch"></i>
-                            </div>
-                            <h3>Full Stack Developer</h3>
-                            <p>Handle both frontend and backend development</p>
-                            <span class="salary-range">$80K - $150K/year</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Right Sidebar - Community & Support -->
-            <aside class="community-sidebar">
-                <div class="community-section">
-                    <h3>Topic Community</h3>
-                    <div class="community-stats">
-                        <div class="stat">
-                            <span class="stat-number">15.2K</span>
-                            <span class="stat-label">Active Learners</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-number">2.5K</span>
-                            <span class="stat-label">Discussions</span>
-                        </div>
-                    </div>
-                    <button class="cta-button">Join Community</button>
-                </div>
-
-                <div class="expert-help">
-                    <h3>Need Help?</h3>
-                    <p>Get personalized guidance from our AI tutor or connect with experts</p>
-                    <button class="cta-button">Ask AI Tutor</button>
-                    <button class="cta-button secondary">Find Mentors</button>
-                </div>
-            </aside>
-        </div>
+        <!-- Related Resources -->
+        <section class="related-resources">
+            <h2>Additional Resources</h2>
+            <div class="resources-grid">
+                <!-- Resource cards will be dynamically populated -->
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -250,7 +114,7 @@
                 <h3>Quick Links</h3>
                 <a href="courses.html">Courses</a>
                 <a href="ai-assistant.html">AI Assistant</a>
-                <a href="community.html">Community</a>
+                <a href="topics.html">Topics</a>
                 <a href="about.html">About Us</a>
             </div>
 
@@ -274,6 +138,8 @@
     </footer>
 
     <!-- Scripts -->
+    <script src="navbar.js"></script>
+    <script src="topics.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

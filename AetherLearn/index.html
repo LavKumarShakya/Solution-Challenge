@@ -12,7 +12,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Required Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js" defer></script>
 </head>
 <body>
     <!-- Loading Screen -->
@@ -20,52 +19,29 @@
         <div class="loader"></div>
     </div>
 
-    <!-- Header Section -->
-    <header>
-        <nav>
-            <a href="/" class="logo">
-                <span>Aether</span>Learn
-            </a>
-            <div class="nav-links">
-                <a href="courses.html">Courses</a>
-                <a href="ai-assistant.html">AI Assistant</a>
-                <a href="topics.html">Topics</a>
-                <a href="resources.html">Resources</a>
-            </div>
-            <div class="search-bar">
-                <input type="text" placeholder="Search courses, topics, skills...">
-                <button><i class="fas fa-search"></i></button>
-            </div>
-            <div class="auth-buttons">
-                <a href="login.html" class="cta-button secondary">Log In</a>
-                <a href="login.html" class="cta-button">Sign Up</a>
-            </div>
-        </nav>
-    </header>
+    <!-- Navbar Placeholder -->
+    <div id="navbar-placeholder"></div>
 
     <main>
         <!-- Hero Section -->
         <section class="hero">
-            <div id="globe-container"></div>
             <div class="hero-content">
-                <h1>Unlock Your Potential with AI-Powered Learning</h1>
-                <p>Tell us what you want to learn, and our AI will create your perfect learning path from the best free resources across the internet.</p>
+                <h1>Transform Your Learning Journey with AI</h1>
+                <p>Our AI creates personalized learning paths using the best free resources across the internet, tailored just for you.</p>
                 
                 <div class="ai-search-container">
-                    <input type="text" class="hero-search-input" placeholder="What would you like to learn? (e.g., 'Build a website from scratch')">
+                    <input type="text" class="hero-search-input" placeholder="What do you want to learn today? (e.g., 'Machine Learning', 'Web Development')">
                     <button class="hero-search-button">
-                        <i class="fas fa-wand-magic-sparkles"></i>
-                        Create My Learning Path
+                        <i class="fas fa-sparkles"></i>
+                        Create Learning Path
                     </button>
-                    <div class="search-suggestions">
-                        <!-- Dynamic content will be added here -->
-                    </div>
                 </div>
 
                 <div class="hero-features">
-                    <span><i class="fas fa-brain"></i>AI-Powered Personalization</span>
+                    <span><i class="fas fa-brain"></i>AI-Powered Learning</span>
                     <span><i class="fas fa-infinity"></i>Free Forever</span>
-                    <span><i class="fas fa-rocket"></i>Learn Faster</span>
+                    <span><i class="fas fa-clock"></i>Learn at Your Pace</span>
+                    <span><i class="fas fa-certificate"></i>Earn Certificates</span>
                 </div>
             </div>
         </section>
@@ -349,51 +325,7 @@
     </footer>
 
     <!-- Scripts -->
+    <script src="navbar.js"></script>
     <script src="script.js"></script>
-    <script>
-        // Globe Animation
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ alpha: true });
-
-        renderer.setSize(window.innerWidth / 2, window.innerHeight);
-        document.getElementById('globe-container').appendChild(renderer.domElement);
-
-        const geometry = new THREE.SphereGeometry(2, 64, 64);
-        const material = new THREE.MeshBasicMaterial({
-            color: 0x4169E1,
-            wireframe: true,
-            transparent: true,
-            opacity: 0.3
-        });
-        const globe = new THREE.Mesh(geometry, material);
-        scene.add(globe);
-
-        camera.position.z = 5;
-
-        function animate() {
-            requestAnimationFrame(animate);
-            globe.rotation.y += 0.002;
-            globe.rotation.x += 0.001;
-            renderer.render(scene, camera);
-        }
-
-        animate();
-
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth / 2, window.innerHeight);
-        });
-
-        // Loading Screen
-        window.addEventListener('load', () => {
-            const loadingScreen = document.getElementById('loading-screen');
-            loadingScreen.style.opacity = '0';
-            setTimeout(() => {
-                loadingScreen.style.display = 'none';
-            }, 300);
-        });
-    </script>
 </body>
 </html>

@@ -392,3 +392,62 @@ function initializePageTransitions() {
     });
 }
 
+// Search functionality
+document.addEventListener('DOMContentLoaded', () => {
+    const searchBtn = document.querySelector('.nav-search-btn');
+    const searchOverlay = document.querySelector('.search-overlay');
+    const closeSearchBtn = document.querySelector('.close-search');
+    const searchInput = document.querySelector('.search-overlay-input');
+
+    // Open search overlay
+    searchBtn?.addEventListener('click', () => {
+        searchOverlay.classList.add('active');
+        searchInput?.focus();
+        document.body.style.overflow = 'hidden';
+    });
+
+    // Close search overlay
+    closeSearchBtn?.addEventListener('click', () => {
+        searchOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+    });
+
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && searchOverlay.classList.contains('active')) {
+            searchOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+
+    // Close if clicked outside search content
+    searchOverlay?.addEventListener('click', (e) => {
+        if (e.target === searchOverlay) {
+            searchOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+
+    // Handle search input
+    searchInput?.addEventListener('input', debounce((e) => {
+        const query = e.target.value;
+        if (query.length >= 2) {
+            // Implement search logic here
+            console.log('Searching for:', query);
+        }
+    }, 300));
+});
+
+// Debounce helper function
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
