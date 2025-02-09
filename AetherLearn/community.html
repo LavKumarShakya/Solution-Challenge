@@ -3,243 +3,249 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AetherLearn - Learning Community">
     <title>Community - AetherLearn</title>
+    
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Loading Screen -->
     <div id="loading-screen">
         <div class="loader"></div>
     </div>
 
+    <!-- Header Section -->
     <header>
         <nav>
-            <div class="logo">AetherLearn</div>
-            <div class="search-bar">
-                <input type="text" placeholder="Search discussions, topics, people...">
-                <button><i class="fas fa-search"></i></button>
-            </div>
+            <a href="/" class="logo">
+                <span>Aether</span>Learn
+            </a>
             <div class="nav-links">
-                <a href="index.html">Home</a>
                 <a href="courses.html">Courses</a>
                 <a href="ai-assistant.html">AI Assistant</a>
-                <a href="community.html" class="active">Community</a>
-                <a href="resources.html">Resources</a>
                 <a href="topics.html">Topics</a>
-                <a href="login.html">Login</a>
+                <a href="resources.html">Resources</a>
             </div>
-            <button class="cta-button">Sign Up</button>
+            <div class="search-bar">
+                <input type="text" placeholder="Search discussions...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+            <div class="auth-buttons">
+                <a href="login.html" class="cta-button secondary">Log In</a>
+                <a href="login.html" class="cta-button">Sign Up</a>
+            </div>
         </nav>
     </header>
 
     <main class="community-page">
-        <section class="community-header">
-            <h1>Join Our Learning Community</h1>
-            <p>Connect with learners, share knowledge, and grow together</p>
-        </section>
-
-        <section class="community-content">
-            <div class="community-sidebar">
+        <!-- Community Header -->
+        <section class="community-hero">
+            <div class="section-header">
+                <h1>Join Our Learning Community</h1>
+                <p>Connect with fellow learners, share knowledge, and grow together</p>
                 <div class="community-stats">
                     <div class="stat">
-                        <i class="fas fa-users"></i>
-                        <div class="stat-info">
-                            <span class="stat-value">50K+</span>
-                            <span class="stat-label">Members</span>
-                        </div>
+                        <span class="stat-number">50K+</span>
+                        <span class="stat-label">Active Members</span>
                     </div>
                     <div class="stat">
-                        <i class="fas fa-comments"></i>
-                        <div class="stat-info">
-                            <span class="stat-value">10K+</span>
-                            <span class="stat-label">Discussions</span>
-                        </div>
+                        <span class="stat-number">1000+</span>
+                        <span class="stat-label">Daily Discussions</span>
                     </div>
                     <div class="stat">
-                        <i class="fas fa-lightbulb"></i>
-                        <div class="stat-info">
-                            <span class="stat-value">5K+</span>
-                            <span class="stat-label">Topics</span>
-                        </div>
+                        <span class="stat-number">100+</span>
+                        <span class="stat-label">Study Groups</span>
                     </div>
-                </div>
-
-                <div class="community-categories">
-                    <h3>Popular Topics</h3>
-                    <ul>
-                        <li><a href="#" class="active"><i class="fas fa-code"></i> Programming</a></li>
-                        <li><a href="#"><i class="fas fa-palette"></i> Design</a></li>
-                        <li><a href="#"><i class="fas fa-robot"></i> AI & ML</a></li>
-                        <li><a href="#"><i class="fas fa-gamepad"></i> Game Dev</a></li>
-                        <li><a href="#"><i class="fas fa-mobile-alt"></i> Mobile Apps</a></li>
-                        <li><a href="#"><i class="fas fa-database"></i> Data Science</a></li>
-                    </ul>
                 </div>
             </div>
+        </section>
 
-            <div class="community-feed">
-                <div class="post-creation">
-                    <img src="https://i.pravatar.cc/150?img=11" alt="User Avatar" class="user-avatar">
-                    <form class="post-form">
-                        <textarea placeholder="Share your thoughts, questions, or insights..."></textarea>
-                        <div class="post-actions">
-                            <div class="post-attachments">
-                                <button type="button"><i class="fas fa-image"></i></button>
-                                <button type="button"><i class="fas fa-link"></i></button>
-                                <button type="button"><i class="fas fa-code"></i></button>
-                            </div>
-                            <button type="submit" class="cta-button">Post</button>
-                        </div>
-                    </form>
+        <div class="community-content">
+            <!-- Community Sidebar -->
+            <aside class="community-sidebar">
+                <div class="create-post">
+                    <button class="cta-button">
+                        <i class="fas fa-plus"></i>
+                        Create New Post
+                    </button>
                 </div>
 
+                <div class="topic-filters">
+                    <h3>Popular Topics</h3>
+                    <ul>
+                        <li><a href="#" class="active">All Topics</a></li>
+                        <li><a href="#">Web Development</a></li>
+                        <li><a href="#">Data Science</a></li>
+                        <li><a href="#">UI/UX Design</a></li>
+                        <li><a href="#">Machine Learning</a></li>
+                        <li><a href="#">Career Advice</a></li>
+                    </ul>
+                </div>
+
+                <div class="trending-topics">
+                    <h3>Trending Now</h3>
+                    <div class="trending-list">
+                        <div class="trending-item">
+                            <span class="trend-number">#1</span>
+                            <div class="trend-info">
+                                <h4>React vs Vue in 2024</h4>
+                                <span>256 discussions</span>
+                            </div>
+                        </div>
+                        <div class="trending-item">
+                            <span class="trend-number">#2</span>
+                            <div class="trend-info">
+                                <h4>Learning Path Guide</h4>
+                                <span>180 discussions</span>
+                            </div>
+                        </div>
+                        <div class="trending-item">
+                            <span class="trend-number">#3</span>
+                            <div class="trend-info">
+                                <h4>AI Tools for Learning</h4>
+                                <span>145 discussions</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Discussion Feed -->
+            <section class="discussion-feed">
                 <div class="feed-filters">
-                    <button class="active">Recent</button>
-                    <button>Popular</button>
-                    <button>Unanswered</button>
-                    <button>My Topics</button>
+                    <button class="filter-btn active">Latest</button>
+                    <button class="filter-btn">Most Discussed</button>
+                    <button class="filter-btn">Top Rated</button>
                 </div>
 
                 <div class="posts">
-                    <!-- Sample Post -->
-                    <div class="post">
-                        <img src="https://i.pravatar.cc/150?img=12" alt="User Avatar" class="user-avatar">
+                    <!-- Discussion Post -->
+                    <article class="post">
+                        <div class="post-votes">
+                            <button class="vote-btn up"><i class="fas fa-chevron-up"></i></button>
+                            <span class="vote-count">42</span>
+                            <button class="vote-btn down"><i class="fas fa-chevron-down"></i></button>
+                        </div>
                         <div class="post-content">
                             <div class="post-header">
+                                <img src="https://i.pravatar.cc/40?img=1" alt="User avatar" class="user-avatar">
                                 <div class="post-meta">
-                                    <h3 class="user-name">Sarah Miller</h3>
-                                    <span class="post-time">2 hours ago</span>
+                                    <h3>Best resources for learning React in 2024</h3>
+                                    <div class="post-info">
+                                        <span class="author">Posted by @sarah_dev</span>
+                                        <span class="time">2 hours ago</span>
+                                        <span class="category">Web Development</span>
+                                    </div>
                                 </div>
-                                <span class="post-category">Programming</span>
                             </div>
-                            <p class="post-text">Just completed my first React project! Here's what I learned about state management and component lifecycle. Would love to hear your thoughts and suggestions for improvement.</p>
+                            <p class="post-text">I've been exploring different resources for learning React and wanted to share my findings with the community...</p>
                             <div class="post-tags">
-                                <span>#React</span>
-                                <span>#WebDevelopment</span>
-                                <span>#JavaScript</span>
+                                <span>#react</span>
+                                <span>#webdev</span>
+                                <span>#javascript</span>
                             </div>
                             <div class="post-actions">
-                                <button><i class="fas fa-heart"></i> 24</button>
-                                <button><i class="fas fa-comment"></i> 8</button>
+                                <button><i class="fas fa-comment"></i> 24 Comments</button>
                                 <button><i class="fas fa-share"></i> Share</button>
+                                <button><i class="fas fa-bookmark"></i> Save</button>
                             </div>
                         </div>
-                    </div>
+                    </article>
 
-                    <!-- Another Sample Post -->
-                    <div class="post">
-                        <img src="https://i.pravatar.cc/150?img=13" alt="User Avatar" class="user-avatar">
-                        <div class="post-content">
-                            <div class="post-header">
-                                <div class="post-meta">
-                                    <h3 class="user-name">Alex Thompson</h3>
-                                    <span class="post-time">5 hours ago</span>
-                                </div>
-                                <span class="post-category">AI & ML</span>
-                            </div>
-                            <p class="post-text">Working on a machine learning project for image classification. Has anyone worked with TensorFlow for similar projects? Looking for best practices and common pitfalls to avoid.</p>
-                            <div class="post-tags">
-                                <span>#MachineLearning</span>
-                                <span>#TensorFlow</span>
-                                <span>#AI</span>
-                            </div>
-                            <div class="post-actions">
-                                <button><i class="fas fa-heart"></i> 31</button>
-                                <button><i class="fas fa-comment"></i> 12</button>
-                                <button><i class="fas fa-share"></i> Share</button>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- More discussion posts... -->
                 </div>
-            </div>
+            </section>
 
-            <div class="community-trending">
-                <div class="trending-section">
-                    <h3>Trending Topics</h3>
-                    <ul>
-                        <li>
-                            <span class="trend-number">#1</span>
-                            <div class="trend-info">
-                                <h4>React vs Vue in 2025</h4>
-                                <span>328 discussions</span>
-                            </div>
-                        </li>
-                        <li>
-                            <span class="trend-number">#2</span>
-                            <div class="trend-info">
-                                <h4>AI Tools for Developers</h4>
-                                <span>245 discussions</span>
-                            </div>
-                        </li>
-                        <li>
-                            <span class="trend-number">#3</span>
-                            <div class="trend-info">
-                                <h4>Getting Started with ML</h4>
-                                <span>189 discussions</span>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="active-members">
-                    <h3>Active Members</h3>
-                    <div class="member-list">
-                        <div class="member">
-                            <img src="https://i.pravatar.cc/150?img=14" alt="Member Avatar">
-                            <div class="member-info">
-                                <h4>Emma Watson</h4>
-                                <span>Web Developer</span>
+            <!-- Community Engagement Sidebar -->
+            <aside class="engagement-sidebar">
+                <div class="top-contributors">
+                    <h3>Top Contributors</h3>
+                    <div class="contributor-list">
+                        <div class="contributor">
+                            <img src="https://i.pravatar.cc/40?img=2" alt="Contributor avatar">
+                            <div class="contributor-info">
+                                <h4>@tech_mentor</h4>
+                                <span>324 helpful answers</span>
                             </div>
                         </div>
-                        <div class="member">
-                            <img src="https://i.pravatar.cc/150?img=15" alt="Member Avatar">
-                            <div class="member-info">
-                                <h4>John Chen</h4>
-                                <span>AI Engineer</span>
-                            </div>
-                        </div>
-                        <div class="member">
-                            <img src="https://i.pravatar.cc/150?img=16" alt="Member Avatar">
-                            <div class="member-info">
-                                <h4>Maria Garcia</h4>
-                                <span>UX Designer</span>
+                        <div class="contributor">
+                            <img src="https://i.pravatar.cc/40?img=3" alt="Contributor avatar">
+                            <div class="contributor-info">
+                                <h4>@code_master</h4>
+                                <span>256 helpful answers</span>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+
+                <div class="active-groups">
+                    <h3>Active Study Groups</h3>
+                    <div class="group-list">
+                        <div class="group">
+                            <div class="group-info">
+                                <h4>React Learners</h4>
+                                <span>128 members • Active now</span>
+                            </div>
+                            <button class="cta-button">Join</button>
+                        </div>
+                        <div class="group">
+                            <div class="group-info">
+                                <h4>Python Beginners</h4>
+                                <span>96 members • Active now</span>
+                            </div>
+                            <button class="cta-button">Join</button>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
     </main>
 
+    <!-- Footer -->
     <footer>
         <div class="footer-content">
             <div class="footer-section">
-                <h3>About Us</h3>
-                <p>AetherLearn is a free educational platform dedicated to making quality education accessible to everyone.</p>
+                <h3>AetherLearn</h3>
+                <p>Transforming education through AI-powered personalized learning paths and free resources.</p>
+                <div class="social-icons"></div>
+                    <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" title="Discord"><i class="fab fa-discord"></i></a>
+                </div>
             </div>
+
             <div class="footer-section">
                 <h3>Quick Links</h3>
-                <a href="index.html">Home</a>
                 <a href="courses.html">Courses</a>
                 <a href="ai-assistant.html">AI Assistant</a>
-                <a href="community.html">Community</a>
+                <a href="topics.html">Topics</a>
+                <a href="resources.html">Resources</a>
             </div>
+
             <div class="footer-section">
-                <h3>Connect With Us</h3>
-                <div class="social-icons">
-                    <a href="#"><i class="fab fa-github"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-linkedin"></i></a>
-                    <a href="#"><i class="fab fa-discord"></i></a>
-                </div>
+                <h3>Resources</h3>
+                <a href="blog.html">Blog</a>
+                <a href="faq.html">FAQs</a>
+                <a href="support.html">Support</a>
+                <a href="privacy.html">Privacy Policy</a>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <a href="mailto:support@aetherlearn.com">support@aetherlearn.com</a>
+                <a href="tel:+1234567890">+1 (234) 567-890</a>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2025 AetherLearn. All rights reserved.</p>
-            <p>Made with &#10084; by Team AetherLearn</p>
+            <p>&copy; 2024 AetherLearn. All rights reserved.</p>
         </div>
     </footer>
 
+    <!-- Scripts -->
     <script src="script.js"></script>
 </body>
 </html>

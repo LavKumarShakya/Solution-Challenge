@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AetherLearn - Explore Learning Topics">
+    <title>Topics - AetherLearn</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Header Section -->
+    <header>
+        <nav>
+            <a href="/" class="logo">
+                <span>Aether</span>Learn
+            </a>
+            <div class="nav-links">
+                <a href="courses.html">Courses</a>
+                <a href="ai-assistant.html">AI Assistant</a>
+                <a href="topics.html" class="active">Topics</a>
+                <a href="resources.html">Resources</a>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Search topics...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+            <div class="auth-buttons">
+                <a href="login.html" class="cta-button secondary">Log In</a>
+                <a href="login.html" class="cta-button">Sign Up</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="topics-page">
+        <!-- Topics Overview Section -->
+        <section class="topics-overview">
+            <div class="section-header">
+                <h1>Explore Learning Topics</h1>
+                <p>Browse through our comprehensive collection of learning topics and start your journey</p>
+            </div>
+
+            <!-- Topic Categories -->
+            <div class="topic-categories">
+                <button class="category-btn active" data-category="all">All Topics</button>
+                <button class="category-btn" data-category="technology">Technology</button>
+                <button class="category-btn" data-category="design">Design</button>
+                <button class="category-btn" data-category="business">Business</button>
+                <button class="category-btn" data-category="science">Science</button>
+                <button class="category-btn" data-category="arts">Arts</button>
+            </div>
+
+            <!-- Topics Grid -->
+            <div class="topics-grid">
+                <!-- Technology Topics -->
+                <div class="topic-card" data-category="technology">
+                    <div class="topic-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="topic-content">
+                        <h3>Web Development</h3>
+                        <p>Master frontend and backend development, build responsive websites and web applications</p>
+                        <div class="topic-stats">
+                            <span><i class="fas fa-book"></i> 50+ Courses</span>
+                            <span><i class="fas fa-users"></i> 25K+ Learners</span>
+                        </div>
+                        <div class="topic-skills">
+                            <span>HTML & CSS</span>
+                            <span>JavaScript</span>
+                            <span>React</span>
+                            <span>Node.js</span>
+                        </div>
+                        <a href="topics-details.html?topic=web-development" class="cta-button">Start Learning</a>
+                    </div>
+                </div>
+
+                <div class="topic-card" data-category="technology">
+                    <div class="topic-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="topic-content">
+                        <h3>AI & Machine Learning</h3>
+                        <p>Learn artificial intelligence, machine learning algorithms, and neural networks</p>
+                        <div class="topic-stats"></div>
+                            <span><i class="fas fa-book"></i> 40+ Courses</span>
+                            <span><i class="fas fa-users"></i> 20K+ Learners</span>
+                        </div>
+                        <div class="topic-skills">
+                            <span>Python</span>
+                            <span>TensorFlow</span>
+                            <span>Deep Learning</span>
+                            <span>NLP</span>
+                        </div>
+                        <a href="topics-details.html?topic=ai-ml" class="cta-button">Start Learning</a>
+                    </div>
+                </div>
+
+                <div class="topic-card" data-category="design">
+                    <div class="topic-icon"></div>
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <div class="topic-content">
+                        <h3>UI/UX Design</h3>
+                        <p>Master user interface design, user experience principles, and design thinking</p>
+                        <div class="topic-stats">
+                            <span><i class="fas fa-book"></i> 35+ Courses</span>
+                            <span><i class="fas fa-users"></i> 18K+ Learners</span>
+                        </div>
+                        <div class="topic-skills">
+                            <span>Figma</span>
+                            <span>Adobe XD</span>
+                            <span>Wireframing</span>
+                            <span>Prototyping</span>
+                        </div>
+                        <a href="topics-details.html?topic=ui-ux-design" class="cta-button">Start Learning</a>
+                    </div>
+                </div>
+
+                <div class="topic-card" data-category="business">
+                    <div class="topic-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="topic-content">
+                        <h3>Digital Marketing</h3>
+                        <p>Learn modern marketing strategies, SEO, social media, and analytics</p>
+                        <div class="topic-stats">
+                            <span><i class="fas fa-book"></i> 30+ Courses</span>
+                            <span><i class="fas fa-users"></i> 15K+ Learners</span>
+                        </div>
+                        <div class="topic-skills">
+                            <span>SEO</span>
+                            <span>Social Media</span>
+                            <span>Content</span>
+                            <span>Analytics</span>
+                        </div>
+                        <a href="topics-details.html?topic=digital-marketing" class="cta-button">Start Learning</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Suggested Learning Paths -->
+        <section class="suggested-paths">
+            <div class="section-header">
+                <h2>Recommended Learning Paths</h2>
+                <p>Structured paths to help you achieve your career goals</p>
+            </div>
+
+            <div class="paths-slider">
+                <div class="path-card">
+                    <div class="path-header">
+                        <i class="fas fa-laptop-code"></i>
+                        <h3>Full Stack Developer</h3>
+                    </div>
+                    <div class="path-content">
+                        <p>Become a full stack developer in 6 months with our structured learning path</p>
+                        <div class="path-info">
+                            <span><i class="fas fa-clock"></i> 6 months</span>
+                            <span><i class="fas fa-signal"></i> Beginner to Advanced</span>
+                            <span><i class="fas fa-book"></i> 15 Courses</span>
+                        </div>
+                        <a href="#" class="cta-button">View Path</a>
+                    </div>
+                </div>
+
+                <div class="path-card">
+                    <div class="path-header">
+                        <i class="fas fa-paint-brush"></i>
+                        <h3>Digital Designer</h3>
+                    </div>
+                    <div class="path-content">
+                        <p>Master UI/UX design, graphics, and build a professional portfolio</p>
+                        <div class="path-info">
+                            <span><i class="fas fa-clock"></i> 4 months</span>
+                            <span><i class="fas fa-signal"></i> All Levels</span>
+                            <span><i class="fas fa-book"></i> 12 Courses</span>
+                        </div>
+                        <a href="#" class="cta-button">View Path</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>AetherLearn</h3>
+                <p>Transforming education through AI-powered personalized learning paths and free resources.</p>
+                <div class="social-icons">
+                    <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" title="Discord"><i class="fab fa-discord"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="courses.html">Courses</a>
+                <a href="ai-assistant.html">AI Assistant</a>
+                <a href="community.html">Community</a>
+                <a href="about.html">About Us</a>
+            </div>
+
+            <div class="footer-section"></div>
+                <h3>Resources</h3>
+                <a href="blog.html">Blog</a>
+                <a href="faq.html">FAQs</a>
+                <a href="support.html">Support</a>
+                <a href="privacy.html">Privacy Policy</a>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <a href="mailto:support@aetherlearn.com">support@aetherlearn.com</a>
+                <a href="tel:+1234567890">+1 (234) 567-890</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 AetherLearn. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+</body>
+</html>

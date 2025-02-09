@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AetherLearn - Free Educational Resources">
+    <title>Resources - AetherLearn</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Header Section -->
+    <header>
+        <nav>
+            <a href="/" class="logo">
+                <span>Aether</span>Learn
+            </a>
+            <div class="nav-links">
+                <a href="courses.html">Courses</a>
+                <a href="ai-assistant.html">AI Assistant</a>
+                <a href="topics.html">Topics</a>
+                <a href="resources.html" class="active">Resources</a>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Search resources...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+            <div class="auth-buttons">
+                <a href="login.html" class="cta-button secondary">Log In</a>
+                <a href="login.html" class="cta-button">Sign Up</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="resources-page">
+        <!-- Resource Categories Section -->
+        <section class="resource-categories">
+            <div class="section-header">
+                <h1>Educational Resources</h1>
+                <p>Discover curated learning materials from across the internet</p>
+            </div>
+            
+            <div class="category-grid">
+                <div class="category-card">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h3>Online Courses</h3>
+                    <p>Free courses from top platforms and universities</p>
+                    <div class="category-stats">
+                        <span><i class="fas fa-book"></i> 1000+ Courses</span>
+                        <span><i class="fas fa-users"></i> 50K+ Learners</span>
+                    </div>
+                    <a href="#courses" class="cta-button">Browse Courses</a>
+                </div>
+
+                <div class="category-card">
+                    <i class="fas fa-book-reader"></i>
+                    <h3>Articles & Tutorials</h3>
+                    <p>In-depth articles and step-by-step tutorials</p>
+                    <div class="category-stats">
+                        <span><i class="fas fa-file-alt"></i> 5000+ Articles</span>
+                        <span><i class="fas fa-eye"></i> 100K+ Views</span>
+                    </div>
+                    <a href="#articles" class="cta-button">Read Articles</a>
+                </div>
+
+                <div class="category-card">
+                    <i class="fas fa-video"></i>
+                    <h3>Video Content</h3>
+                    <p>Educational videos and lecture recordings</p>
+                    <div class="category-stats">
+                        <span><i class="fas fa-play-circle"></i> 2000+ Videos</span>
+                        <span><i class="fas fa-clock"></i> 1000+ Hours</span>
+                    </div>
+                    <a href="#videos" class="cta-button">Watch Videos</a>
+                </div>
+
+                <div class="category-card">
+                    <i class="fas fa-tools"></i>
+                    <h3>Learning Tools</h3>
+                    <p>Software and tools to enhance your learning</p>
+                    <div class="category-stats">
+                        <span><i class="fas fa-toolbox"></i> 100+ Tools</span>
+                        <span><i class="fas fa-download"></i> 10K+ Downloads</span>
+                    </div>
+                    <a href="#tools" class="cta-button">Explore Tools</a>
+                </div>
+
+                <div class="category-card">
+                    <i class="fas fa-users"></i>
+                    <h3>Communities</h3>
+                    <p>Join learning groups and discussion forums</p>
+                    <div class="category-stats">
+                        <span><i class="fas fa-user-friends"></i> 20+ Communities</span>
+                        <span><i class="fas fa-comments"></i> Active Daily</span>
+                    </div>
+                    <a href="#communities" class="cta-button">Join Communities</a>
+                </div>
+
+                <div class="category-card">
+                    <i class="fas fa-project-diagram"></i>
+                    <h3>Practice Projects</h3>
+                    <p>Hands-on projects to build your portfolio</p>
+                    <div class="category-stats">
+                        <span><i class="fas fa-code-branch"></i> 500+ Projects</span>
+                        <span><i class="fas fa-star"></i> 4.8 Average Rating</span>
+                    </div>
+                    <a href="#projects" class="cta-button">Start Projects</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resource Listing Section -->
+        <section class="resource-listing">
+            <div class="resource-filters">
+                <div class="filter-group">
+                    <label for="category">Category</label>
+                    <select id="category">
+                        <option value="all">All Categories</option>
+                        <option value="courses">Courses</option>
+                        <option value="articles">Articles</option>
+                        <option value="videos">Videos</option>
+                        <option value="tools">Tools</option>
+                        <option value="communities">Communities</option>
+                        <option value="projects">Projects</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="topic">Topic</label>
+                    <select id="topic">
+                        <option value="all">All Topics</option>
+                        <option value="web-dev">Web Development</option>
+                        <option value="data-science">Data Science</option>
+                        <option value="ai-ml">AI & Machine Learning</option>
+                        <option value="design">Design</option>
+                        <option value="business">Business</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="skill-level">Skill Level</label>
+                    <select id="skill-level">
+                        <option value="all">All Levels</option>
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="sort">Sort By</label>
+                    <select id="sort">
+                        <option value="popular">Most Popular</option>
+                        <option value="newest">Newest</option>
+                        <option value="rating">Highest Rated</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="resources-grid">
+                <!-- Resource Cards will be dynamically populated here -->
+                <div class="resource-card">
+                    <div class="resource-thumbnail">
+                        <img src="https://via.placeholder.com/300x200" alt="Resource thumbnail">
+                        <span class="resource-type">Course</span>
+                    </div>
+                    <div class="resource-content">
+                        <h3>Learn Web Development from Scratch</h3>
+                        <p>A comprehensive guide to becoming a full-stack web developer</p>
+                        <div class="resource-meta">
+                            <span><i class="fas fa-star"></i> 4.8</span>
+                            <span><i class="fas fa-user-graduate"></i> Beginner</span>
+                            <span><i class="fas fa-clock"></i> 20h</span>
+                        </div>
+                        <a href="#" class="cta-button">Access Resource</a>
+                    </div>
+                </div>
+
+                <!-- More resource cards... -->
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <button class="pagination-btn active">1</button>
+                <button class="pagination-btn">2</button>
+                <button class="pagination-btn">3</button>
+                <span>...</span>
+                <button class="pagination-btn">10</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>AetherLearn</h3>
+                <p>Transforming education through AI-powered personalized learning paths and free resources.</p>
+                <div class="social-icons">
+                    <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" title="Discord"><i class="fab fa-discord"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="courses.html">Courses</a>
+                <a href="ai-assistant.html">AI Assistant</a>
+                <a href="topics.html">Topics</a>
+                <a href="about.html">About Us</a>
+            </div>
+
+            <div class="footer-section">
+                <h3>Resources</h3>
+                <a href="blog.html">Blog</a>
+                <a href="faq.html">FAQs</a>
+                <a href="support.html">Support</a>
+                <a href="privacy.html">Privacy Policy</a>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <a href="mailto:support@aetherlearn.com">support@aetherlearn.com</a>
+                <a href="tel:+1234567890">+1 (234) 567-890</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 AetherLearn. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+</body>
+</html>
