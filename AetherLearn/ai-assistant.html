@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant - AetherLearn</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="loading-screen">
+        <div class="loader"></div>
+    </div>
+
+    <header>
+        <nav>
+            <div class="logo">AetherLearn</div>
+            <div class="search-bar">
+                <input type="text" placeholder="Search for courses, topics, skills...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="courses.html">Courses</a>
+                <a href="ai-assistant.html" class="active">AI Assistant</a>
+                <a href="community.html">Community</a>
+                <a href="resources.html">Resources</a>
+                <a href="topics.html">Topics</a>
+                <a href="login.html">Login</a>
+            </div>
+            <button class="cta-button">Sign Up</button>
+        </nav>
+    </header>
+
+    <main class="ai-assistant-page">
+        <section class="ai-header">
+            <h1>Your Personal AI Learning Assistant</h1>
+            <p>Get personalized help, instant answers, and learning path recommendations</p>
+        </section>
+
+        <section class="ai-chat-interface">
+            <div class="chat-container">
+                <div class="chat-messages" id="chat-messages">
+                    <!-- Welcome Message -->
+                    <div class="message bot">
+                        <div class="message-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            <p>👋 Hi! I'm your AI Learning Assistant. I can help you with:</p>
+                            <ul>
+                                <li>Finding the right courses and learning paths</li>
+                                <li>Answering questions about any topic</li>
+                                <li>Providing personalized learning recommendations</li>
+                                <li>Creating study materials and summaries</li>
+                            </ul>
+                            <p>What would you like to learn today?</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <button class="quick-action-btn">
+                        <i class="fas fa-compass"></i>
+                        Suggest a learning path
+                    </button>
+                    <button class="quick-action-btn">
+                        <i class="fas fa-book"></i>
+                        Explain a concept
+                    </button>
+                    <button class="quick-action-btn">
+                        <i class="fas fa-search"></i>
+                        Find courses
+                    </button>
+                    <button class="quick-action-btn">
+                        <i class="fas fa-tasks"></i>
+                        Create study plan
+                    </button>
+                </div>
+
+                <div class="chat-input-container">
+                    <form id="chat-form" class="chat-form">
+                        <input 
+                            type="text" 
+                            id="chat-input"
+                            placeholder="Ask me anything about learning..."
+                            autocomplete="off"
+                        >
+                        <button type="submit">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="ai-features">
+                <h2>Key Features</h2>
+                <div class="feature-list">
+                    <div class="ai-feature">
+                        <i class="fas fa-brain"></i>
+                        <h3>Personalized Learning</h3>
+                        <p>Get customized course recommendations and learning paths based on your goals and interests.</p>
+                    </div>
+                    <div class="ai-feature">
+                        <i class="fas fa-comment-dots"></i>
+                        <h3>24/7 Support</h3>
+                        <p>Ask questions anytime and get instant, accurate responses to help you learn effectively.</p>
+                    </div>
+                    <div class="ai-feature">
+                        <i class="fas fa-file-alt"></i>
+                        <h3>Study Materials</h3>
+                        <p>Generate summaries, flashcards, and practice questions to enhance your learning.</p>
+                    </div>
+                    <div class="ai-feature">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Progress Tracking</h3>
+                        <p>Monitor your learning progress and get suggestions for improvement.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <p>AetherLearn is a free educational platform dedicated to making quality education accessible to everyone.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="index.html">Home</a>
+                <a href="courses.html">Courses</a>
+                <a href="ai-assistant.html">AI Assistant</a>
+                <a href="community.html">Community</a>
+            </div>
+            <div class="footer-section">
+                <h3>Connect With Us</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-discord"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 AetherLearn. All rights reserved.</p>
+            <p>Made with &#10084; by Team AetherLearn</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
