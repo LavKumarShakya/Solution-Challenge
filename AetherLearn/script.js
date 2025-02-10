@@ -52,90 +52,12 @@ function initializePage() {
     });
 }
 
-// AI Assistant Chat Functionality
+// AI Assistant Chat Initialization
 function initializeAIChat() {
-    const chatForm = document.querySelector('.chat-form');
-    const chatMessages = document.querySelector('.chat-messages');
-    const quickActions = document.querySelectorAll('.quick-action-btn');
-
-    if (chatForm) {
-        chatForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const input = chatForm.querySelector('input');
-            const message = input.value.trim();
-
-            if (message) {
-                // Add user message
-                addMessage('user', message);
-                input.value = '';
-
-                // Simulate AI response
-                simulateTyping();
-                setTimeout(() => {
-                    addMessage('ai', getAIResponse(message));
-                }, 1500);
-            }
-        });
-    }
-
-    if (quickActions) {
-        quickActions.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const action = btn.querySelector('span').textContent;
-                addMessage('user', action);
-                simulateTyping();
-                setTimeout(() => {
-                    addMessage('ai', getQuickActionResponse(action));
-                }, 1500);
-            });
-        });
-    }
+    // Let the AIChat class handle everything
+    new AIChat();
 }
 
-function addMessage(type, content) {
-    const chatMessages = document.querySelector('.chat-messages');
-    if (!chatMessages) return;
-
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${type}`;
-    
-    const avatar = document.createElement('div');
-    avatar.className = 'message-avatar';
-    avatar.innerHTML = `<i class="fas fa-${type === 'ai' ? 'robot' : 'user'}"></i>`;
-    
-    const messageContent = document.createElement('div');
-    messageContent.className = 'message-content';
-    messageContent.innerHTML = content;
-    
-    messageDiv.appendChild(avatar);
-    messageDiv.appendChild(messageContent);
-    
-    chatMessages.appendChild(messageDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-function simulateTyping() {
-    const chatMessages = document.querySelector('.chat-messages');
-    if (!chatMessages) return;
-
-    const typingDiv = document.createElement('div');
-    typingDiv.className = 'message ai typing';
-    typingDiv.innerHTML = `
-        <div class="message-avatar">
-            <i class="fas fa-robot"></i>
-        </div>
-        <div class="message-content">
-            <div class="typing-indicator">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-    `;
-    
-    chatMessages.appendChild(typingDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-}
 
 // Topic Filtering Functionality
 function initializeTopicFilters() {
@@ -201,6 +123,215 @@ function handleSearch(e) {
     // This would typically involve an API call
 }
 
+// AI Chat Integration
+class AIChat {
+    constructor() {
+        this.chatForm = document.querySelector('.chat-form');
+        this.chatMessages = document.querySelector('.chat-messages');
+        this.quickActions = document.querySelectorAll('.quick-action-btn');
+        this.clearButton = document.querySelector('.clear-chat');
+        this.setupEventListeners();
+    }
+
+    setupEventListeners() {
+        if (this.chatForm) {
+            this.chatForm.addEventListener('submit', (e) => this.handleSubmit(e));
+        }
+
+        if (this.quickActions) {
+            this.quickActions.forEach(btn => {
+                btn.addEventListener('click', () => this.handleQuickAction(btn));
+            });
+        }
+
+        if (this.clearButton) {
+            this.clearButton.addEventListener('click', () => this.clearChat());
+        }
+    }
+
+    async handleSubmit(e) {
+        e.preventDefault();
+        const input = this.chatForm.querySelector('input');
+        const sendButton = this.chatForm.querySelector('.send-message');
+        const message = input.value.trim();
+
+        if (message) {
+            // Disable input and show loading state
+            input.disabled = true;
+            sendButton.disabled = true;
+            sendButton.querySelector('.fa-paper-plane').style.display = 'none';
+            sendButton.querySelector('.fa-circle-notch').style.display = 'block';
+
+            // Add user message
+            this.addMessage('user', message);
+            input.value = '';
+
+            try {
+                // Make API call to Gemini
+                const response = await this.getAIResponse(message);
+                this.addMessage('ai', response);
+            } catch (error) {
+                this.addMessage('ai', error.message || 'Sorry, I encountered an error. Please try again.');
+                console.error('AI Error:', error);
+            } finally {
+                // Re-enable input and hide loading state
+                input.disabled = false;
+                sendButton.disabled = false;
+                sendButton.querySelector('.fa-paper-plane').style.display = 'block';
+                sendButton.querySelector('.fa-circle-notch').style.display = 'none';
+                input.focus();
+            }
+        }
+    }
+
+    handleQuickAction(btn) {
+        const action = btn.querySelector('span').textContent;
+        this.addMessage('user', action);
+        this.showTypingIndicator();
+        
+        // Simulate AI response for quick actions
+        setTimeout(() => {
+            this.hideTypingIndicator();
+            this.addMessage('ai', this.getQuickActionResponse(action));
+        }, 1000);
+    }
+
+    async getAIResponse(message) {
+        try {
+            const response = await fetch('http://localhost:3001/api/ai/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    message,
+                    context: 'You are an AI learning assistant for AetherLearn. You help users learn various topics in technology, programming, and other subjects. Keep responses concise, friendly, and educational.'
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            return data.response;
+        } catch (error) {
+            console.error('API Error:', error);
+            throw new Error('Sorry, I had trouble connecting to my AI service. Please try again in a moment.');
+        }
+    }
+
+    formatResponse(text) {
+        // Convert markdown-style code blocks to HTML
+        text = text.replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
+        
+        // Convert single backtick code to inline code
+        text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+        
+        // Convert URLs to links
+        text = text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>');
+        
+        // Convert bullet points
+        text = text.replace(/^\s*[-*]\s(.+)$/gm, '<li>$1</li>');
+        text = text.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
+        
+        return text;
+    }
+
+    handleQuickAction(btn) {
+        const action = btn.querySelector('span').textContent;
+        this.addMessage('user', action);
+        this.showTypingIndicator();
+        
+        // Simulate AI response for quick actions
+        setTimeout(() => {
+            this.hideTypingIndicator();
+            this.addMessage('ai', this.getQuickActionResponse(action));
+        }, 1000);
+    }
+
+    addMessage(type, content) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${type}`;
+        
+        messageDiv.innerHTML = `
+            <div class="message-avatar">
+                <i class="fas fa-${type === 'ai' ? 'robot' : 'user'}"></i>
+            </div>
+            <div class="message-content">
+                ${type === 'ai' ? this.formatResponse(content) : `<p>${content}</p>`}
+            </div>
+        `;
+        
+        this.chatMessages.appendChild(messageDiv);
+        this.scrollToBottom();
+
+        // Add syntax highlighting for code blocks if response is from AI
+        if (type === 'ai') {
+            messageDiv.querySelectorAll('pre code').forEach(block => {
+                hljs.highlightElement(block);
+            });
+        }
+    }
+
+    showTypingIndicator() {
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'message ai typing';
+        typingDiv.innerHTML = `
+            <div class="message-avatar">
+                <i class="fas fa-robot"></i>
+            </div>
+            <div class="message-content">
+                <div class="typing-indicator">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        `;
+        this.chatMessages.appendChild(typingDiv);
+        this.scrollToBottom();
+    }
+
+    hideTypingIndicator() {
+        const typingIndicator = this.chatMessages.querySelector('.typing');
+        if (typingIndicator) {
+            typingIndicator.remove();
+        }
+    }
+
+    scrollToBottom() {
+        this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+    }
+
+    clearChat() {
+        while (this.chatMessages.children.length > 1) {
+            this.chatMessages.removeChild(this.chatMessages.lastChild);
+        }
+    }
+
+    getQuickActionResponse(action) {
+        const responses = {
+            'Create Learning Path': 'I\'ll help you create a personalized learning path. What subject would you like to learn?',
+            'Explain a Topic': 'I\'d be happy to explain any topic. What would you like to understand better?',
+            'Find Resources': 'I can help you find the best learning resources. What topic are you interested in?',
+            'Practice Exercises': 'I\'ll create some practice exercises for you. What subject would you like to practice?'
+        };
+        return responses[action] || 'How can I help you with that?';
+    }
+}
+
+// Initialize AI Chat when on AI Assistant page
+document.addEventListener('DOMContentLoaded', () => {
+    if (window.location.pathname.includes('ai-assistant')) {
+        const chat = new AIChat();
+        // Remove any existing messages except the welcome message
+        const chatMessages = document.querySelector('.chat-messages');
+        while (chatMessages && chatMessages.children.length > 1) {
+            chatMessages.removeChild(chatMessages.lastChild);
+        }
+    }
+});
+
 // Utility Functions
 function debounce(func, wait) {
     let timeout;
@@ -212,17 +343,6 @@ function debounce(func, wait) {
         clearTimeout(timeout);
         timeout = setTimeout(later, wait);
     };
-}
-
-// Mock AI Responses
-function getAIResponse(message) {
-    // Implement more sophisticated response logic
-    return `I understand you're asking about "${message}". Let me help you with that...`;
-}
-
-function getQuickActionResponse(action) {
-    // Implement responses for quick actions
-    return `I'll help you ${action.toLowerCase()}. Let's get started...`;
 }
 
 // AI Search Functionality
