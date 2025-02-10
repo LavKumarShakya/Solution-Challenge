@@ -30,12 +30,12 @@
                 <p>Our AI creates personalized learning paths using the best free resources across the internet, tailored just for you.</p>
                 
                 <div class="ai-search-container">
-                    <input type="text" class="hero-search-input" placeholder="What do you want to learn today? (e.g., 'Machine Learning', 'Web Development')">
-                    <button class="hero-search-button">
-                        <i class="fas fa-sparkles"></i>
-                        Create Learning Path
-                    </button>
+                    <div style="position: relative;">
+                        <input type="text" class="hero-search-input" id="searchInput" placeholder="What do you want to learn today? (e.g., 'Machine Learning', 'Web Development')">
+                        <div class="search-suggestions" id="searchSuggestions"></div>
+                    </div>
                 </div>
+                <button class="hero-search-button clean-button">Create Learning Path</button>
 
                 <div class="hero-features">
                     <span><i class="fas fa-brain"></i>AI-Powered Learning</span>
@@ -47,12 +47,12 @@
         </section>
 
         <!-- Technology Education Section -->
-        <section class="learning-paths">
+        <section class="learning-paths" data-aos="fade-up">
             <h2>Explore Our Diverse Learning Paths</h2>
             <p>Discover curated paths that align with your goals and interests</p>
             
-            <div class="learning-paths-grid">
-                <div class="learning-path-card">
+            <div class="learning-paths-grid" data-aos="fade-up" data-aos-delay="50">
+                <div class="learning-path-card" data-aos="fade-up" data-aos-delay="100">
                     <div class="path-content">
                         <i class="fas fa-code"></i>
                         <h3>Technology</h3>
@@ -97,12 +97,12 @@
         </section>
 
         <!-- Feature Highlights Section -->
-        <section class="features">
+        <section class="features" data-aos="fade-up">
             <h2>Features That Empower Your Learning</h2>
             <p>Experience the future of education with our AI-powered tools</p>
 
-            <div class="feature-grid">
-                <div class="feature-card">
+            <div class="feature-grid" data-aos="fade-up" data-aos-delay="50">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
                     <i class="fas fa-robot"></i>
                     <h3>AI Learning Assistant</h3>
                     <p>Get instant help, explanations, and guidance 24/7 from our advanced AI tutor</p>
@@ -236,12 +236,12 @@
         </section>
 
         <!-- Testimonials Section -->
-        <section class="testimonials">
+        <section class="testimonials" data-aos="fade-up">
             <h2>What Our Learners Say</h2>
             <p>Join thousands of successful learners who transformed their skills with AetherLearn</p>
 
             <div class="testimonial-container">
-                <div class="testimonial">
+                <div class="testimonial" data-aos="fade-up" data-aos-delay="100">
                     <img src="https://i.pravatar.cc/100?img=1" alt="User Avatar" class="testimonial-avatar">
                     <p>"The AI-powered learning paths helped me transition into tech without any prior experience. Now I'm a full-stack developer!"</p>
                     <div class="testimonial-info">
@@ -327,5 +327,17 @@
     <!-- Scripts -->
     <script src="navbar.js"></script>
     <script src="script.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 600,
+            easing: 'ease-out',
+            once: false,
+            offset: 50,
+            delay: 50,
+            mirror: true,
+            anchorPlacement: 'top-bottom'
+        });
+    </script>
 </body>
 </html>

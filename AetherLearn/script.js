@@ -394,17 +394,61 @@ function initializePageTransitions() {
 
 // Search functionality
 document.addEventListener('DOMContentLoaded', () => {
-    const searchBtn = document.querySelector('.nav-search-btn');
-    const searchOverlay = document.querySelector('.search-overlay');
-    const closeSearchBtn = document.querySelector('.close-search');
-    const searchInput = document.querySelector('.search-overlay-input');
+    const searchInput = document.getElementById('searchInput');
+    const suggestionsContainer = document.getElementById('searchSuggestions');
 
-    // Open search overlay
-    searchBtn?.addEventListener('click', () => {
-        searchOverlay.classList.add('active');
-        searchInput?.focus();
-        document.body.style.overflow = 'hidden';
-    });
+    // Dummy suggestions
+    const dummySuggestions = [
+        'Machine Learning Fundamentals',
+        'Web Development with React',
+        'Python Programming',
+        'Data Science Basics',
+        'JavaScript Advanced Concepts',
+        'Mobile App Development',
+        'Cloud Computing AWS',
+        'Artificial Intelligence Ethics'
+    ];
+
+    if (searchInput && suggestionsContainer) {
+        searchInput.addEventListener('input', (e) => {
+            const value = e.target.value.toLowerCase();
+            
+            if (value.length > 0) {
+                const filteredSuggestions = dummySuggestions.filter(suggestion =>
+                    suggestion.toLowerCase().includes(value)
+                );
+                
+                displaySuggestions(filteredSuggestions);
+                suggestionsContainer.style.display = 'block';
+            } else {
+                suggestionsContainer.style.display = 'none';
+            }
+        });
+
+        // Close suggestions when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
+                suggestionsContainer.style.display = 'none';
+            }
+        });
+    }
+
+    function displaySuggestions(suggestions) {
+        suggestionsContainer.innerHTML = suggestions
+            .map(suggestion => `
+                <div class="suggestion-item">${suggestion}</div>
+            `)
+            .join('');
+
+        // Add click handlers for suggestions
+        const suggestionItems = suggestionsContainer.querySelectorAll('.suggestion-item');
+        suggestionItems.forEach(item => {
+            item.addEventListener('click', () => {
+                searchInput.value = item.textContent.trim();
+                suggestionsContainer.style.display = 'none';
+            });
+        });
+    }
 
     // Close search overlay
     closeSearchBtn?.addEventListener('click', () => {
