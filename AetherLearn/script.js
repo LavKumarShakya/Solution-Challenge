@@ -25,7 +25,7 @@ function initializePage() {
     } else if (currentPath.includes('resources')) {
         initializeResourceFilters();
     }
-
+    
     // Initialize common features
     initializeSearch();
 
@@ -126,10 +126,10 @@ function handleSearch(e) {
 // AI Chat Integration
 class AIChat {
     constructor() {
-        this.chatForm = document.querySelector('.chat-form');
-        this.chatMessages = document.querySelector('.chat-messages');
-        this.quickActions = document.querySelectorAll('.quick-action-btn');
-        this.clearButton = document.querySelector('.clear-chat');
+        this.chatForm = document.querySelector('#chatForm');
+        this.chatMessages = document.querySelector('#chatMessages');
+        this.suggestionsChips = document.querySelectorAll('.suggestion-chip');
+        this.clearButton = document.querySelector('.action-btn[title="Clear Chat"]');
         this.setupEventListeners();
     }
 
@@ -138,8 +138,8 @@ class AIChat {
             this.chatForm.addEventListener('submit', (e) => this.handleSubmit(e));
         }
 
-        if (this.quickActions) {
-            this.quickActions.forEach(btn => {
+        if (this.suggestionsChips) {
+            this.suggestionsChips.forEach(btn => {
                 btn.addEventListener('click', () => this.handleQuickAction(btn));
             });
         }
@@ -151,20 +151,18 @@ class AIChat {
 
     async handleSubmit(e) {
         e.preventDefault();
-        const input = this.chatForm.querySelector('input');
-        const sendButton = this.chatForm.querySelector('.send-message');
-        const message = input.value.trim();
+        const textarea = this.chatForm.querySelector('textarea');
+        const sendButton = this.chatForm.querySelector('.send-button');
+        const message = textarea.value.trim();
 
         if (message) {
             // Disable input and show loading state
-            input.disabled = true;
+            textarea.disabled = true;
             sendButton.disabled = true;
-            sendButton.querySelector('.fa-paper-plane').style.display = 'none';
-            sendButton.querySelector('.fa-circle-notch').style.display = 'block';
+            sendButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
 
             // Add user message
             this.addMessage('user', message);
-            input.value = '';
 
             try {
                 // Make API call to Gemini
@@ -174,26 +172,28 @@ class AIChat {
                 this.addMessage('ai', error.message || 'Sorry, I encountered an error. Please try again.');
                 console.error('AI Error:', error);
             } finally {
-                // Re-enable input and hide loading state
-                input.disabled = false;
+                // Re-enable input and restore send button
+                textarea.disabled = false;
                 sendButton.disabled = false;
-                sendButton.querySelector('.fa-paper-plane').style.display = 'block';
-                sendButton.querySelector('.fa-circle-notch').style.display = 'none';
-                input.focus();
+                sendButton.innerHTML = '<i class="fas fa-paper-plane"></i>';
+                textarea.focus();
+                textarea.value = '';
             }
         }
     }
 
-    handleQuickAction(btn) {
-        const action = btn.querySelector('span').textContent;
-        this.addMessage('user', action);
-        this.showTypingIndicator();
+    async handleQuickAction(btn) {
+        const suggestion = btn.textContent.trim();
+        this.addMessage('user', suggestion);
         
-        // Simulate AI response for quick actions
-        setTimeout(() => {
-            this.hideTypingIndicator();
-            this.addMessage('ai', this.getQuickActionResponse(action));
-        }, 1000);
+        try {
+            // Make API call to Gemini
+            const response = await this.getAIResponse(suggestion);
+            this.addMessage('ai', response);
+        } catch (error) {
+            this.addMessage('ai', error.message || 'Sorry, I encountered an error. Please try again.');
+            console.error('AI Error:', error);
+        }
     }
 
     async getAIResponse(message) {
@@ -237,18 +237,6 @@ class AIChat {
         text = text.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
         
         return text;
-    }
-
-    handleQuickAction(btn) {
-        const action = btn.querySelector('span').textContent;
-        this.addMessage('user', action);
-        this.showTypingIndicator();
-        
-        // Simulate AI response for quick actions
-        setTimeout(() => {
-            this.hideTypingIndicator();
-            this.addMessage('ai', this.getQuickActionResponse(action));
-        }, 1000);
     }
 
     addMessage(type, content) {
@@ -307,16 +295,6 @@ class AIChat {
         while (this.chatMessages.children.length > 1) {
             this.chatMessages.removeChild(this.chatMessages.lastChild);
         }
-    }
-
-    getQuickActionResponse(action) {
-        const responses = {
-            'Create Learning Path': 'I\'ll help you create a personalized learning path. What subject would you like to learn?',
-            'Explain a Topic': 'I\'d be happy to explain any topic. What would you like to understand better?',
-            'Find Resources': 'I can help you find the best learning resources. What topic are you interested in?',
-            'Practice Exercises': 'I\'ll create some practice exercises for you. What subject would you like to practice?'
-        };
-        return responses[action] || 'How can I help you with that?';
     }
 }
 
@@ -614,4 +592,3 @@ function debounce(func, wait) {
         timeout = setTimeout(later, wait);
     };
 }
-

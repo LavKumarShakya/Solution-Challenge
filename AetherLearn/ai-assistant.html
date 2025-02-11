@@ -6,211 +6,177 @@
     <meta name="description" content="AetherLearn - AI Learning Assistant">
     <title>AI Assistant - AetherLearn</title>
     
-    <!-- Stylesheets -->
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Loading Screen -->
     <div id="loading-screen">
         <div class="loader"></div>
     </div>
 
-    <!-- Navbar Placeholder -->
     <div id="navbar-placeholder"></div>
 
-    <main class="ai-assistant-page">
-        <!-- AI Header -->
-        <section class="ai-header">
-            <div class="ai-header-content">
-                <h1>Your Personal AI Learning Assistant</h1>
-                <p>Get instant help, explanations, and guidance for any topic</p>
-                <div class="ai-stats">
-                    <div class="stat">
-                        <span class="stat-number">24/7</span>
-                        <span class="stat-label">Available</span>
+    <main class="ai-assistant-container">
+        <!-- Hero Section -->
+        <section class="ai-hero">
+            <div class="ai-hero-content">
+                <h1 class="reveal-text">Your AI Learning Companion</h1>
+                <p class="hero-subtitle fade-in">Powered by advanced AI to help you master any tech topic</p>
+                <div class="ai-capabilities">
+                    <div class="capability">
+                        <div class="capability-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <span>Instant Responses</span>
                     </div>
-                    <div class="stat">
-                        <span class="stat-number">100+</span>
-                        <span class="stat-label">Topics</span>
+                    <div class="capability">
+                        <div class="capability-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <span>Smart Learning</span>
                     </div>
-                    <div class="stat">
-                        <span class="stat-number">1M+</span>
-                        <span class="stat-label">Questions Answered</span>
+                    <div class="capability">
+                        <div class="capability-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <span>Code Support</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <div class="ai-chat-interface">
-            <!-- AI Features Sidebar -->
-            <div class="ai-features">
-                <h2>AI Assistant Features</h2>
-                <div class="feature-list">
-                    <div class="ai-feature">
-                        <i class="fas fa-brain"></i>
-                        <h3>Personalized Learning</h3>
-                        <p>Get customized learning paths based on your goals and preferences</p>
-                    </div>
-
-                    <div class="ai-feature">
-                        <i class="fas fa-lightbulb"></i>
-                        <h3>Smart Explanations</h3>
-                        <p>Receive clear explanations adapted to your learning style</p>
-                    </div>
-
-                    <div class="ai-feature">
-                        <i class="fas fa-book-reader"></i>
-                        <h3>Resource Recommendations</h3>
-                        <p>Discover the best learning materials for your needs</p>
-                    </div>
-
-                    <div class="ai-feature">
-                        <i class="fas fa-chart-line"></i>
-                        <h3>Progress Tracking</h3>
-                        <p>Monitor your learning progress and get improvement suggestions</p>
-                    </div>
-
-                    <div class="ai-feature">
-                        <i class="fas fa-puzzle-piece"></i>
-                        <h3>Interactive Practice</h3>
-                        <p>Test your knowledge with AI-generated exercises</p>
-                    </div>
-
-                    <div class="ai-feature">
-                        <i class="fas fa-clock"></i>
-                        <h3>24/7 Availability</h3>
-                        <p>Get help anytime, anywhere with instant responses</p>
-                    </div>
+        <!-- Main Chat Interface -->
+        <section class="chat-interface">
+            <!-- Left Sidebar -->
+            <aside class="chat-sidebar">
+                <div class="sidebar-header">
+                    <h3>Learning Topics</h3>
                 </div>
-            </div>
-
-            <!-- Chat Area -->
-            <div class="chat-container">
-                <div class="chat-header">
-                    <div class="ai-status">
-                        <div class="status-indicator active"></div>
-                        <span>AI Assistant Online</span>
-                    </div>
-                    <button class="clear-chat">
-                        <i class="fas fa-trash-alt"></i>
-                        Clear Chat
+                <div class="topic-list">
+                    <button class="topic-button active">
+                        <i class="fas fa-terminal"></i>
+                        <span>Programming</span>
+                    </button>
+                    <button class="topic-button">
+                        <i class="fas fa-laptop-code"></i>
+                        <span>Web Development</span>
+                    </button>
+                    <button class="topic-button">
+                        <i class="fas fa-database"></i>
+                        <span>Databases</span>
+                    </button>
+                    <button class="topic-button">
+                        <i class="fas fa-robot"></i>
+                        <span>Machine Learning</span>
+                    </button>
+                    <button class="topic-button">
+                        <i class="fas fa-mobile-alt"></i>
+                        <span>Mobile Dev</span>
                     </button>
                 </div>
+            </aside>
 
-                <div class="chat-messages">
+            <!-- Chat Area -->
+            <div class="chat-main">
+                <div class="chat-header">
+                    <div class="chat-status">
+                        <span class="status-dot"></span>
+                        <span class="status-text">AI Assistant Active</span>
+                    </div>
+                    <div class="chat-actions">
+                        <button class="action-btn" title="Clear Chat">
+                            <i class="fas fa-broom"></i>
+                        </button>
+                        <button class="action-btn" title="Export Chat">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="chat-messages" id="chatMessages">
                     <!-- Welcome Message -->
-                    <div class="message ai">
+                    <div class="message ai-message">
                         <div class="message-avatar">
                             <i class="fas fa-robot"></i>
                         </div>
                         <div class="message-content">
-                            <p>Hello! I'm your AI learning assistant powered by Gemini AI. I can help you with:</p>
-                            <ul>
-                                <li>Explaining programming concepts and providing code examples</li>
-                                <li>Creating personalized learning paths</li>
-                                <li>Breaking down complex topics into simple steps</li>
-                                <li>Answering technical questions</li>
-                                <li>Suggesting learning resources</li>
-                            </ul>
-                            <p>Try asking me about any programming language, framework, or concept. For example:</p>
-                            <ul>
-                                <li>"Explain async/await in JavaScript with examples"</li>
-                                <li>"Create a learning path for becoming a full-stack developer"</li>
-                                <li>"Help me understand React hooks"</li>
-                            </ul>
+                            <div class="message-bubble">
+                                <h4>Hello! 👋 I'm your AI learning assistant.</h4>
+                                <p>I can help you with:</p>
+                                <ul class="feature-list">
+                                    <li>Learning programming concepts</li>
+                                    <li>Debugging code</li>
+                                    <li>Understanding algorithms</li>
+                                    <li>Finding learning resources</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Quick Actions -->
-                <div class="quick-actions">
-                    <button class="quick-action-btn">
+                <!-- Quick Suggestions -->
+                <div class="quick-suggestions">
+                    <button class="suggestion-chip">
+                        <i class="fas fa-graduation-cap"></i>
+                        Learning path for React
+                    </button>
+                    <button class="suggestion-chip">
                         <i class="fas fa-code"></i>
-                        <span>Learn JavaScript Basics</span>
+                        JavaScript basics
                     </button>
-                    <button class="quick-action-btn">
+                    <button class="suggestion-chip">
                         <i class="fas fa-project-diagram"></i>
-                        <span>Web Development Roadmap</span>
-                    </button>
-                    <button class="quick-action-btn">
-                        <i class="fas fa-database"></i>
-                        <span>SQL vs NoSQL Databases</span>
-                    </button>
-                    <button class="quick-action-btn">
-                        <i class="fas fa-laptop-code"></i>
-                        <span>Build Portfolio Projects</span>
-                    </button>
-                    <button class="quick-action-btn">
-                        <i class="fas fa-brain"></i>
-                        <span>Data Structures & Algorithms</span>
+                        System design
                     </button>
                 </div>
 
                 <!-- Chat Input -->
-                <div class="chat-input-container">
-                    <form class="chat-form">
+                <div class="chat-input">
+                    <form id="chatForm" class="input-form">
                         <div class="input-wrapper">
-                            <input type="text" placeholder="Ask about programming, web development, AI, or any tech topic..." required>
-                            <div class="suggestions">
-                                <small>Try: "How to use async/await" or "Explain React components"</small>
-                            </div>
+                            <textarea 
+                                placeholder="Ask me anything about programming, web development, or tech..." 
+                                rows="1"
+                                autofocus>
+                            </textarea>
+                            <button type="submit" class="send-button">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
                         </div>
-                        <button type="submit" class="send-message" id="sendMessage">
-                            <i class="fas fa-paper-plane"></i>
-                            <i class="fas fa-circle-notch fa-spin" style="display: none;"></i>
-                        </button>
                     </form>
+                    <div class="input-suggestions">
+                    </div>
                 </div>
             </div>
-        </div>
+
+            <!-- Right Sidebar -->
+            <aside class="context-sidebar">
+                <div class="context-header">
+                    <h3>Current Topic</h3>
+                </div>
+                <div class="context-content">
+                    <div class="context-card">
+                        <h4>Related Resources</h4>
+                        <ul class="resource-list">
+                            <li>
+                                <i class="fas fa-book"></i>
+                                <span>Documentation</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-video"></i>
+                                <span>Video Tutorials</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-tasks"></i>
+                                <span>Practice Exercises</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </aside>
+        </section>
     </main>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>AetherLearn</h3>
-                <p>Transforming education through AI-powered personalized learning paths and free resources.</p>
-                <div class="social-icons">
-                    <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
-                    <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
-                    <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                    <a href="#" title="Discord"><i class="fab fa-discord"></i></a>
-                </div>
-            </div>
-
-            <div class="footer-section">
-                <h3>Quick Links</h3>
-                <a href="courses.html">Courses</a>
-                <a href="ai-assistant.html">AI Assistant</a>
-                <a href="community.html">Community</a>
-                <a href="about.html">About Us</a>
-            </div>
-
-            <div class="footer-section">
-                <h3>Resources</h3>
-                <a href="blog.html">Blog</a>
-                <a href="faq.html">FAQs</a>
-                <a href="support.html">Support</a>
-                <a href="privacy.html">Privacy Policy</a>
-            </div>
-
-            <div class="footer-section">
-                <h3>Contact Us</h3>
-                <a href="mailto:support@aetherlearn.com">support@aetherlearn.com</a>
-                <a href="tel:+1234567890">+1 (234) 567-890</a>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 AetherLearn. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <!-- Syntax Highlighting -->
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
-    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
 
     <!-- Scripts -->
     <script src="navbar.js"></script>

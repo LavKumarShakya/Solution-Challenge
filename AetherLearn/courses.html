@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body>
     <!-- Loading Screen -->
@@ -23,7 +24,7 @@
     <main class="course-discovery">
         <div class="course-container">
             <!-- Course Header -->
-            <section class="course-header">
+            <section class="course-header" data-aos="fade-up">
                 <h1>Discover Free Online Courses</h1>
                 <p>Unleash your potential with AI-powered learning paths tailored just for you.</p>
                 <p>Learn from curated courses across various topics and skill levels</p>
@@ -73,9 +74,9 @@
         </section>
 
         <!-- Course Grid -->
-        <section class="course-grid">
+        <section class="course-grid" data-aos="fade-up">
             <!-- Course Card -->
-            <div class="course-card">
+            <div class="course-card" data-aos="fade-up" data-aos-delay="50">
                 <div class="course-thumbnail">
                     <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=500&h=300&fit=crop" alt="Web Development Course">
                     <div class="course-overlay">
@@ -98,7 +99,7 @@
             </div>
 
             <!-- Course Card -->
-            <div class="course-card">
+            <div class="course-card" data-aos="fade-up" data-aos-delay="100">
                 <div class="course-thumbnail">
                     <img src="https://www.infiraise.com/wp-content/uploads/2022/09/UI-Developers-And-UX-Developers.jpg" alt="Web Development Course">
                     <div class="course-overlay">
@@ -121,7 +122,7 @@
             </div>
 
             <!-- Machine Learning Course Card -->
-            <div class="course-card">
+            <div class="course-card" data-aos="fade-up" data-aos-delay="150">
                 <div class="course-thumbnail">
                     <img src="https://www.mindinventory.com/blog/wp-content/uploads/2023/11/ai-ml-in-business-processes.webp" alt="Machine Learning Course">
                     <div class="course-overlay">
@@ -154,12 +155,12 @@
         </div>
 
         <!-- Featured Learning Paths -->
-        <section class="featured-paths">
+        <section class="featured-paths" data-aos="fade-up">
             <h2>Featured Learning Paths</h2>
             <p>Structured learning paths to help you achieve your career goals</p>
 
             <div class="paths-grid">
-                <div class="path-card">
+                <div class="path-card" data-aos="fade-up" data-aos-delay="50">
                     <div class="path-thumbnail">
                         <img src="https://images.unsplash.com/photo-1587620962725-abab7fe55159?w=800&h=450&fit=crop" alt="Full Stack Development Course">
                     </div>
@@ -176,7 +177,7 @@
                     </div>
                 </div>
 
-                <div class="path-card">
+                <div class="path-card" data-aos="fade-up" data-aos-delay="100">
                     <div class="path-thumbnail">
                         <img src="https://careercollegeindia.com/blog/wp-content/uploads/2024/09/UI-UX-Designer-scaled.jpg" alt="Digital Design Path">
                     </div>
@@ -193,7 +194,7 @@
                     </div>
                 </div>
 
-                <div class="path-card">
+                <div class="path-card" data-aos="fade-up" data-aos-delay="150">
                     <div class="path-thumbnail">
                         <img src="https://www.krmangalam.edu.in/wp-content/uploads/2024/02/324bs_ArtificialIntelligenceMachineLearning.webp" alt="AI & Machine Learning Path">
                     </div>
@@ -258,5 +259,17 @@
     <!-- Scripts -->
     <script src="navbar.js"></script>
     <script src="script.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 600,
+            easing: 'ease-out',
+            once: false,
+            offset: 50,
+            delay: 50,
+            mirror: true,
+            anchorPlacement: 'top-bottom'
+        });
+    </script>
 </body>
 </html>
