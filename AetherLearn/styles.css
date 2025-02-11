@@ -2320,16 +2320,16 @@ social-icons a:hover {
     transform: scale(1.1);
 }
 
-/* Context Sidebar */
-.context-sidebar {
-    padding: 2rem;
-}
 
 /* Context Sidebar */
 .context-sidebar {
-    padding: 2rem;
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
-
 .context-content {
     padding: 1.5rem;
     overflow-y: auto;
