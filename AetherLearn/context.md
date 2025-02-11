@@ -12,6 +12,7 @@
   - A multi-disciplinary learning approach that allows users to choose their preferred style.
   - AI chatbots designed to resolve queries and deliver explanations in a clear, personalized manner.
   - On-demand generation of educational content using AI tools (e.g., creating PDF notes from lecture videos, generating articles, quizzes, and more).
+   - Our platform offers the generation of customized study plans and complete course pathways, tailored to individual interests and learning preferences (visual, auditory, etc.). These plans can be created from scratch or built upon pre-generated recommendations powered by Gemini AI.
 
 ### Core Features Overview
 1. **Universal Search System**

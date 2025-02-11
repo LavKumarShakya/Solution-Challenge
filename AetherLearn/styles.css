@@ -833,15 +833,17 @@ button.hero-search-button.clean-button:hover {
 
 /* Section Styles */
 section {
-  padding: 6rem 5rem;
   width: 100%;
-  margin: 0;
+  padding: 6rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--bg-primary);
 }
 
 section > * {
+  width: 100%;
   max-width: 1400px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 section h2 {
@@ -1551,35 +1553,53 @@ social-icons a:hover {
 
 .course-filters {
   background: var(--card-bg);
-  padding: 2rem 5%;
   display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   gap: 1.5rem;
-  flex-wrap: wrap;
-  align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  max-width: 1400px;
+  margin: 0 auto;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1.5rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
 }
 
 .filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
   flex: 1;
-  min-width: 200px;
 }
 
 .filter-group label {
   display: block;
-  margin-bottom: 0.5rem;
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  font-weight: 500;
 }
 
 .filter-group select {
   width: 100%;
-  padding: 0.8rem;
+  padding: 0.8rem 1rem;
   background: var(--bg-tertiary);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 2px solid var(--input-border);
   border-radius: 8px;
   color: var(--text-primary);
   cursor: pointer;
   transition: all 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.filter-group select:hover {
+  border-color: var(--accent-secondary);
+}
+
+.filter-group select:focus {
+  border-color: var(--accent-primary);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(64, 224, 208, 0.1);
 }
 
 .filter-group select:hover {
@@ -1593,12 +1613,100 @@ social-icons a:hover {
 }
 
 .course-grid {
-    padding: 3rem 5%;
+    padding: 3rem 0;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 2.5rem;
     max-width: 1400px;
     margin: 0 auto;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+.course-card {
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.8rem;
+    margin: 3rem 0;
+}
+
+.pagination-btn {
+    padding: 0.8rem 1.2rem;
+    background: var(--card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pagination-btn:hover {
+    background: var(--accent-secondary);
+    border-color: var(--accent-secondary);
+    transform: translateY(-2px);
+}
+
+.pagination-btn.active {
+    background: var(--gradient-primary);
+    border: none;
+    color: var(--text-primary);
+}
+
+@media (max-width: 1200px) {
+    .course-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 1024px) {
+    .course-filters {
+        flex-wrap: wrap;
+    }
+    
+    .filter-group {
+        min-width: calc(50% - 0.75rem);
+        flex: 0 0 calc(50% - 0.75rem);
+    }
+}
+
+@media (max-width: 768px) {
+    .course-grid {
+        grid-template-columns: 1fr;
+        padding: 2rem 1rem;
+    }
+    
+    .course-filters {
+        margin: 0 1rem;
+    }
+    
+    .filter-group {
+        min-width: 100%;
+        flex: 0 0 100%;
+    }
+    
+    .pagination {
+        gap: 0.5rem;
+    }
 }
 
 .course-card {
@@ -2811,12 +2919,72 @@ social-icons a:hover {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
 }
 
-/* Add styles for the learning paths section */
+/* Learning Paths Section Styles */
 .courses {
-  padding: 50px 20px;
-  background-color: #0d0d0d;
-  color: #fff;
-  text-align: center;
+  padding: 4rem 2rem;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.paths-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem;
+  max-width: 1400px;
+  margin: 3rem auto;
+  padding: 0 2rem;
+}
+
+.path-card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.path-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.path-thumbnail {
+  position: relative;
+  padding-top: 56.25%; /* 16:9 aspect ratio */
+  overflow: hidden;
+}
+
+.path-thumbnail img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.path-card:hover .path-thumbnail img {
+  transform: scale(1.1);
+}
+
+.path-content {
+  padding: 2rem;
+  background: var(--card-bg);
+  position: relative;
+}
+
+@media (max-width: 1024px) {
+  .paths-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .paths-grid {
+    grid-template-columns: 1fr;
+    padding: 0 1rem;
+  }
 }
 
 .learning-path-card {
@@ -2873,6 +3041,9 @@ social-icons a:hover {
   background: var(--gradient-dark);
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .curated-courses::before {
@@ -2890,8 +3061,23 @@ social-icons a:hover {
 .curated-courses > * {
   position: relative;
   z-index: 2;
+  width: 100%;
   max-width: 1400px;
-  margin: 0 auto;
+}
+
+.course-filters {
+  width: 100%;
+  max-width: 1400px;
+  margin: 2rem auto;
+}
+
+.course-grid {
+  width: 100%;
+  max-width: 1400px;
+  margin: 3rem auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
 }
 
 .course-filters {
