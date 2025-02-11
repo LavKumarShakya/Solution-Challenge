@@ -4848,6 +4848,94 @@ html {
 
 /* Resources Page Styles */
 .resources-page {
+
+/* Markdown content styling */
+.markdown-content {
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+.markdown-content h1, .markdown-content h2, .markdown-content h3, 
+.markdown-content h4, .markdown-content h5, .markdown-content h6 {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.markdown-content p {
+    margin: 1em 0;
+}
+
+.markdown-content ul, .markdown-content ol {
+    margin: 1em 0;
+    padding-left: 2em;
+}
+
+.markdown-content li {
+    margin: 0.5em 0;
+}
+
+.markdown-content code {
+    background: #f4f4f4;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.9em;
+}
+
+.markdown-content pre {
+    background: #1e1e1e;
+    color: #fff;
+    padding: 1em;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 1em 0;
+}
+
+.markdown-content pre code {
+    background: transparent;
+    padding: 0;
+    color: inherit;
+    font-size: 0.9em;
+    line-height: 1.5;
+}
+
+.markdown-content a {
+    color: var(--primary-color);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+}
+
+.markdown-content a:hover {
+    border-bottom-color: var(--primary-color);
+}
+
+.markdown-content blockquote {
+    border-left: 4px solid var(--primary-color);
+    margin: 1em 0;
+    padding: 0.5em 1em;
+    background: #f8f9fa;
+    font-style: italic;
+}
+
+.markdown-content table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+}
+
+.markdown-content th, .markdown-content td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.markdown-content th {
+    background-color: #f8f9fa;
+}
+
     padding-top: 80px;
     min-height: 100vh;
     background: var(--bg-primary);

@@ -1,4 +1,4 @@
- but // Loading Screen
+// Loading Screen
 document.addEventListener('DOMContentLoaded', () => {
     const loadingScreen = document.getElementById('loading-screen');
     if (loadingScreen) {
@@ -212,9 +212,27 @@ class AIChat {
                     contents: [{
                         role: 'user',
                         parts: [{
-                            text: `You are an AI learning assistant for AetherLearn. You help users learn various topics in technology, programming, and other subjects. Keep responses concise, friendly, and educational.
-                            
-User's message: ${message}`
+                            text: `You are AetherLearn's AI learning assistant, an expert in technology education and programming. Your role is to provide helpful, accurate, and engaging responses to help users learn and grow in their tech journey.
+    
+    Key Guidelines:
+    - Be friendly, encouraging, and maintain a supportive learning environment
+    - Use clear explanations with practical examples
+    - For code examples, use markdown code blocks with language specification (e.g. \`\`\`javascript)
+    - Break down complex concepts into digestible parts
+    - Relate answers to real-world applications where possible
+    - Keep responses focused and concise
+    - Use bullet points and headers (markdown) to organize information
+    - Recommend relevant AetherLearn courses or resources when appropriate
+    
+    Focus Areas:
+    - Programming & Software Development
+    - Web Development (Frontend/Backend)
+    - Data Science & Machine Learning
+    - Cloud Computing & DevOps
+    - System Design & Architecture
+    - Best Practices & Industry Standards
+    
+    User's message: ${message}`
                         }]
                     }]
                 })
@@ -242,20 +260,27 @@ User's message: ${message}`
     }
 
     formatResponse(text) {
-        // Convert markdown-style code blocks to HTML
-        text = text.replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
-        
-        // Convert single backtick code to inline code
-        text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
-        
-        // Convert URLs to links
-        text = text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>');
-        
-        // Convert bullet points
-        text = text.replace(/^\s*[-*]\s(.+)$/gm, '<li>$1</li>');
-        text = text.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
-        
-        return text;
+        marked.setOptions({
+            highlight: function(code, lang) {
+                if (lang && hljs.getLanguage(lang)) {
+                    return hljs.highlight(code, { language: lang }).value;
+                }
+                return hljs.highlightAuto(code).value;
+            },
+            breaks: true,
+            gfm: true,
+            headerIds: false,
+            mangle: false
+        });
+
+        try {
+            const formattedHtml = marked.parse(text);
+            // Wrap response in a div for proper styling
+            return `<div class="markdown-content">${formattedHtml}</div>`;
+        } catch (error) {
+            console.error('Markdown parsing error:', error);
+            return `<p>${text}</p>`;
+        }
     }
 
     addMessage(type, content) {
