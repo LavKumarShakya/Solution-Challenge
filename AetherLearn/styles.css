@@ -2005,19 +2005,6 @@ social-icons a:hover {
     z-index: 1;
 }
 
-.chat-interface {
-    display: grid;
-    grid-template-columns: 280px 1fr 280px;
-    gap: 2rem;
-    max-width: 1600px;
-    margin: 0 auto;
-    padding: 2rem;
-    height: calc(100vh - 180px);
-    min-height: 600px;
-    position: relative;
-    z-index: 1;
-}
-
 .chat-container {
     background: var(--bg-secondary);
     border-radius: 16px;
@@ -2215,7 +2202,7 @@ social-icons a:hover {
     font-size: 1.2rem;
     color: var(--text-primary);
     margin: 0;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 /* Topic List */
@@ -2223,8 +2210,40 @@ social-icons a:hover {
     padding: 1rem;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.8rem;
     overflow-y: auto;
+}
+
+.topic-button {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: none;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    text-align: left;
+}
+
+.topic-button:hover,
+.topic-button.active {
+    background: var(--bg-tertiary);
+    border-color: var(--accent-secondary);
+    color: var(--text-primary);
+}
+
+.topic-button i {
+    font-size: 1.2rem;
+    color: var(--accent-secondary);
+    transition: transform 0.3s ease;
+}
+
+.topic-button:hover i {
+    transform: scale(1.1);
 }
 
 .topic-button {
@@ -2306,6 +2325,11 @@ social-icons a:hover {
     padding: 2rem;
 }
 
+/* Context Sidebar */
+.context-sidebar {
+    padding: 2rem;
+}
+
 .context-content {
     padding: 1.5rem;
     overflow-y: auto;
@@ -2376,32 +2400,6 @@ social-icons a:hover {
     color: var(--accent-secondary);
 }
 
-.resource-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.resource-list li {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 0.8rem;
-    color: var(--text-secondary);
-    border-radius: 8px;
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.resource-list li:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--accent-secondary);
-}
-
-.resource-list li i {
-    color: var(--accent-secondary);
-}
-
 .chat-container {
     background: var(--chat-bg);
     border-radius: 16px;
@@ -2418,6 +2416,75 @@ social-icons a:hover {
 .chat-container:hover,
 .chat-input textarea:focus ~ .chat-container {
     box-shadow: 0 0 15px var(--accent-secondary);
+}
+
+/* Chat Header */
+.chat-header {
+    padding: 1.2rem 1.5rem;
+    background: var(--bg-tertiary);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-status {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--success);
+    position: relative;
+}
+
+.status-dot::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--success);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+    50% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+}
+
+.status-text {
+    color: var(--text-primary);
+    font-size: 0.95rem;
+}
+
+.chat-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    padding: 0.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--accent-secondary);
+    transform: translateY(-2px);
 }
 
 /* Chat Header */
@@ -4322,11 +4389,21 @@ html {
 
 /* Chat Container */
 .chat-container {
-    background: var(--bg-secondary);
-    border-radius: 12px;
+    background: var(--chat-bg);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--chat-border);
     display: flex;
     flex-direction: column;
     height: 100%;
+    position: relative;
+    z-index: 1;
+    transition: box-shadow 0.3s ease;
+}
+
+.chat-container:hover,
+.chat-input textarea:focus ~ .chat-container {
+    box-shadow: 0 0 15px var(--accent-secondary);
 }
 
 .chat-header {

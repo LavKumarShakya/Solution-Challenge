@@ -1,4 +1,4 @@
-// Loading Screen
+ but // Loading Screen
 document.addEventListener('DOMContentLoaded', () => {
     const loadingScreen = document.getElementById('loading-screen');
     if (loadingScreen) {
@@ -167,7 +167,9 @@ class AIChat {
             try {
                 // Make API call to Gemini
                 const response = await this.getAIResponse(message);
-                this.addMessage('ai', response);
+                if (response) {
+                    this.addMessage('ai', response);
+                }
             } catch (error) {
                 this.addMessage('ai', error.message || 'Sorry, I encountered an error. Please try again.');
                 console.error('AI Error:', error);
@@ -197,28 +199,45 @@ class AIChat {
     }
 
     async getAIResponse(message) {
+        const API_KEY = 'AIzaSyCTXQs7wWnAsekXkYban3EJvuBPwm0qDRM';
+        const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
+        
         try {
-            const response = await fetch('http://localhost:3001/api/ai/chat', {
+            const response = await fetch(`${API_URL}?key=${API_KEY}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json'
                 },
                 body: JSON.stringify({
-                    message,
-                    context: 'You are an AI learning assistant for AetherLearn. You help users learn various topics in technology, programming, and other subjects. Keep responses concise, friendly, and educational.'
+                    contents: [{
+                        role: 'user',
+                        parts: [{
+                            text: `You are an AI learning assistant for AetherLearn. You help users learn various topics in technology, programming, and other subjects. Keep responses concise, friendly, and educational.
+                            
+User's message: ${message}`
+                        }]
+                    }]
                 })
             });
 
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                const errorData = await response.text();
+                console.error('Gemini API Error:', errorData);
+                if (response.status === 403) {
+                    throw new Error('Invalid API key. Please check your Gemini API key configuration.');
+                }
+                throw new Error('Failed to get response from Gemini API. Please try again.');
             }
 
             const data = await response.json();
-            return data.response;
+            if (!data.candidates || !data.candidates[0] || !data.candidates[0].content) {
+                throw new Error('Invalid response format from Gemini API');
+            }
+            
+            return data.candidates[0].content.parts[0].text;
         } catch (error) {
             console.error('API Error:', error);
-            throw new Error('Sorry, I had trouble connecting to my AI service. Please try again in a moment.');
+            throw error;
         }
     }
 
@@ -240,6 +259,7 @@ class AIChat {
     }
 
     addMessage(type, content) {
+        console.log('addMessage called', type, content);
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${type}`;
         
@@ -298,17 +318,6 @@ class AIChat {
     }
 }
 
-// Initialize AI Chat when on AI Assistant page
-document.addEventListener('DOMContentLoaded', () => {
-    if (window.location.pathname.includes('ai-assistant')) {
-        const chat = new AIChat();
-        // Remove any existing messages except the welcome message
-        const chatMessages = document.querySelector('.chat-messages');
-        while (chatMessages && chatMessages.children.length > 1) {
-            chatMessages.removeChild(chatMessages.lastChild);
-        }
-    }
-});
 
 // Utility Functions
 function debounce(func, wait) {
