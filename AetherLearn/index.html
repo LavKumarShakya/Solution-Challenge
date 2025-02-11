@@ -29,13 +29,17 @@
                 <h1>Transform Your Learning Journey with AI</h1>
                 <p>Our AI creates personalized learning paths using the best free resources across the internet, tailored just for you.</p>
                 
-                <div class="ai-search-container">
-                    <div style="position: relative;">
-                        <input type="text" class="hero-search-input" id="searchInput" placeholder="What do you want to learn today? (e.g., 'Machine Learning', 'Web Development')">
-                        <div class="search-suggestions" id="searchSuggestions"></div>
+                <div class="search-and-cta">
+                    <div class="ai-search-container">
+                        <div style="position: relative;">
+                            <input type="text" class="hero-search-input" id="searchInput" placeholder="What do you want to learn today? (e.g., 'Machine Learning', 'Web Development')">
+                            <div class="search-suggestions" id="searchSuggestions"></div>
+                        </div>
+                    </div>
+                    <div class="cta-group">
+                        <button class="hero-search-button clean-button">Create Learning Path</button>
                     </div>
                 </div>
-                <button class="hero-search-button clean-button">Create Learning Path</button>
                 <a href="ai-assistant.html" class="ai-assistant-btn">
                     <i class="fas fa-robot"></i>
                     Try AI Assistant
@@ -239,36 +243,109 @@
             </div>
         </section>
 
-        <!-- Testimonials Section -->
-        <section class="testimonials" data-aos="fade-up">
-            <h2>What Our Learners Say</h2>
-            <p>Join thousands of successful learners who transformed their skills with AetherLearn</p>
-
-            <div class="testimonial-container">
-                <div class="testimonial" data-aos="fade-up" data-aos-delay="100">
-                    <img src="https://i.pravatar.cc/100?img=1" alt="User Avatar" class="testimonial-avatar">
-                    <p>"The AI-powered learning paths helped me transition into tech without any prior experience. Now I'm a full-stack developer!"</p>
-                    <div class="testimonial-info">
-                        <div class="name">Sarah Johnson</div>
-                        <div class="role">Web Developer</div>
+        <!-- Learning Journey Section -->
+        <section class="learning-journey" data-aos="fade-up">
+            <h2>Your Learning Journey</h2>
+            <div class="journey-cards">
+                <div class="journey-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="journey-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <div class="journey-content">
+                        <h3>Start Your Journey</h3>
+                        <p>Begin your personalized learning experience with AI-guided path recommendations and adaptive content.</p>
+                        <div class="journey-metrics">
+                            <div class="metric">
+                                <div class="metric-value">500+</div>
+                                <div class="metric-label">Learning Paths</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value">95%</div>
+                                <div class="metric-label">Success Rate</div>
+                            </div>
+                        </div>
+                        <ul class="journey-steps">
+                            <li class="journey-step">
+                                <span class="step-number">1</span>
+                                <span class="step-text">Choose your learning path</span>
+                            </li>
+                            <li class="journey-step">
+                                <span class="step-number">2</span>
+                                <span class="step-text">Get AI-powered recommendations</span>
+                            </li>
+                            <li class="journey-step">
+                                <span class="step-number">3</span>
+                                <span class="step-text">Track your progress</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 
-                <div class="testimonial">
-                    <img src="https://i.pravatar.cc/100?img=2" alt="User Avatar" class="testimonial-avatar">
-                    <p>"The personalized approach and AI assistant made learning complex topics much easier. Best free learning platform!"</p>
-                    <div class="testimonial-info">
-                        <div class="name">Michael Chen</div>
-                        <div class="role">Data Scientist</div>
+                <div class="journey-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="journey-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="journey-content">
+                        <h3>Master Skills</h3>
+                        <p>Develop expertise through interactive learning experiences and real-world projects.</p>
+                        <div class="journey-metrics">
+                            <div class="metric">
+                                <div class="metric-value">1000+</div>
+                                <div class="metric-label">Projects</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value">24/7</div>
+                                <div class="metric-label">AI Support</div>
+                            </div>
+                        </div>
+                        <ul class="journey-steps">
+                            <li class="journey-step">
+                                <span class="step-number">1</span>
+                                <span class="step-text">Practice with interactive exercises</span>
+                            </li>
+                            <li class="journey-step">
+                                <span class="step-number">2</span>
+                                <span class="step-text">Build real-world projects</span>
+                            </li>
+                            <li class="journey-step">
+                                <span class="step-number">3</span>
+                                <span class="step-text">Earn certifications</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 
-                <div class="testimonial">
-                    <img src="https://i.pravatar.cc/100?img=3" alt="User Avatar" class="testimonial-avatar">
-                    <p>"Amazing community and AI tools. I learned game development faster than I ever thought possible."</p>
-                    <div class="testimonial-info">
-                        <div class="name">Emma Davis</div>
-                        <div class="role">Game Developer</div>
+                <div class="journey-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="journey-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="journey-content">
+                        <h3>Grow Together</h3>
+                        <p>Connect with peers, join study groups, and participate in collaborative projects.</p>
+                        <div class="journey-metrics">
+                            <div class="metric">
+                                <div class="metric-value">50K+</div>
+                                <div class="metric-label">Community</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value">100+</div>
+                                <div class="metric-label">Study Groups</div>
+                            </div>
+                        </div>
+                        <ul class="journey-steps">
+                            <li class="journey-step">
+                                <span class="step-number">1</span>
+                                <span class="step-text">Join study groups</span>
+                            </li>
+                            <li class="journey-step">
+                                <span class="step-number">2</span>
+                                <span class="step-text">Collaborate on projects</span>
+                            </li>
+                            <li class="journey-step">
+                                <span class="step-number">3</span>
+                                <span class="step-text">Share knowledge</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
