@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - AetherLearn</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Include the common navbar -->
+    <header>
+        <nav>
+            <a href="/" class="logo">
+                <span>Aether</span>Learn
+            </a>
+            <div class="nav-links">
+                <a href="/">
+                    <i class="fas fa-home"></i>
+                    Home
+                </a>
+                <a href="courses.html">
+                    <i class="fas fa-graduation-cap"></i>
+                    Courses
+                </a>
+                <a href="ai-assistant.html">
+                    <i class="fas fa-robot"></i>
+                    AI Assistant
+                </a>
+                <a href="resources.html">
+                    <i class="fas fa-cube"></i>
+                    Resources
+                </a>
+                <a href="dashboard.html" class="active">
+                    <i class="fas fa-user"></i>
+                    Profile
+                </a>
+                <button class="nav-search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+                <a href="login.html" class="sign-in-btn">
+                    <i class="fas fa-user"></i>
+                    Sign In
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="dashboard-page">
+        <section class="dashboard-hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Welcome back, <span class="user-name">John!</span></h1>
+                    <p>Track your learning journey and achievements</p>
+                    <div class="dashboard-quick-actions">
+                        <button class="quick-action-btn">
+                            <i class="fas fa-play"></i>
+                            Continue Learning
+                        </button>
+                        <button class="quick-action-btn">
+                            <i class="fas fa-calendar"></i>
+                            Schedule Session
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Overview Section -->
+        <section class="dashboard-content">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-card completion">
+                        <i class="fas fa-chart-line stats-icon"></i>
+                        <div class="stat-value">85%</div>
+                        <div class="stat-label">Course Completion Rate</div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" style="width: 85%;"></div>
+                        </div>
+                        <div class="stat-trend positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>5% from last week</span>
+                        </div>
+                    </div>
+                    <div class="stat-card courses">
+                        <i class="fas fa-book-open stats-icon"></i>
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Active Courses</div>
+                        <div class="stat-trend">
+                            <span>2 due this week</span>
+                        </div>
+                    </div>
+                    <div class="stat-card hours">
+                        <i class="fas fa-clock stats-icon"></i>
+                        <div class="stat-value">256</div>
+                        <div class="stat-label">Hours Learned</div>
+                        <div class="stat-trend positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>8 hours this week</span>
+                        </div>
+                    </div>
+                    <div class="stat-card certificates">
+                        <i class="fas fa-medal stats-icon"></i>
+                        <div class="stat-value">15</div>
+                        <div class="stat-label">Certificates Earned</div>
+                        <div class="stat-trend">
+                            <span>Next milestone: 20</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <!-- Learning Progress -->
+                    <div class="dashboard-item learning-progress">
+                        <div class="item-header">
+                            <h2>Learning Progress</h2>
+                            <div class="view-options">
+                                <button class="view-btn active" data-view="weekly">
+                                    <i class="fas fa-calendar-week"></i> Weekly
+                                </button>
+                                <button class="view-btn" data-view="monthly">
+                                    <i class="fas fa-calendar-alt"></i> Monthly
+                                </button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <div class="progress-summary">
+                                <div class="pie-chart"></div>
+                                <div class="progress-stats">
+                                    <div class="progress-stat">
+                                        <span class="stat-number">65%</span>
+                                        <span class="stat-label">Overall Progress</span>
+                                    </div>
+                                    <div class="progress-stat">
+                                        <span class="stat-number">12</span>
+                                        <span class="stat-label">Days Streak</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chart-legend">
+                                <div class="legend-item">
+                                    <span class="legend-color" style="background: var(--accent-primary)"></span>
+                                    <span class="legend-label">Completed</span>
+                                    <span class="legend-value">45%</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-color" style="background: var(--accent-secondary)"></span>
+                                    <span class="legend-label">In Progress</span>
+                                    <span class="legend-value">35%</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-color" style="background: var(--success)"></span>
+                                    <span class="legend-label">Upcoming</span>
+                                    <span class="legend-value">20%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Achievements -->
+                    <div class="dashboard-item achievements">
+                        <div class="item-header">
+                            <h2>Recent Achievements</h2>
+                            <button class="view-all-btn">
+                                View All <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                        <div class="achievement-grid">
+                            <div class="achievement-item" data-unlocked="true">
+                                <div class="achievement-ring">
+                                    <i class="fas fa-star"></i>
+                                    <svg class="ring-progress" viewBox="0 0 36 36">
+                                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--accent-secondary)" stroke-width="2" stroke-dasharray="100, 100"/>
+                                    </svg>
+                                </div>
+                                <div class="achievement-info">
+                                    <h3>Quick Learner</h3>
+                                    <p>Complete 5 courses in a month</p>
+                                    <span class="achievement-date">Unlocked Feb 10</span>
+                                </div>
+                            </div>
+                            <div class="achievement-item" data-unlocked="true">
+                                <div class="achievement-ring">
+                                    <i class="fas fa-award"></i>
+                                    <svg class="ring-progress" viewBox="0 0 36 36">
+                                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--accent-secondary)" stroke-width="2" stroke-dasharray="100, 100"/>
+                                    </svg>
+                                </div>
+                                <div class="achievement-info">
+                                    <h3>Course Master</h3>
+                                    <p>Achieve 90%+ in all assignments</p>
+                                    <span class="achievement-date">Unlocked Feb 8</span>
+                                </div>
+                            </div>
+                            <div class="achievement-item" data-unlocked="false">
+                                <div class="achievement-ring locked">
+                                    <i class="fas fa-medal"></i>
+                                    <svg class="ring-progress" viewBox="0 0 36 36">
+                                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-dasharray="60, 100"/>
+                                    </svg>
+                                </div>
+                                <div class="achievement-info">
+                                    <h3>Top Performer</h3>
+                                    <p>Maintain study streak for 30 days</p>
+                                    <span class="achievement-progress">20/30 days</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Weekly Activity -->
+                    <div class="dashboard-item activity">
+                        <div class="item-header">
+                            <h2>Weekly Activity</h2>
+                            <div class="activity-stats">
+                                <div class="activity-stat">
+                                    <span class="stat-value">28.5</span>
+                                    <span class="stat-label">Hours this week</span>
+                                </div>
+                                <div class="activity-trend positive">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>12% vs last week</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="activityChart"></canvas>
+                        </div>
+                        <div class="activity-highlights">
+                            <div class="highlight-item">
+                                <i class="fas fa-fire"></i>
+                                <div class="highlight-info">
+                                    <h4>Most Productive Day</h4>
+                                    <p>Wednesday - 6.5 hours</p>
+                                </div>
+                            </div>
+                            <div class="highlight-item">
+                                <i class="fas fa-trophy"></i>
+                                <div class="highlight-info">
+                                    <h4>Weekly Goal</h4>
+                                    <p>28.5/30 hours</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Course Progress -->
+                    <div class="dashboard-item courses">
+                        <div class="item-header">
+                            <h2>Current Courses</h2>
+                            <div class="course-filters">
+                                <button class="filter-btn active">All</button>
+                                <button class="filter-btn">In Progress</button>
+                                <button class="filter-btn">Upcoming</button>
+                            </div>
+                        </div>
+                        <div class="courses-grid">
+                            <div class="course-card">
+                                <div class="course-info">
+                                    <div class="course-icon">
+                                        <i class="fas fa-code"></i>
+                                    </div>
+                                    <div class="course-details">
+                                        <h3>Web Development</h3>
+                                        <div class="course-meta">
+                                            <span class="course-duration">
+                                                <i class="fas fa-clock"></i> 8 weeks
+                                            </span>
+                                            <span class="course-lessons">
+                                                <i class="fas fa-book"></i> 24/32 lessons
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="course-progress-bar">
+                                    <div class="progress-ring">
+                                        <svg viewBox="0 0 120 120">
+                                            <circle class="progress-ring-bg" r="50" cx="60" cy="60"/>
+                                            <circle class="progress-ring-circle" r="50" cx="60" cy="60" style="stroke-dashoffset: 78.54"/>
+                                        </svg>
+                                        <div class="progress-text">75%</div>
+                                    </div>
+                                    <div class="next-milestone">
+                                        <span>Next: Advanced CSS</span>
+                                        <small>Tomorrow, 2 PM</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="course-card">
+                                <div class="course-info">
+                                    <div class="course-icon">
+                                        <i class="fas fa-brain"></i>
+                                    </div>
+                                    <div class="course-details">
+                                        <h3>Machine Learning</h3>
+                                        <div class="course-meta">
+                                            <span class="course-duration">
+                                                <i class="fas fa-clock"></i> 12 weeks
+                                            </span>
+                                            <span class="course-lessons">
+                                                <i class="fas fa-book"></i> 16/32 lessons
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="course-progress-bar">
+                                    <div class="progress-ring">
+                                        <svg viewBox="0 0 120 120">
+                                            <circle class="progress-ring-bg" r="50" cx="60" cy="60"/>
+                                            <circle class="progress-ring-circle" r="50" cx="60" cy="60" style="stroke-dashoffset: 157.08"/>
+                                        </svg>
+                                        <div class="progress-text">50%</div>
+                                    </div>
+                                    <div class="next-milestone">
+                                        <span>Next: Neural Networks</span>
+                                        <small>Today, 4 PM</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 AetherLearn. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="navbar.js"></script>
+    <script>
+        // Initialize Activity Chart with enhanced styling
+        const ctx = document.getElementById('activityChart').getContext('2d');
+        const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+        gradient.addColorStop(0, 'rgba(64, 224, 208, 0.3)');
+        gradient.addColorStop(1, 'rgba(64, 224, 208, 0)');
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Hours Studied',
+                    data: [4, 5, 3, 6, 4, 7, 5],
+                    borderColor: getComputedStyle(document.documentElement).getPropertyValue('--accent-secondary'),
+                    backgroundColor: gradient,
+                    tension: 0.4,
+                    fill: true,
+                    borderWidth: 3,
+                    pointBackgroundColor: '#fff',
+                    pointBorderColor: getComputedStyle(document.documentElement).getPropertyValue('--accent-secondary'),
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animations: {
+                    tension: {
+                        duration: 1000,
+                        easing: 'linear'
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleFont: {
+                            size: 14,
+                            weight: 'bold'
+                        },
+                        bodyFont: {
+                            size: 13
+                        },
+                        padding: 12,
+                        displayColors: false,
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.parsed.y} hours studied`;
+                            }
+                        }
+                    }
+                },
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            padding: 10,
+                            color: 'rgba(255, 255, 255, 0.7)',
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            padding: 10,
+                            color: 'rgba(255, 255, 255, 0.7)',
+                            font: {
+                                size: 12
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
