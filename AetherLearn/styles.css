@@ -1,8 +1,132 @@
+/* Custom Properties for Dashboard Hero */
+:root {
+    /* Colors */
+    --hero-gradient-start: #2196F3;
+    --hero-gradient-end: #4FC3F7;
+    --hero-gradient-accent: #81D4FA;
+    --hero-text-primary: #FFFFFF;
+    --hero-text-secondary: rgba(255, 255, 255, 0.8);
+    
+    /* Backgrounds */
+    --hero-bg-light: linear-gradient(135deg, #F5F7FA, #E4E7EB);
+    --hero-bg-dark: linear-gradient(135deg, #1E1E1E, #2D2D2D);
+    
+    /* Shadows */
+    --hero-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --hero-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --hero-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    
+    /* Transitions */
+    --hero-transition-fast: 0.2s ease;
+    --hero-transition-normal: 0.3s ease;
+    --hero-transition-slow: 0.5s ease;
+    
+    /* Spacing */
+    --hero-spacing-sm: 0.5rem;
+    --hero-spacing-md: 1rem;
+    --hero-spacing-lg: 2rem;
+    --hero-spacing-xl: 4rem;
+    
+    /* Border Radius */
+    --hero-radius-sm: 4px;
+    --hero-radius-md: 8px;
+    --hero-radius-lg: 16px;
+    --hero-radius-full: 9999px;
+}
+
+/* Dark mode overrides */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --hero-text-primary: #FFFFFF;
+        --hero-text-secondary: rgba(255, 255, 255, 0.7);
+        --hero-bg-gradient: var(--hero-bg-dark);
+    }
+}
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;600;700&family=Open+Sans:wght@400;600;700&display=swap");
 @import url("https://unpkg.com/aos@2.3.1/dist/aos.css");
 
 /* Base element transitions */
 .learning-path-card,
+/* Responsive Breakpoints */
+:root {
+    /* Breakpoints */
+    --bp-sm: 576px;
+    --bp-md: 768px;
+    --bp-lg: 992px;
+    --bp-xl: 1200px;
+}
+
+/* Responsive Utility Classes for Dashboard */
+.dashboard-hide-sm {
+    display: none;
+}
+
+@media (min-width: 576px) {
+    .dashboard-show-sm-up {
+        display: block;
+    }
+    .dashboard-hide-sm-up {
+        display: none;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .dashboard-page .dashboard-hero .container .hero-content .hero-text h1.gradient-text {
+        font-size: 2.5rem;
+    }
+
+    .dashboard-page .dashboard-hero .container .hero-content .hero-text h1.gradient-text span.user-name {
+        font-size: 3rem;
+    }
+
+    .dashboard-page .dashboard-hero .container .hero-content .hero-subtitle {
+        font-size: 1rem;
+        padding: 0 var(--hero-spacing-md);
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .dashboard-page .dashboard-hero .container .hero-content .hero-text h1.gradient-text {
+        font-size: 3.5rem;
+    }
+
+    .dashboard-page .dashboard-hero .container .hero-content .hero-text h1.gradient-text span.user-name {
+        font-size: 4rem;
+    }
+}
+
+/* Container width adjustments */
+.dashboard-page .dashboard-hero .container {
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: var(--hero-spacing-md);
+    padding-left: var(--hero-spacing-md);
+}
+
+@media (min-width: 576px) {
+    .dashboard-page .dashboard-hero .container {
+        max-width: 540px;
+    }
+}
+
+@media (min-width: 768px) {
+    .dashboard-page .dashboard-hero .container {
+        max-width: 720px;
+    }
+}
+
+@media (min-width: 992px) {
+    .dashboard-page .dashboard-hero .container {
+        max-width: 960px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .dashboard-page .dashboard-hero .container {
+        max-width: 1140px;
+    }
+}
 .feature-card,
 .testimonial,
 .course-card {
@@ -23,6 +147,70 @@
 }
 
 /* Custom animation for cards */
+/* Print Styles for Dashboard Hero */
+@media print {
+    .dashboard-page .dashboard-hero {
+        padding: 2rem 0 !important;
+        background: none !important;
+        color: #000 !important;
+        print-color-adjust: exact;
+    }
+
+    .dashboard-page .dashboard-hero::before,
+    .dashboard-page .dashboard-hero::after {
+        display: none !important;
+    }
+
+    .dashboard-page .dashboard-hero .container .hero-content .hero-text h1.gradient-text,
+    .dashboard-page .dashboard-hero .container .hero-content .hero-text h1.gradient-text span.user-name {
+        color: #000 !important;
+        background: none !important;
+        -webkit-text-fill-color: #000 !important;
+    }
+
+    .dashboard-page .dashboard-hero .container .hero-content .dashboard-actions {
+        display: none !important;
+    }
+
+    .dashboard-page .dashboard-hero .container .hero-content .hero-subtitle {
+        color: #666 !important;
+    }
+}
+
+/* Performance Optimizations */
+.dashboard-page .dashboard-hero * {
+    /* Optimize animation performance */
+    will-change: transform, opacity;
+    /* Ensure GPU acceleration for animations */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+/* Load animations only when visible */
+.dashboard-hero-animate {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.dashboard-hero-animate.is-visible {
+    opacity: 1;
+    visibility: visible;
+    animation: fadeSlideUp 0.8s ease-out forwards;
+}
+
+/* Reduce motion when system prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .dashboard-hero-animate {
+        opacity: 1;
+        visibility: visible;
+        animation: none !important;
+    }
+
+    .dashboard-page .dashboard-hero * {
+        transition: none !important;
+        animation: none !important;
+    }
+}
 .learning-path-card:hover,
 .feature-card:hover {
   transform: translateY(-10px);
@@ -6990,6 +7178,72 @@ social-auth p::after { right: 0; }
     gap: 1.5rem;
     margin-bottom: 2rem;
 }
+/* Dashboard Hero Heading Styles - Using CSS Variables */
+.dashboard-page .dashboard-hero .container .hero-content .hero-text h1.gradient-text {
+    font-family: 'Poppins', sans-serif;
+    font-size: 4.5rem;
+    font-weight: 800;
+    background: linear-gradient(120deg, var(--hero-gradient-start), var(--hero-gradient-end));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    line-height: 1.2;
+    margin-bottom: var(--hero-spacing-md);
+    text-align: center;
+    text-transform: capitalize;
+    transition: transform var(--hero-transition-normal);
+}
+
+.dashboard-page .dashboard-hero .container .hero-content .hero-text h1.gradient-text span.user-name {
+    font-size: 5.5rem;
+    font-weight: 900;
+    background: linear-gradient(120deg, var(--hero-gradient-end), var(--hero-gradient-accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+    transform: translateY(2px);
+    transition: all var(--hero-transition-normal);
+}
+
+.dashboard-page .dashboard-hero {
+    padding: var(--hero-spacing-xl) 0;
+    background: var(--hero-bg-gradient);
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-page .dashboard-hero .container .hero-content .dashboard-actions .cta-button {
+    padding: var(--hero-spacing-md) var(--hero-spacing-lg);
+    border-radius: var(--hero-radius-full);
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: var(--hero-spacing-sm);
+    transition: all var(--hero-transition-normal);
+    cursor: pointer;
+    border: none;
+}
+
+.dashboard-page .dashboard-hero .container .hero-content .dashboard-actions .primary-button {
+    background: linear-gradient(120deg, var(--hero-gradient-start), var(--hero-gradient-end));
+    color: var(--hero-text-primary);
+    box-shadow: var(--hero-shadow-md);
+}
+
+.dashboard-page .dashboard-hero .container .hero-content .dashboard-actions .secondary-button {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--hero-text-primary);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.dashboard-page .dashboard-hero .container .hero-content .hero-subtitle {
+    color: var(--hero-text-secondary);
+    font-size: 1.2rem;
+    margin-bottom: var(--hero-spacing-lg);
+    transition: opacity var(--hero-transition-normal);
+}
 
 .stat-card {
     background: var(--bg-tertiary);
@@ -7034,6 +7288,623 @@ social-auth p::after { right: 0; }
 .progress-bar-fill {
     height: 100%;
     background: var(--gradient-primary);
+/* Dashboard Hero Heading Styles - Exact Structure Match */
+.dashboard-page .dashboard-hero .container .hero-content .hero-text h1.gradient-text {
+    font-family: 'Poppins', sans-serif;
+    font-size: 4.5rem;
+    font-weight: 800;
+    background: linear-gradient(120deg, #2196F3, #4FC3F7);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    text-transform: capitalize;
+}
+
+.dashboard-page .dashboard-hero .container .hero-content .hero-text h1.gradient-text span.user-name {
+    font-size: 5.5rem;
+    font-weight: 900;
+    background: linear-gradient(120deg, #4FC3F7, #81D4FA);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+    transform: translateY(2px);
+    transition: all 0.3s ease;
+}
+
+.dashboard-page .dashboard-hero .container .hero-content .hero-text h1.gradient-text span.user-name:hover {
+    text-shadow: 0 0 20px rgba(79, 195, 247, 0.5);
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .dashboard-page .dashboard-hero .container .hero-content .hero-text h1.gradient-text {
+        font-size: 3rem;
+    }
+
+    .dashboard-page .dashboard-hero .container .hero-content .hero-text h1.gradient-text span.user-name {
+        font-size: 3.5rem;
+    }
+}
+/* Dashboard Hero Heading Styles - Maximum Specificity */
+.dashboard-page .dashboard-hero .hero-content .hero-text h1.gradient-text {
+/* Dashboard Hero Subtitle Styles */
+.dashboard-page .dashboard-hero .container .hero-content .hero-subtitle {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    text-align: center;
+    margin-top: -0.5rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+    .dashboard-page .dashboard-hero .container .hero-content .hero-subtitle {
+        font-size: 1rem;
+        margin-top: -0.25rem;
+        margin-bottom: 1.5rem;
+    }
+}
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 4.5rem !important;
+/* Dashboard Action Buttons Styles */
+.dashboard-page .dashboard-hero .container .hero-content .dashboard-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.dashboard-page .dashboard-hero .container .hero-content .dashboard-actions .action-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.dashboard-page .dashboard-hero .container .hero-content .dashboard-actions .cta-button {
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.dashboard-page .dashboard-hero .container .hero-content .dashboard-actions .primary-button {
+    background: linear-gradient(120deg, #2196F3, #4FC3F7);
+    color: white;
+    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+}
+
+.dashboard-page .dashboard-hero .container .hero-content .dashboard-actions .secondary-button {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.dashboard-page .dashboard-hero .container .hero-content .dashboard-actions .cta-button:hover {
+    transform: translateY(-2px);
+}
+
+.dashboard-page .dashboard-hero .container .hero-content .dashboard-actions .primary-button:hover {
+    box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+}
+
+.dashboard-page .dashboard-hero .container .hero-content .dashboard-actions .secondary-button:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+/* Dashboard Hero Container and Layout Styles */
+.dashboard-page .dashboard-hero {
+    padding: 4rem 0;
+    background: var(--bg-gradient);
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-page .dashboard-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at top right, rgba(79, 195, 247, 0.1), transparent 60%);
+    pointer-events: none;
+}
+
+.dashboard-page .dashboard-hero .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 1;
+}
+
+.dashboard-page .dashboard-hero .hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .dashboard-page .dashboard-hero {
+        padding: 3rem 0;
+    }
+/* Dashboard Hero Animations */
+@keyframes fadeSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.dashboard-page .dashboard-hero .container .hero-content .hero-text h1.gradient-text {
+    animation: fadeSlideUp 0.8s ease-out forwards;
+}
+
+.dashboard-page .dashboard-hero .container .hero-content .hero-subtitle {
+    animation: fadeSlideUp 0.8s ease-out 0.2s forwards;
+    opacity: 0;
+}
+
+.dashboard-page .dashboard-hero .container .hero-content .dashboard-actions {
+    animation: fadeSlideUp 0.8s ease-out 0.4s forwards;
+    opacity: 0;
+}
+
+.dashboard-page .dashboard-hero::before {
+    animation: fadeIn 1.2s ease-out forwards;
+}
+
+/* Optional hover effects for interactive elements */
+/* Dashboard Hero Decorative Elements and Dark Mode Support */
+.dashboard-page .dashboard-hero {
+    position: relative;
+}
+
+/* Decorative circles */
+.dashboard-page .dashboard-hero::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -5%;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(79, 195, 247, 0.1) 0%, rgba(79, 195, 247, 0.05) 50%, transparent 70%);
+    z-index: 0;
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0) scale(1);
+    }
+    50% {
+        transform: translateY(-20px) scale(1.05);
+    }
+}
+
+/* Dark mode specific styles */
+@media (prefers-color-scheme: dark) {
+    .dashboard-page .dashboard-hero {
+        background: linear-gradient(to bottom, var(--bg-dark), var(--bg-darker));
+    }
+
+    .dashboard-page .dashboard-hero::before {
+        background: radial-gradient(circle at top right, rgba(79, 195, 247, 0.05), transparent 70%);
+    }
+
+    .dashboard-page .dashboard-hero .container .hero-content .hero-subtitle {
+        color: var(--text-secondary-dark);
+    }
+
+    .dashboard-page .dashboard-hero .container .hero-content .dashboard-actions .secondary-button {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .dashboard-page .dashboard-hero .container .hero-content .dashboard-actions .secondary-button:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.15);
+    }
+}
+
+/* Reduce motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .dashboard-page .dashboard-hero::after {
+        animation: none;
+    }
+
+    .dashboard-page .dashboard-hero .container .hero-content * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+.dashboard-page .dashboard-hero .container .hero-content .hero-text h1.gradient-text,
+.dashboard-page .dashboard-hero .container .hero-content .hero-subtitle {
+    transition: transform 0.3s ease;
+}
+
+.dashboard-page .dashboard-hero .container .hero-content .hero-text h1.gradient-text:hover,
+.dashboard-page .dashboard-hero .container .hero-content .hero-subtitle:hover {
+    transform: scale(1.02);
+}
+
+    .dashboard-page .dashboard-hero .container {
+        padding: 0 1rem;
+    }
+
+    .dashboard-page .dashboard-hero .hero-content {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-page .dashboard-hero .container .hero-content .dashboard-actions {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .dashboard-page .dashboard-hero .container .hero-content .dashboard-actions .action-buttons {
+        flex-direction: column;
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .dashboard-page .dashboard-hero .container .hero-content .dashboard-actions .cta-button {
+        width: 100%;
+        justify-content: center;
+        padding: 0.875rem 1.5rem;
+        font-size: 1rem;
+    }
+}
+    font-weight: 800 !important;
+    background: linear-gradient(120deg, #2196F3, #4FC3F7) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
+    line-height: 1.2 !important;
+    margin-bottom: 1.5rem !important;
+    text-align: center !important;
+    text-transform: capitalize !important;
+}
+
+.dashboard-page .dashboard-hero .hero-content .hero-text h1.gradient-text .user-name {
+    font-size: 5.5rem !important;
+    font-weight: 900 !important;
+    background: linear-gradient(120deg, #4FC3F7, #81D4FA) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
+    display: inline-block !important;
+    transform: translateY(2px) !important;
+    transition: all 0.3s ease !important;
+}
+
+@media (max-width: 768px) {
+    .dashboard-page .dashboard-hero .hero-content .hero-text h1.gradient-text {
+        font-size: 3rem !important;
+    }
+
+    .dashboard-page .dashboard-hero .hero-content .hero-text h1.gradient-text .user-name {
+        font-size: 3.5rem !important;
+    }
+}
+/* Updated Dashboard Hero Heading Styles with Higher Specificity */
+.dashboard-page .dashboard-hero .hero-text .gradient-text {
+    font-size: 4.5rem !important;
+    font-weight: 800;
+    background: linear-gradient(120deg, #2196F3, #4FC3F7) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.dashboard-page .dashboard-hero .hero-text .gradient-text .user-name {
+    font-size: 5.5rem !important;
+    font-weight: 900;
+    background: linear-gradient(120deg, #4FC3F7, #81D4FA) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
+    display: inline-block;
+    transform: translateY(2px);
+    transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .dashboard-page .dashboard-hero .hero-text .gradient-text {
+        font-size: 3rem !important;
+    }
+
+    .dashboard-page .dashboard-hero .hero-text .gradient-text .user-name {
+        font-size: 3.5rem !important;
+    }
+}
+/* Updated Hero Heading Styles */
+.dashboard-hero .gradient-text {
+    font-family: 'Poppins', sans-serif;
+    font-size: 5rem;
+    font-weight: 800;
+    background: linear-gradient(120deg, #2196F3, #4FC3F7);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    text-transform: capitalize;
+}
+
+.dashboard-hero .user-name {
+    font-size: 5.5rem;
+    font-weight: 900;
+    background: linear-gradient(120deg, #4FC3F7, #81D4FA);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+    transform: translateY(2px);
+    transition: all 0.3s ease;
+}
+
+.dashboard-hero .user-name:hover {
+    text-shadow: 0 0 20px rgba(79, 195, 247, 0.5);
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .dashboard-hero .gradient-text {
+        font-size: 3rem;
+    }
+
+    .dashboard-hero .user-name {
+        font-size: 3.5rem;
+    }
+}
+/* Updated Hero Heading Styles */
+.dashboard-hero .gradient-text {
+    font-size: 4rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.dashboard-hero .user-name {
+    font-size: 4.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent-secondary) 0%, #4FC3F7 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+    transform: translateY(2px);
+}
+
+@media (max-width: 768px) {
+    .dashboard-hero .gradient-text {
+        font-size: 2.8rem;
+    }
+
+    .dashboard-hero .user-name {
+        font-size: 3rem;
+    }
+}
+/* Updated Dashboard Hero Styles */
+.dashboard-hero {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+    padding: 6rem 2rem;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+}
+
+.dashboard-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(64, 224, 208, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero-content h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    line-height: 1.2;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-bottom: 2.5rem;
+}
+
+.dashboard-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+}
+
+.cta-button {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.cta-button i {
+    font-size: 1rem;
+}
+
+.primary-button {
+    background: var(--gradient-primary);
+    color: var(--text-primary);
+    box-shadow: 0 4px 15px rgba(64, 224, 208, 0.3);
+}
+
+.primary-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(64, 224, 208, 0.4);
+}
+
+.secondary-button {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.secondary-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .dashboard-hero {
+        padding: 4rem 1rem;
+    }
+
+    .hero-content h1 {
+/* Enhanced Dashboard Layout Styles */
+.dashboard-container {
+    padding: 2rem;
+    display: grid;
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.dashboard-item {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 20px;
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.dashboard-item:hover {
+    border-color: rgba(64, 224, 208, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.item-header h2 {
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding: 1rem;
+        gap: 1.5rem;
+    }
+
+    .dashboard-grid {
+        gap: 1.5rem;
+    }
+
+    .dashboard-item {
+        padding: 1.5rem;
+    }
+}
+
+        font-size: 2.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+        width: 100%;
+        gap: 1rem;
+    }
+
+    .cta-button {
+        width: 100%;
+        justify-content: center;
+    }
+}
 /* Dashboard New Styles */
 .dashboard-hero {
     background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
