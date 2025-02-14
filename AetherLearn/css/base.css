@@ -1,0 +1,61 @@
+/* Import fonts */
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;600;700&family=Open+Sans:wght@400;600;700&display=swap");
+@import url("https://unpkg.com/aos@2.3.1/dist/aos.css");
+
+:root {
+  /* Colors */
+  --bg-primary: #0B121A;
+  --bg-secondary: #141E2B;
+  --bg-tertiary: #1C2A3A;
+  --text-primary: #F0FFFF;
+  --text-secondary: #B8C9DC;
+  --text-muted: #8295A7;
+  --accent-primary: #4169E1;
+  --accent-secondary: #40E0D0;
+  --accent-hover: #98F5FF;
+  --success: #4CAF50;
+  --warning: #FFC107;
+  --error: #FF5252;
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  --gradient-dark: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+
+  /* Components */
+  --card-bg: var(--bg-secondary);
+  --header-bg: var(--bg-secondary);
+  --input-border: #2E4A64;
+  --box-shadow: rgba(0, 0, 0, 0.5);
+
+  /* Breakpoints */
+  --bp-sm: 576px;
+  --bp-md: 768px;
+  --bp-lg: 992px;
+  --bp-xl: 1200px;
+}
+
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Roboto", "Open Sans", sans-serif;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', 'Raleway', sans-serif;
+  font-weight: bold;
+  color: var(--text-primary);
+}

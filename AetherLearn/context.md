@@ -135,10 +135,14 @@
     -   Offers filtering and sorting options for community posts.
 
 5.  **Resources Page (resources.html):**
-    -   Central hub for educational resources and learning topics.
-    -   Merges the functionality of the former Resources and Topics pages.
-    -   Features resource category cards and topic cards for browsing.
-    -   Includes a comprehensive resource listing section with filtering and sorting.
+    -   Central hub for AI-powered learning tools and resource management:
+        1. AI Study Tools: Content explainer, language assistant, and study planner
+        2. Content Enhancement Tools: Video learning suite, mind map creator, and flashcard generator
+        3. Resource Organization: Smart bookmarking and offline access features
+        4. Accessibility Tools: Features for inclusive learning including color blind mode, dyslexia-friendly fonts, and multi-language support
+    -   Focus on learning enhancement and productivity tools
+    -   Clear separation from course content (available on courses.html)
+    -   Emphasis on AI-powered features for personalized learning
 
 6.  **Login/Signup Page (login.html):**
     -   Dedicated page for user authentication.

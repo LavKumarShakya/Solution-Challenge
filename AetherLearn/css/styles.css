@@ -1,0 +1,88 @@
+/* Core Variables and Imports */
+:root {
+  /* Colors */
+  --bg-primary: #0B121A;
+  --bg-secondary: #141E2B;
+  --bg-tertiary: #1C2A3A;
+  --text-primary: #F0FFFF;
+  --text-secondary: #B8C9DC;
+  --text-muted: #8295A7;
+  --accent-primary: #4169E1;
+  --accent-secondary: #40E0D0;
+  --accent-hover: #98F5FF;
+  
+  /* Common Values */
+  --max-width: 1400px;
+  --header-height: 80px;
+  --sidebar-width: 280px;
+  --card-radius: 16px;
+  --border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Essential Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  min-height: 100vh;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent-secondary);
+  border-radius: 3px;
+}
+
+/* Print Styles */
+@media print {
+  body {
+    background: none;
+    color: black;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
+
