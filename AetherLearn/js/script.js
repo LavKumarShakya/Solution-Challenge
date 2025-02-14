@@ -14,42 +14,15 @@ document.addEventListener('DOMContentLoaded', () => {
     initializePage();
 });
 
+// Initialize page features
 function initializePage() {
     // Get current page
     const currentPath = window.location.pathname;
     
-    if (currentPath.includes('ai-assistant')) {
-        initializeAIChat();
-    } else if (currentPath.includes('topics')) {
-        initializeTopicFilters();
-    } else if (currentPath.includes('resources')) {
-        initializeResourceFilters();
-    }
-    
     // Initialize common features
     initializeSearch();
-
-    // Add new initializations
     initializeMobileMenu();
-    initializeScrollReveal();
     initializePageTransitions();
-    
-    // Add data-scroll attributes to elements that should animate on scroll
-    const elementsToAnimate = [
-        '.topic-card',
-        '.course-card',
-        '.feature-card',
-        '.category-card',
-        '.ai-feature',
-        '.path-card'
-    ];
-    
-    elementsToAnimate.forEach(selector => {
-        document.querySelectorAll(selector).forEach((el, index) => {
-            el.setAttribute('data-scroll', '');
-            el.style.transitionDelay = `${index * 0.1}s`;
-        });
-    });
 }
 
 // AI Assistant Chat Initialization
@@ -57,7 +30,6 @@ function initializeAIChat() {
     // Let the AIChat class handle everything
     new AIChat();
 }
-
 
 // Topic Filtering Functionality
 function initializeTopicFilters() {
@@ -342,7 +314,6 @@ class AIChat {
         }
     }
 }
-
 
 // Utility Functions
 function debounce(func, wait) {

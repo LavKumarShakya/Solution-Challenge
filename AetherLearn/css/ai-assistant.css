@@ -16,26 +16,71 @@
   height: calc(100vh - 180px);
 }
 
+.ai-chat-interface {
+  display: grid;
+  grid-template-columns: 280px 1fr 280px;
+  gap: 2rem;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 2rem 2rem;
+}
+
 .chat-container {
-  background: var(--bg-secondary);
+  background: var(--chat-bg);
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  border: 1px solid var(--chat-border);
   display: flex;
   flex-direction: column;
   height: 100%;
+  position: relative;
+  z-index: 1;
+  transition: box-shadow 0.3s ease;
+}
+
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chat-status {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--accent-secondary);
+  border-radius: 50%;
+  position: relative;
+}
+
+.status-dot::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: inherit;
+  border-radius: inherit;
+  animation: pulse 2s ease-out infinite;
 }
 
 .chat-messages {
   flex-grow: 1;
   overflow-y: auto;
   padding: 1.5rem;
+  scroll-behavior: smooth;
 }
 
 .message {
   display: flex;
-  gap: 1.2rem;
+  gap: 1rem;
   margin-bottom: 1.5rem;
-  max-width: 85%;
 }
 
 .message.user {
@@ -48,11 +93,81 @@
   padding: 1.2rem;
   border-radius: 16px;
   position: relative;
+  transition: all 0.3s ease;
+  max-width: 90%;
+  overflow-wrap: break-word;
+}
+
+.quick-suggestions {
+  padding: 1rem 1.5rem;
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.suggestion-chip {
+  background: var(--bg-tertiary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 0.8rem 1.2rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+.suggestion-chip:hover {
+  background: var(--accent-primary);
+  color: var(--text-primary);
+  transform: translateY(-2px);
 }
 
 .chat-input {
-  padding: 1.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+  background: var(--bg-tertiary);
+  border-top: 1px solid var(--border-color);
+}
+
+.input-form {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.input-wrapper {
+  flex: 1;
+  position: relative;
+}
+
+.input-form textarea {
+  width: 100%;
+  padding: 1rem 1.2rem;
+  background: var(--bg-secondary);
+  border: 2px solid var(--input-border);
+  border-radius: 12px;
+  color: var(--text-primary);
+  font-size: 1rem;
+  resize: none;
+  min-height: 50px;
+  max-height: 150px;
+  transition: all 0.3s ease;
+}
+
+.send-button {
+  background: var(--accent-primary);
+  border-radius: 12px;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+.send-button:hover {
+  background: var(--accent-secondary);
+  transform: translateY(-2px);
 }
 
 /* Responsive */
@@ -62,8 +177,71 @@
   }
 }
 
+@media (max-width: 1024px) {
+  .ai-chat-interface {
+    grid-template-columns: 1fr;
+  }
+  
+  .chat-container {
+    height: 500px;
+  }
+}
+
 @media (max-width: 768px) {
   .chat-container {
-    height: calc(100vh - 100px);
+    height: calc(100vh - 160px);
   }
+  
+  .chat-header {
+    padding: 1rem;
+  }
+  
+  .chat-messages {
+    padding: 1rem;
+  }
+  
+  .chat-input {
+    padding: 1rem;
+  }
+}
+
+.ai-assistant-page {
+  padding-top: 80px;
+  min-height: 100vh;
+  background: var(--bg-primary);
+}
+
+.ai-header {
+  background: var(--gradient-dark);
+  padding: 4rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg-feature-sections);
+  opacity: 0.05;
+}
+
+.ai-header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.ai-header h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
