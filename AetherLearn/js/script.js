@@ -1,19 +1,24 @@
-// Loading Screen
+// Loading Screen and Page Initialization
 document.addEventListener('DOMContentLoaded', () => {
-    const loadingScreen = document.getElementById('loading-screen');
-    if (loadingScreen) {
-        // Add the hidden class to trigger CSS transition
-        setTimeout(() => {
-            loadingScreen.classList.add('hidden');
-            loadingScreen.addEventListener('transitionend', () => loadingScreen.style.display = 'none');
-        }, 500);
-    }
-
-    // Initialize features based on current page
+    // Initialize features first
     initializePage();
+
+    // Handle loading screen once everything is ready
+    document.addEventListener('readystatechange', () => {
+        if (document.readyState === 'complete') {
+            setTimeout(() => {
+                const loadingScreen = document.getElementById('loading-screen');
+                if (loadingScreen) {
+                    loadingScreen.classList.add('hidden');
+                    loadingScreen.addEventListener('transitionend', () => {
+                        loadingScreen.style.display = 'none';
+                    });
+                }
+            }, 500); // Consistent delay for smooth transition
+        }
+    });
 });
 
-// All the rest of the original script.js content remains unchanged
 // Initialize page features
 function initializePage() {
     // Get current page
@@ -23,12 +28,137 @@ function initializePage() {
     initializeSearch();
     initializeMobileMenu();
     initializePageTransitions();
+
+    // Initialize AI Assistant if we're on the AI assistant page
+    if (currentPath.includes('ai-assistant')) {
+        initializeAIChat();
+    }
+    
+    // Only run course functionality if we're on the courses page
+    if (currentPath.includes('courses')) {
+        // Filter functionality
+        const filters = {
+            category: document.getElementById('category'),
+            level: document.getElementById('level'),
+            duration: document.getElementById('duration'),
+            sort: document.getElementById('sort')
+        };
+
+        // Course filtering system
+        Object.values(filters).forEach(filter => {
+            if (filter) {
+                filter.addEventListener('change', updateCourses);
+            }
+        });
+
+        // Pagination functionality
+        const paginationBtns = document.querySelectorAll('.pagination-btn');
+        paginationBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                // Remove active class from all buttons
+                paginationBtns.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                e.target.classList.add('active');
+                // Update courses based on page
+                updateCourses();
+            });
+        });
+
+        // Course card hover effects
+        const courseCards = document.querySelectorAll('.course-card');
+        courseCards.forEach(card => {
+            card.addEventListener('mouseenter', (e) => {
+                const thumbnail = card.querySelector('.course-thumbnail img');
+                if (thumbnail) {
+                    thumbnail.style.transform = 'scale(1.1)';
+                }
+            });
+
+            card.addEventListener('mouseleave', (e) => {
+                const thumbnail = card.querySelector('.course-thumbnail img');
+                if (thumbnail) {
+                    thumbnail.style.transform = 'scale(1)';
+                }
+            });
+        });
+
+        // Initialize lazy loading for course images
+        const courseImages = document.querySelectorAll('.course-thumbnail img');
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.classList.add('loaded');
+                        observer.unobserve(img);
+                    }
+                });
+            });
+
+            courseImages.forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+    }
+}
+
+// Course filtering functionality
+function updateCourses() {
+    const courseGrid = document.querySelector('.course-grid');
+    if (!courseGrid) return;
+
+    // Add loading animation
+    courseGrid.style.opacity = '0.5';
+    courseGrid.style.pointerEvents = 'none';
+
+    // Get current filter values
+    const currentFilters = {
+        category: document.getElementById('category')?.value,
+        level: document.getElementById('level')?.value,
+        duration: document.getElementById('duration')?.value,
+        sort: document.getElementById('sort')?.value,
+        page: document.querySelector('.pagination-btn.active')?.textContent || '1'
+    };
+
+    // Simulate API call with setTimeout
+    setTimeout(() => {
+        // Here you would typically make an API call to get filtered courses
+        console.log('Applying filters:', currentFilters);
+
+        // Remove loading state
+        courseGrid.style.opacity = '1';
+        courseGrid.style.pointerEvents = 'auto';
+
+        // Trigger AOS refresh for smooth animations
+        if (typeof AOS !== 'undefined') {
+            AOS.refresh();
+        }
+    }, 500);
 }
 
 // AI Assistant Chat Initialization
 function initializeAIChat() {
-    // Let the AIChat class handle everything
-    new AIChat();
+    return new Promise((resolve) => {
+        // Initialize chat after a small delay to ensure DOM is ready
+        setTimeout(() => {
+            const chat = new AIChat();
+            resolve(chat);
+        }, 100);
+    });
+}
+
+// Function to remove loading screen
+function hideLoadingScreen() {
+    const loadingScreen = document.getElementById('loading-screen');
+    if (loadingScreen) {
+        loadingScreen.classList.add('hidden');
+        loadingScreen.addEventListener('transitionend', () => {
+            if (loadingScreen.classList.contains('hidden')) {
+                loadingScreen.style.display = 'none';
+            }
+        });
+    }
 }
 
 // Topic Filtering Functionality
@@ -102,6 +232,8 @@ class AIChat {
         this.chatMessages = document.querySelector('#chatMessages');
         this.suggestionsChips = document.querySelectorAll('.suggestion-chip');
         this.clearButton = document.querySelector('.action-btn[title="Clear Chat"]');
+        
+
         this.setupEventListeners();
     }
 
@@ -393,11 +525,10 @@ aiSearchButton?.addEventListener('click', () => {
             aiSearchButton.disabled = false;
             
             showSearchResults(searchQuery); // Call function to display results
-
         }, 2000);
     }
 });
-      
+
 function showSearchResults(query) {
     const searchResultsContainer = document.createElement('div');
     searchResultsContainer.classList.add('search-results-container');
@@ -424,7 +555,7 @@ function showSearchResults(query) {
             <span class="result-category">Learning Path</span>
         </div>
     `;
-    hero?.appendChild(searchResultsContainer); // Append to hero section
+    hero?.appendChild(searchResultsContainer);
 }
 
 // Mobile Menu Handler
@@ -495,7 +626,7 @@ function initializePageTransitions() {
     });
 }
 
-// Search functionality
+// Initialize search functionality
 document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('searchInput');
     const suggestionsContainer = document.getElementById('searchSuggestions');

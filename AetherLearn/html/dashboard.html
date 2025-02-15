@@ -17,6 +17,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loader"></div>
+    </div>
+
     <!-- Include the common navbar -->
     <header>
         <nav>
@@ -343,7 +348,11 @@
         </div>
     </footer>
 
-    <script src="navbar.js"></script>
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- App Scripts -->
+    <script src="../js/navbar.js"></script>
     <script>
         // Initialize Activity Chart with enhanced styling
         const ctx = document.getElementById('activityChart').getContext('2d');
@@ -436,6 +445,6 @@
             }
         });
     </script>
-    <script src="script.js"></script>
+    <script src="../js/script.js"></script>
 </body>
 </html>
