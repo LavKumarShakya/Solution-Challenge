@@ -2,11 +2,10 @@
 document.addEventListener('DOMContentLoaded', () => {
     const loadingScreen = document.getElementById('loading-screen');
     if (loadingScreen) {
+        // Add the hidden class to trigger CSS transition
         setTimeout(() => {
-            loadingScreen.style.opacity = '0';
-            setTimeout(() => {
-                loadingScreen.style.display = 'none';
-            }, 300);
+            loadingScreen.classList.add('hidden');
+            loadingScreen.addEventListener('transitionend', () => loadingScreen.style.display = 'none');
         }, 500);
     }
 
@@ -14,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializePage();
 });
 
+// All the rest of the original script.js content remains unchanged
 // Initialize page features
 function initializePage() {
     // Get current page
@@ -367,12 +367,12 @@ function hideSearchSuggestions() {
     searchSuggestions.classList.remove('active');
 }
 
-aiSearchInput.addEventListener('focus', showSearchSuggestions);
-aiSearchInput.addEventListener('blur', () => {
+aiSearchInput?.addEventListener('focus', showSearchSuggestions);
+aiSearchInput?.addEventListener('blur', () => {
     setTimeout(hideSearchSuggestions, 200);
 });
 
-aiSearchButton.addEventListener('click', () => {
+aiSearchButton?.addEventListener('click', () => {
     const searchQuery = aiSearchInput.value.trim();
     const hero = document.getElementById('hero');
     if (searchQuery) {
@@ -424,7 +424,7 @@ function showSearchResults(query) {
             <span class="result-category">Learning Path</span>
         </div>
     `;
-    hero.appendChild(searchResultsContainer); // Append to hero section
+    hero?.appendChild(searchResultsContainer); // Append to hero section
 }
 
 // Mobile Menu Handler
@@ -554,14 +554,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Close search overlay
+    const searchOverlay = document.querySelector('.search-overlay');
+    const closeSearchBtn = document.querySelector('.close-search');
+
     closeSearchBtn?.addEventListener('click', () => {
-        searchOverlay.classList.remove('active');
+        searchOverlay?.classList.remove('active');
         document.body.style.overflow = '';
     });
 
     // Close on escape key
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && searchOverlay.classList.contains('active')) {
+        if (e.key === 'Escape' && searchOverlay?.classList.contains('active')) {
             searchOverlay.classList.remove('active');
             document.body.style.overflow = '';
         }
@@ -574,26 +577,4 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.style.overflow = '';
         }
     });
-
-    // Handle search input
-    searchInput?.addEventListener('input', debounce((e) => {
-        const query = e.target.value;
-        if (query.length >= 2) {
-            // Implement search logic here
-            console.log('Searching for:', query);
-        }
-    }, 300));
 });
-
-// Debounce helper function
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
