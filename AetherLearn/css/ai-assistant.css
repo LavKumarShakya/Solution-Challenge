@@ -330,6 +330,20 @@
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    height: calc(100% - 140px); /* Account for header and input area */
+    min-height: 400px;
+}
+
+/* Adjust input area to be more compact */
+.chat-input {
+    padding: 1.2rem;
+    background: rgba(30, 35, 45, 0.95);
+    border-top: 1px solid rgba(64, 224, 208, 0.2);
+}
+
+/* Make header more compact */
+.chat-header {
+    padding: 1.2rem;
 }
 
 .message {
@@ -515,11 +529,12 @@
 
 /* Enhanced Chat Input */
 .chat-input {
-    padding: 1.5rem;
-    background: rgba(30, 35, 45, 0.9);
+    padding: 1.2rem;
+    background: rgba(30, 35, 45, 0.95);
     border-top: 1px solid rgba(64, 224, 208, 0.2);
     backdrop-filter: blur(10px);
     position: relative;
+    min-height: 90px;
 }
 
 .chat-input::before {

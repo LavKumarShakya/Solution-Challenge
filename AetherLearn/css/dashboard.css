@@ -6,12 +6,18 @@
 }
 
 .dashboard-hero {
-  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
-  padding: 4rem 2rem;
+  background-image: url('../img/dashboard-hero-bg.jpg'); /* Background image */
+  background-size: cover;
+  background-attachment: fixed; /* Parallax effect */
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 6rem 2rem; /* Increased padding */
   position: relative;
   overflow: hidden;
   border-radius: 20px;
   margin: 2rem;
+  color: var(--text-primary); /* Set text color for hero section */
+  animation: heroFadeIn 1s ease-out forwards;
 }
 
 .dashboard-hero::before {
@@ -21,8 +27,13 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at center, rgba(64, 224, 208, 0.1) 0%, transparent 70%);
+  background-color: rgba(0, 0, 0, 0.5); /* Darker overlay for better text visibility */
   pointer-events: none;
+}
+
+@keyframes heroFadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .hero-content {
@@ -39,7 +50,41 @@
   background-clip: text;
   color: transparent;
   line-height: 1.2;
+  text-shadow: 2px 2px 10px rgba(0,0,0,0.5); /* Deeper text shadow */
+  animation: heroTextPop 1.5s ease-out forwards 0.5s;
+  opacity: 0;
+  transform: translateY(20px);
 }
+
+@keyframes heroTextPop {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-subtitle {
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  margin-bottom: 2rem; /* Increased margin */
+  opacity: 0;
+  transform: translateY(20px);
+  animation: subtitleSlideUp 1s ease-out forwards 0.7s;
+}
+
+@keyframes subtitleSlideUp {
+    to { opacity: 0.9; transform: translateY(0); }
+}
+
+.dashboard-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  animation: actionsFadeIn 1s ease-out forwards 1s; /* Fade in for buttons */
+  opacity: 0;
+}
+
+@keyframes actionsFadeIn {
+    to { opacity: 1; }
+}
+
 
 .dashboard-content {
   padding: 2rem;
@@ -61,20 +106,42 @@
   border-radius: 16px;
   padding: 2rem;
   transition: all 0.3s ease;
+  opacity: 0;
+  transform: scale(0.95);
+  animation: dashboardItemFadeIn 1s ease-out forwards var(--dashboard-item-delay, 0.2s); /* Staggered animation */
+  box-shadow: var(--card-box-shadow);
 }
 
-.dashboard-card {
-  background: var(--card-bg);
-  border-radius: 16px;
-  padding: 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
-}
-
-.dashboard-card:hover {
+.dashboard-item:hover {
   transform: translateY(-5px);
   box-shadow: var(--card-hover-shadow);
 }
+
+@keyframes dashboardItemFadeIn {
+    to { opacity: 1; transform: scale(1); }
+}
+
+
+.dashboard-card {
+  background: linear-gradient(145deg, var(--bg-tertiary) 60%, var(--bg-secondary) 100%); /* Gradient background */
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: statCardFadeIn 1s ease-out forwards var(--stat-card-delay, 0.3s); /* Staggered animation */
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+@keyframes statCardFadeIn {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.dashboard-card:hover {
+  transform: translateY(-8px) scale(1.08); /* More pronounced lift */
+  box-shadow: var(--card-hover-shadow-deeper); /* Deeper shadow */
+}
+
 
 .progress-ring {
   position: relative;
@@ -86,8 +153,15 @@
 .progress-ring-circle {
   transform: rotate(-90deg);
   transform-origin: 50% 50%;
-  transition: stroke-dashoffset 0.3s ease;
+  transition: stroke-dashoffset 0.6s ease; /* Smooth progress animation */
+  animation: progressCircleDraw 1.5s ease-out forwards var(--progress-circle-delay, 0.5s); /* Circle draw animation */
+  stroke-dasharray: 0 314.159; /* Start with no dash, full circumference is approx 314 */
 }
+
+@keyframes progressCircleDraw {
+    to { stroke-dasharray: 314.159 314.159; } /* Draw full circle */
+}
+
 
 .progress-ring-text {
   position: absolute;
@@ -96,7 +170,14 @@
   transform: translate(-50%, -50%);
   font-size: 1.5rem;
   color: var(--text-primary);
+  opacity: 0;
+  animation: fadeIn 1s ease-out forwards 1s; /* Fade in for text */
 }
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
 
 .stats-grid {
   display: grid;
@@ -107,11 +188,39 @@
 }
 
 .stat-card {
-  background: var(--bg-tertiary);
+  background: linear-gradient(145deg, var(--bg-tertiary) 60%, var(--bg-secondary) 100%); /* Gradient background */
   border-radius: 12px;
   padding: 1.5rem;
   text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: statCardFadeIn 1s ease-out forwards var(--stat-card-delay, 0.4s); /* Staggered animation */
+  opacity: 0;
+  transform: translateY(20px);
 }
+
+@keyframes statCardFadeIn {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.stat-card:hover {
+  transform: translateY(-8px) scale(1.08); /* More pronounced lift */
+  box-shadow: var(--card-hover-shadow-deeper); /* Deeper shadow */
+}
+
+.stats-icon {
+  font-size: 2.5rem;
+  color: var(--accent-primary);
+  margin-bottom: 1rem;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.2); /* Icon shadow */
+  animation: iconPop 1s ease-out forwards var(--stat-icon-delay, 0.5s); /* Icon pop animation */
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+@keyframes iconPop {
+    to { opacity: 1; transform: scale(1); }
+}
+
 
 .stat-value {
   font-size: 2rem;
@@ -120,13 +229,35 @@
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  overflow: hidden; /* Clip the content */
+  white-space: nowrap;
+  animation: countUp 2s ease-out forwards var(--stat-value-delay, 0.6s), valueFadeIn 1s ease-out forwards var(--stat-value-delay, 0.6s);
+  opacity: 0;
+  transform: translateY(10px);
 }
+
+@keyframes countUp {
+    0% { content: "0"; }
+    100% {} /* Final value set by JS, if needed */
+}
+
+@keyframes valueFadeIn {
+    to { opacity: 1; transform: translateY(0); }
+}
+
 
 .stat-label {
   color: var(--text-secondary);
   font-size: 1.1rem;
   margin-top: 0.5rem;
+  opacity: 0;
+  animation: labelFadeIn 1s ease-out forwards 0.8s; /* Fade in for labels */
 }
+
+@keyframes labelFadeIn {
+    to { opacity: 0.7; }
+}
+
 
 .achievement-grid {
   display: grid;
@@ -138,6 +269,19 @@
 .achievement-item {
   text-align: center;
   position: relative;
+  transition: transform 0.3s ease;
+  opacity: 0;
+  animation: achievementItemFadeIn 1s ease-out forwards var(--achievement-item-delay, 0.4s); /* Staggered animation */
+}
+
+@keyframes achievementItemFadeIn {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+.achievement-item:hover {
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow on hover */
 }
 
 .achievement-ring {
@@ -149,12 +293,21 @@
   align-items: center;
   justify-content: center;
   margin: 0 auto 1rem;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease, box-shadow 0.3s ease; /* Box-shadow transition */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Initial shadow */
+  opacity: 0;
+  animation: achievementRingFadeIn 1s ease-out forwards var(--achievement-ring-delay, 0.6s); /* Staggered animation */
 }
 
+@keyframes achievementRingFadeIn {
+    to { opacity: 1; transform: scale(1); }
+}
+
+
 .achievement-ring:hover {
-  transform: scale(1.1) rotate(5deg);
+  transform: scale(1.2) rotate(10deg);
   background: var(--accent-primary);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3); /* Deeper shadow on hover */
 }
 
 .activity-stats {
@@ -172,6 +325,16 @@
   color: transparent;
 }
 
+.course-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.course-card:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: var(--card-hover-shadow);
+}
+
+
 .course-progress-bar {
   display: flex;
   align-items: center;
@@ -183,26 +346,26 @@
   .dashboard-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .stat-value {
     font-size: 2rem;
   }
-  
+
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .achievement-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 
   .dashboard-hero {
     margin: 1rem;
-    padding: 2rem 1rem;
+    padding: 3rem 1rem; /* Adjusted padding for smaller screens */
   }
 
   .hero-content h1 {
-    font-size: 2rem;
+    font-size: 2.5rem;
   }
 
   .stats-grid {
