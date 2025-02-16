@@ -21,109 +21,74 @@
     <div id="navbar-placeholder"></div>
 
     <main class="ai-assistant-container">
-        <!-- Hero Section -->
-        <section class="ai-hero">
-            <div class="ai-hero-content">
-                <h1 class="reveal-text">Your AI Learning Companion</h1>
-                <p class="hero-subtitle fade-in">Powered by advanced AI to help you master any tech topic</p>
-                <div class="ai-capabilities">
-                    <div class="capability">
-                        <div class="capability-icon">
-                            <i class="fas fa-bolt"></i>
-                        </div>
-                        <span>Instant Responses</span>
-                    </div>
-                    <div class="capability">
-                        <div class="capability-icon">
-                            <i class="fas fa-brain"></i>
-                        </div>
-                        <span>Smart Learning</span>
-                    </div>
-                    <div class="capability">
-                        <div class="capability-icon">
-                            <i class="fas fa-code"></i>
-                        </div>
-                        <span>Code Support</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Main Chat Interface -->
         <section class="chat-interface">
-            <!-- Chat Area -->
-            <div class="chat-main">
-                <div class="chat-header">
-                    <div class="chat-status">
-                        <span class="status-dot"></span>
-                        <span class="status-text">AI Assistant Active</span>
-                    </div>
-                    <div class="chat-actions">
-                        <button class="action-btn" title="Clear Chat">
-                            <i class="fas fa-broom"></i>
-                        </button>
-                        <button class="action-btn" title="Export Chat">
-                            <i class="fas fa-download"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="chat-messages" id="chatMessages">
-                    <!-- Welcome Message -->
-                    <div class="message ai-message">
-                        <div class="message-avatar">
+            <div class="chat-container">
+                <div class="chat-header-info">
+                    <div class="header-content">
+                        <div class="header-icon">
                             <i class="fas fa-robot"></i>
                         </div>
-                        <div class="message-content">
-                            <div class="message-bubble">
-                                <h4>Hello! 👋 I'm your AI learning assistant.</h4>
-                                <p>I can help you with:</p>
-                                <ul class="feature-list">
-                                    <li>Learning programming concepts</li>
-                                    <li>Debugging code</li>
-                                    <li>Understanding algorithms</li>
-                                    <li>Finding learning resources</li>
-                                </ul>
+                        <div class="header-text">
+                            <h1>AI Learning Assistant</h1>
+                            <p>Your personalized guide to mastering tech concepts</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Chat Area -->
+                <div class="chat-main">
+                    <div class="chat-header">
+                        <div class="chat-status">
+                            <span class="status-dot"></span>
+                            <span class="status-text">AI Assistant Active</span>
+                        </div>
+                        <div class="chat-actions">
+                            <button class="action-btn" title="Clear Chat">
+                                <i class="fas fa-broom"></i>
+                            </button>
+                            <button class="action-btn" title="Export Chat">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="chat-messages" id="chatMessages">
+                        <!-- Welcome Message -->
+                        <div class="message ai-message">
+                            <div class="message-avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="message-content">
+                                <div class="message-bubble">
+                                    <h4>Hello! 👋 I'm your AI learning assistant.</h4>
+                                    <p>I can help you with:</p>
+                                    <ul class="feature-list">
+                                        <li>Learning programming concepts</li>
+                                        <li>Debugging code</li>
+                                        <li>Understanding algorithms</li>
+                                        <li>Finding learning resources</li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Quick Suggestions -->
-                <div class="quick-suggestions">
-                    <button class="suggestion-chip">
-                        <i class="fas fa-graduation-cap"></i>
-                        Learning path for React
-                    </button>
-                    <button class="suggestion-chip">
-                        <i class="fas fa-code"></i>
-                        JavaScript basics
-                    </button>
-                    <button class="suggestion-chip">
-                        <i class="fas fa-project-diagram"></i>
-                        System design
-                    </button>
-                </div>
-
-                <!-- Chat Input -->
-                <div class="chat-input">
-                    <form id="chatForm" class="input-form">
-                        <div class="input-wrapper">
-                            <textarea 
-                                placeholder="Ask me anything about programming, web development, or tech..." 
-                                rows="1"
-                                autofocus>
-                            </textarea>
-                            <button type="submit" class="send-button">
-                                <i class="fas fa-paper-plane"></i>
-                            </button>
-                        </div>
-                    </form>
-                    <div class="input-suggestions">
+                    <!-- Chat Input -->
+                    <div class="chat-input">
+                        <form id="chatForm" class="input-form">
+                            <div class="input-wrapper">
+                                <textarea 
+                                    placeholder="Ask me anything about programming, web development, or tech..." 
+                                    rows="1"
+                                    autofocus>
+                                </textarea>
+                                <button type="submit" class="send-button">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-
         </section>
     </main>
 

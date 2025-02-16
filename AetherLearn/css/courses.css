@@ -40,9 +40,9 @@
 }
 
 .course-container {
-    max-width: 1400px;
+    max-width: 100%;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 0;
 }
 
 .course-grid {
@@ -50,14 +50,35 @@
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2.5rem;
     width: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
+    max-width: 100%;
+    margin: 2rem auto;
+    padding: 0 2rem;
 }
 
 /* Featured Learning Paths */
 .featured-paths {
     padding: 4rem 0;
     text-align: center;
+    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+    position: relative;
+    overflow: hidden;
+}
+
+.featured-paths::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-feature-sections);
+    opacity: 0.05;
+    z-index: 1;
+}
+
+.featured-paths > * {
+    position: relative;
+    z-index: 2;
 }
 
 .featured-paths h2 {
@@ -80,12 +101,12 @@
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2.5rem;
     width: 100%;
-    max-width: 1400px;
+    max-width: 100%;
     margin: 0 auto;
     padding: 0 2rem;
 }
 
-.learning-path-card {
+.path-card {
     background: var(--card-bg);
     border-radius: 16px;
     overflow: hidden;
@@ -94,12 +115,38 @@
     position: relative;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     backdrop-filter: blur(10px);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.path-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    border-color: var(--accent-secondary);
 }
 
 .path-thumbnail {
     position: relative;
     padding-top: 56.25%; /* 16:9 aspect ratio */
     overflow: hidden;
+}
+
+.path-thumbnail::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(0deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%);
+    z-index: 1;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
+}
+
+.path-card:hover .path-thumbnail::after {
+    opacity: 0.7;
 }
 
 .path-thumbnail img {
@@ -109,16 +156,11 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.4s ease;
+    transition: transform 0.6s ease;
 }
 
-.learning-path-card:hover .path-thumbnail img {
-    transform: scale(1.1);
-}
-
-.learning-path-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+.path-card:hover .path-thumbnail img {
+    transform: scale(1.1) rotate(-2deg);
 }
 
 .path-content {
@@ -126,10 +168,73 @@
     position: relative;
     z-index: 1;
     background: var(--card-bg);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
-/* Path CTA Button */
-.learning-path-card .cta-button {
+.path-content i {
+    font-size: 2.5rem;
+    background: linear-gradient(120deg, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+.path-card:hover .path-content i {
+    transform: scale(1.1);
+}
+
+.path-content h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+.path-card:hover .path-content h3 {
+    background: linear-gradient(120deg, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    transform: translateX(5px);
+}
+
+.path-content p {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.path-features {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.path-features li {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    padding: 0.75rem 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.path-card:hover .path-features li {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.path-card .cta-button {
     display: flex;
     width: 100%;
     padding: 1rem 1.5rem;
@@ -147,9 +252,10 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     position: relative;
     overflow: hidden;
+    margin-top: auto;
 }
 
-.learning-path-card .cta-button::before {
+.path-card .cta-button::before {
     content: '';
     position: absolute;
     top: 0;
@@ -160,84 +266,13 @@
     transition: 0.5s;
 }
 
-.learning-path-card .cta-button:hover {
+.path-card .cta-button:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(64, 224, 208, 0.3);
 }
 
-.learning-path-card .cta-button:hover::before {
+.path-card .cta-button:hover::before {
     left: 100%;
-}
-
-.learning-path-card .cta-button i {
-    font-size: 1.1rem;
-    transition: transform 0.3s ease;
-}
-
-.learning-path-card .cta-button:hover i {
-    transform: translateX(3px);
-}
-
-.path-content i {
-    font-size: 2.5rem;
-    background: linear-gradient(120deg, var(--accent-primary), var(--accent-secondary));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    margin-bottom: 1.5rem;
-}
-
-.path-content h3 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    background: linear-gradient(120deg, var(--accent-primary), var(--accent-secondary));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-}
-
-.path-content p {
-    color: var(--text-secondary);
-    margin-bottom: 1.5rem;
-    font-size: 1.1rem;
-}
-
-.path-resources {
-    list-style: none;
-    padding: 0;
-    margin-bottom: 2rem;
-}
-
-.path-resources li {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    color: var(--text-secondary);
-    margin-bottom: 0.8rem;
-    font-size: 0.95rem;
-}
-
-.path-resources i {
-    color: var(--accent-secondary);
-    font-size: 1.1rem;
-}
-
-@media (max-width: 768px) {
-    .featured-paths {
-        padding: 3rem 1rem;
-    }
-
-    .featured-paths h2 {
-        font-size: 2rem;
-    }
-
-    .paths-grid {
-        gap: 1.5rem;
-    }
-
-    .path-content {
-        padding: 1.5rem;
-    }
 }
 
 /* Course Header */
@@ -279,7 +314,7 @@
 .course-filters {
     display: flex;
     gap: 1rem;
-    margin-bottom: 2rem;
+    margin: 2rem;
     background: var(--card-bg);
     border-radius: 12px;
     padding: 1.5rem 2rem;
@@ -390,15 +425,7 @@
     z-index: 2;
 }
 
-.path-overlay span {
-    background: rgba(0, 0, 0, 0.6);
-    color: var(--text-primary);
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    backdrop-filter: blur(4px);
-}
-
+.path-overlay span,
 .course-overlay span {
     background: rgba(0, 0, 0, 0.6);
     color: var(--text-primary);
@@ -455,56 +482,6 @@
 
 .rating i {
     color: #FFD700;
-}
-
-/* Course CTA Button */
-.course-card .cta-button {
-    display: flex;
-    width: 100%;
-    padding: 1rem 1.5rem;
-    background: var(--gradient-primary);
-    color: var(--text-primary);
-    text-decoration: none;
-    border-radius: 12px;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5rem;
-    font-weight: 500;
-    font-size: 1.05rem;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    position: relative;
-    overflow: hidden;
-}
-
-.course-card .cta-button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: 0.5s;
-}
-
-.course-card .cta-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(64, 224, 208, 0.3);
-}
-
-.course-card .cta-button:hover::before {
-    left: 100%;
-}
-
-.course-card .cta-button i {
-    font-size: 1.1rem;
-    transition: transform 0.3s ease;
-}
-
-.course-card .cta-button:hover i {
-    transform: translateX(3px);
 }
 
 /* Pagination */
