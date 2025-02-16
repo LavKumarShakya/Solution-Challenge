@@ -208,6 +208,8 @@ nav {
     background: transparent;
     border: 2px solid var(--input-border);
     color: var(--text-primary);
+    margin-left: auto;
+    text-decoration: none;
     border-radius: 8px;
     font-weight: 600;
     cursor: pointer;

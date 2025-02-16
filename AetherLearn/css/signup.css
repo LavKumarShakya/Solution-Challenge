@@ -244,18 +244,11 @@ body {
 }
 
 .terms-check input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    border-radius: 4px;
-    border: 2px solid var(--input-border);
-    appearance: none;
+    width: 16px;
+    height: 16px;
     cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.terms-check input[type="checkbox"]:checked {
-    background: var(--accent-secondary);
-    border-color: var(--accent-secondary);
+    accent-color: var(--accent-secondary);
+    margin-right: 4px;
 }
 
 .cta-button {

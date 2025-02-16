@@ -379,8 +379,21 @@
 /* Course Thumbnail */
 .course-thumbnail {
     position: relative;
-    padding-top: 56.25%; /* 16:9 aspect ratio */
+    padding-top: 56.25%;
     overflow: hidden;
+}
+
+.course-thumbnail::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(0deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%);
+    z-index: 1;
+    opacity: 0.5;
+    transition: opacity 0.3s ease;
 }
 
 .course-thumbnail img {
@@ -390,7 +403,15 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.4s ease;
+    transition: transform 0.6s ease;
+}
+
+.course-card:hover .course-thumbnail::after {
+    opacity: 0.7;
+}
+
+.course-card:hover .course-thumbnail img {
+    transform: scale(1.1) rotate(-2deg);
 }
 
 .course-card:hover {
