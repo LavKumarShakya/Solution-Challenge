@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AetherLearn - AI Assistant">
+    <title>AI Assistant - AetherLearn</title>
+    
+    <!-- Core Styles -->
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    
+    <!-- Page Specific Styles -->
+    <link rel="stylesheet" href="../css/ai-assistant.css">
+    
+    <!-- External Resources -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="navbar-placeholder"></div>
+
+    <main class="ai-assistant-container">
+        <section class="chat-interface">
+            <div class="chat-container">
+                <div class="chat-header-info">
+                    <div class="header-content">
+                        <div class="header-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="header-text">
+                            <h1>AI Learning Assistant</h1>
+                            <p>Your personalized guide to mastering tech concepts</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Chat Area -->
+                <div class="chat-main">
+                    <div class="chat-header">
+                        <div class="chat-status">
+                            <span class="status-dot"></span>
+                            <span class="status-text">AI Assistant Active</span>
+                        </div>
+                        <div class="chat-actions">
+                            <button class="action-btn" title="Clear Chat">
+                                <i class="fas fa-broom"></i>
+                            </button>
+                            <button class="action-btn" title="Export Chat">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="chat-messages" id="chatMessages">
+                        <!-- Welcome Message -->
+                        <div class="message ai-message">
+                            <div class="message-avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="message-content">
+                                <div class="message-bubble">
+                                    <h4>Hello! 👋 I'm your AI learning assistant.</h4>
+                                    <p>I can help you with:</p>
+                                    <ul class="feature-list">
+                                        <li>Learning programming concepts</li>
+                                        <li>Debugging code</li>
+                                        <li>Understanding algorithms</li>
+                                        <li>Finding learning resources</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Input -->
+                    <div class="chat-input">
+                        <form id="chatForm" class="input-form">
+                            <div class="input-wrapper">
+                                <textarea 
+                                    placeholder="Ask me anything about programming, web development, or tech..." 
+                                    rows="1"
+                                    autofocus>
+                                </textarea>
+                                <button type="submit" class="send-button">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/lib/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/github.css">
+    <script src="../js/navbar.js"></script>
+    <script src="../js/script.js"></script>
+</body>
+</html>

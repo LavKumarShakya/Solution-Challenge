@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AetherLearn - Course Catalog">
+    <title>Courses - AetherLearn</title>
+    
+    <!-- Core Styles -->
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    
+    <!-- Page Specific Styles -->
+    <link rel="stylesheet" href="../css/courses.css">
+    
+    <!-- External Resources -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Navbar Placeholder -->
+    <div id="navbar-placeholder"></div>
+
+    <main class="course-discovery">
+        <div class="course-container">
+            <!-- Course Header -->
+            <section class="course-header" data-aos="fade-up">
+                <h1>Discover Free Online Courses</h1>
+                <p>Unleash your potential with AI-powered learning paths tailored just for you.</p>
+                <p>Learn from curated courses across various topics and skill levels</p>
+            
+            <div class="course-filters">
+                <div class="filter-group">
+                    <label for="category">Category</label>
+                    <select id="category">
+                        <option value="all">All Categories</option>
+                        <option value="technology">Technology</option>
+                        <option value="design">Design</option>
+                        <option value="business">Business</option>
+                        <option value="science">Science</option>
+                        <option value="arts">Arts</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="level">Skill Level</label>
+                    <select id="level">
+                        <option value="all">All Levels</option>
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="duration">Duration</label>
+                    <select id="duration">
+                        <option value="all">Any Duration</option>
+                        <option value="short">0-2 Hours</option>
+                        <option value="medium">2-10 Hours</option>
+                        <option value="long">10+ Hours</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="sort">Sort By</label>
+                    <select id="sort">
+                        <option value="popular">Most Popular</option>
+                        <option value="newest">Newest</option>
+                        <option value="rating">Highest Rated</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- Course Grid -->
+        <section class="course-grid" data-aos="fade-up">
+            <!-- Course Card -->
+            <div class="course-card" data-aos="fade-up" data-aos-delay="50">
+                <div class="course-thumbnail">
+                    <img src="https://www.cdmi.in/courses@2x/web-developments.webp" alt="Web Development Course">
+                    <div class="course-overlay">
+                        <span class="course-level">Beginner</span>
+                        <span class="course-duration">20 Hours</span>
+                    </div>
+                </div>
+                <div class="course-content">
+                    <h3>Web Development Fundamentals</h3>
+                    <p>Learn the basics of web development with HTML, CSS, and JavaScript</p>
+                    <div class="course-meta">
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <span>4.8 (2.1k reviews)</span>
+                        </div>
+                        <span class="students"><i class="fas fa-user-graduate"></i> 15k students</span>
+                    </div>
+                    <a href="course-details.html?id=web-dev-101" class="cta-button">View Course</a>
+                </div>
+            </div>
+
+            <!-- Course Card -->
+            <div class="course-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="course-thumbnail">
+                    <img src="https://blog.mitsde.com/wp-content/uploads/2024/05/ui-ux.png" alt="UI/UX Design Course">
+                    <div class="course-overlay">
+                        <span class="course-level">Intermediate</span>
+                        <span class="course-duration">15 Hours</span>
+                    </div>
+                </div>
+                <div class="course-content">
+                    <h3>UI/UX Design Essentials</h3>
+                    <p>Master the fundamentals of user interface and experience design</p>
+                    <div class="course-meta">
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <span>4.9 (1.8k reviews)</span>
+                        </div>
+                        <span class="students"><i class="fas fa-user-graduate"></i> 12k students</span>
+                    </div>
+                    <a href="course-details.html?id=uiux-101" class="cta-button">View Course</a>
+                </div>
+            </div>
+
+            <!-- Machine Learning Course Card -->
+            <div class="course-card" data-aos="fade-up" data-aos-delay="150">
+                <div class="course-thumbnail">
+                    <img src="https://5.imimg.com/data5/SELLER/Default/2021/9/YA/FN/SK/83343488/artificial-intelligence-and-machine-learning-training.jpeg" alt="Machine Learning Course">
+                    <div class="course-overlay">
+                        <span class="course-level">Advanced</span>
+                        <span class="course-duration">25 Hours</span>
+                    </div>
+                </div>
+                <div class="course-content">
+                    <h3>Machine Learning & AI</h3>
+                    <p>Dive into machine learning algorithms and artificial intelligence</p>
+                    <div class="course-meta">
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <span>4.7 (1.5k reviews)</span>
+                        </div>
+                        <span class="students"><i class="fas fa-user-graduate"></i> 10k students</span>
+                    </div>
+                    <a href="course-details.html?id=ml-ai-101" class="cta-button">View Course</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <button class="pagination-btn active">1</button>
+            <button class="pagination-btn">2</button>
+            <button class="pagination-btn">3</button>
+            <span>...</span>
+            <button class="pagination-btn">10</button>
+        </div>
+
+        <!-- Featured Learning Paths -->
+        <section class="featured-paths" data-aos="fade-up">
+            <h2>Featured Learning Paths</h2>
+            <p>Structured learning paths to help you achieve your career goals</p>
+
+            <div class="paths-grid">
+                <div class="path-card" data-aos="fade-up" data-aos-delay="50">
+                    <div class="path-thumbnail">
+                        <img src="https://images.unsplash.com/photo-1587620962725-abab7fe55159?w=800&h=450&fit=crop" alt="Full Stack Development Course">
+                    </div>
+                    <div class="path-content">
+                        <i class="fas fa-laptop-code"></i>
+                        <h3>Full Stack Developer</h3>
+                        <p>Master both frontend and backend development</p>
+                        <ul class="path-features">
+                            <li>20+ Courses</li>
+                            <li>100+ Hours</li>
+                            <li>Real Projects</li>
+                        </ul>
+                        <a href="#" class="cta-button">Explore Path</a>
+                    </div>
+                </div>
+
+                <div class="path-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="path-thumbnail">
+                        <img src="https://careercollegeindia.com/blog/wp-content/uploads/2024/09/UI-UX-Designer-scaled.jpg" alt="Digital Design Path">
+                    </div>
+                    <div class="path-content">
+                        <i class="fas fa-paint-brush"></i>
+                        <h3>Digital Designer</h3>
+                        <p>Learn UI/UX design, graphics, and animation</p>
+                        <ul class="path-features">
+                            <li>15+ Courses</li>
+                            <li>80+ Hours</li>
+                            <li>Portfolio Building</li>
+                        </ul>
+                        <a href="#" class="cta-button">Explore Path</a>
+                    </div>
+                </div>
+
+                <div class="path-card" data-aos="fade-up" data-aos-delay="150">
+                    <div class="path-thumbnail">
+                        <img src="https://www.krmangalam.edu.in/wp-content/uploads/2024/02/324bs_ArtificialIntelligenceMachineLearning.webp" alt="AI & Machine Learning Path">
+                    </div>
+                    <div class="path-content">
+                        <i class="fas fa-brain"></i>
+                        <h3>AI & Machine Learning</h3>
+                        <p>Master AI algorithms and machine learning</p>
+                        <ul class="path-features">
+                            <li>18+ Courses</li>
+                            <li>90+ Hours</li>
+                            <li>Hands-on Projects</li>
+                        </ul>
+                        <a href="#" class="cta-button">Explore Path</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>AetherLearn</h3>
+                <p>Transforming education through AI-powered personalized learning paths and free resources.</p>
+                <div class="social-icons">
+                    <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" title="Discord"><i class="fab fa-discord"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="courses.html">Courses</a>
+                <a href="ai-assistant.html">AI Assistant</a>
+                <a href="community.html">Community</a>
+                <a href="about.html">About Us</a>
+            </div>
+
+            <div class="footer-section">
+                <h3>Resources</h3>
+                <a href="blog.html">Blog</a>
+                <a href="faq.html">FAQs</a>
+                <a href="support.html">Support</a>
+                <a href="privacy.html">Privacy Policy</a>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <a href="mailto:support@aetherlearn.com">support@aetherlearn.com</a>
+                <a href="tel:+1234567890">+1 (234) 567-890</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 AetherLearn. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../js/navbar.js"></script>
+    <script src="../js/script.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 600,
+            easing: 'ease-out',
+            once: false,
+            offset: 50,
+            delay: 50,
+            mirror: true,
+            anchorPlacement: 'top-bottom'
+        });
+    </script>
+</body>
+</html>

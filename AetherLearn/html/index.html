@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AetherLearn - AI-Powered Learning Platform">
+    <title>AetherLearn - Learn Smarter with AI</title>
+    
+    <!-- Core Styles -->
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    
+    <!-- External Resources -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar Placeholder -->
+    <div id="navbar-placeholder"></div>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Transform Your Learning Journey with AI</h1>
+                <p>Our AI creates personalized learning paths using the best free resources across the internet, tailored just for you.</p>
+                
+                <div class="search-and-cta">
+                    <div class="ai-search-container">
+                        <div style="position: relative;">
+                            <input type="text" class="hero-search-input" id="searchInput" placeholder="What do you want to learn today? (e.g., 'Machine Learning', 'Web Development')">
+                            <div class="search-suggestions" id="searchSuggestions"></div>
+                        </div>
+                    </div>
+                    <div class="cta-group">
+                        <button class="hero-search-button clean-button">Create Learning Path</button>
+                    </div>
+                </div>
+                <a href="ai-assistant.html" class="ai-assistant-btn">
+                    <i class="fas fa-robot"></i>
+                    Try AI Assistant
+                </a>
+
+                <div class="hero-features">
+                    <span><i class="fas fa-brain"></i>AI-Powered Learning</span>
+                    <span><i class="fas fa-infinity"></i>Free Forever</span>
+                    <span><i class="fas fa-clock"></i>Learn at Your Pace</span>
+                    <span><i class="fas fa-certificate"></i>Earn Certificates</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technology Education Section -->
+        <section class="learning-paths" data-aos="fade-up">
+            <h2>Explore Our Diverse Learning Paths</h2>
+            <p>Discover curated paths that align with your goals and interests</p>
+            
+            <div class="learning-paths-grid" data-aos="fade-up" data-aos-delay="50">
+                <div class="learning-path-card">
+                    <div class="path-content">
+                        <i class="fas fa-code"></i>
+                        <h3>Technology</h3>
+                        <p>Master web development, mobile apps, AI, and more through hands-on projects</p>
+                        <ul class="path-features">
+                            <li>Real-world projects</li>
+                            <li>Industry-standard tools</li>
+                            <li>Expert-curated content</li>
+                        </ul>
+                        <a href="courses.html?category=technology" class="cta-button">Explore Technology</a>
+                    </div>
+                </div>
+
+                <div class="learning-path-card">
+                    <div class="path-content">
+                        <i class="fas fa-palette"></i>
+                        <h3>Digital Arts</h3>
+                        <p>Learn digital painting, 3D modeling, animation, and graphic design</p>
+                        <ul class="path-features">
+                            <li>Creative projects</li>
+                            <li>Professional tools</li>
+                            <li>Portfolio building</li>
+                        </ul>
+                        <a href="courses.html?category=digital-arts" class="cta-button">Explore Digital Arts</a>
+                    </div>
+                </div>
+
+                <div class="learning-path-card">
+                    <div class="path-content">
+                        <i class="fas fa-gamepad"></i>
+                        <h3>Game Design</h3>
+                        <p>Create games from scratch using popular engines and programming</p>
+                        <ul class="path-features">
+                            <li>Game development basics</li>
+                            <li>Popular game engines</li>
+                            <li>Interactive projects</li>
+                        </ul>
+                        <a href="courses.html?category=game-design" class="cta-button">Explore Game Design</a>
+                    </div>
+                </div>
+            </div>
+
+        <!-- AI Tools Section -->
+        <section class="learning-paths" data-aos="fade-up">
+            <h2>AI-Powered Learning Tools</h2>
+            <p>Enhance your learning experience with our cutting-edge AI tools</p>
+            
+            <div class="learning-paths-grid" data-aos="fade-up" data-aos-delay="50">
+                <div class="learning-path-card">
+                    <div class="path-content">
+                        <i class="fas fa-brain"></i>
+                        <h3>Gemini AI Tutor</h3>
+                        <p>Get personalized tutoring and instant answers to your questions using advanced AI</p>
+                        <ul class="path-features">
+                            <li>24/7 Learning Support</li>
+                            <li>Detailed Explanations</li>
+                            <li>Multi-subject Expertise</li>
+                        </ul>
+                        <a href="ai-assistant.html" class="cta-button">Start Learning</a>
+                    </div>
+                </div>
+
+                <div class="learning-path-card">
+                    <div class="path-content">
+                        <i class="fas fa-graduation-cap"></i>
+                        <h3>Study Path Generator</h3>
+                        <p>Create customized learning paths tailored to your goals and current skill level</p>
+                        <ul class="path-features">
+                            <li>Personalized Curriculum</li>
+                            <li>Progress Tracking</li>
+                            <li>Adaptive Learning</li>
+                        </ul>
+                        <a href="courses.html" class="cta-button">Generate Path</a>
+                    </div>
+                </div>
+
+                <div class="learning-path-card">
+                    <div class="path-content">
+                        <i class="fas fa-robot"></i>
+                        <h3>AI Project Assistant</h3>
+                        <p>Get guided assistance for your coding projects and real-time problem-solving</p>
+                        <ul class="path-features">
+                            <li>Code Analysis</li>
+                            <li>Debug Support</li>
+                            <li>Best Practices Guide</li>
+                        </ul>
+                        <a href="ai-assistant.html?mode=project" class="cta-button">Start Project</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        </section>
+
+        <!-- Feature Highlights Section -->
+        <section class="features" data-aos="fade-up">
+            <h2>Features That Empower Your Learning</h2>
+            <p>Experience the future of education with our AI-powered tools</p>
+
+            <div class="feature-grid" data-aos="fade-up" data-aos-delay="50">
+                <div class="feature-card">
+                    <i class="fas fa-robot"></i>
+                    <h3>AI Learning Assistant</h3>
+                    <p>Get instant help, explanations, and guidance 24/7 from our advanced AI tutor</p>
+                    <a href="ai-assistant.html" class="cta-button">Try AI Assistant</a>
+                </div>
+
+                <div class="feature-card">
+                    <i class="fas fa-users"></i>
+                    <h3>Collaborative Community</h3>
+                    <p>Learn together with peers, share resources, and grow with community support</p>
+                </div>
+
+                <div class="feature-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Progress Tracking</h3>
+                    <p>Visualize your learning journey with interactive progress dashboards</p>
+                </div>
+
+                <div class="feature-card">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h3>Personalized Learning</h3>
+                    <p>Get custom learning paths tailored to your goals and learning style</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Curated Courses Section -->
+        <section class="curated-courses">
+            <h2>Curated Learning Paths Just for You</h2>
+            <p>Discover hand-picked courses tailored to your interests</p>
+<p>Explore curated learning paths and discover courses tailored to your interests. AetherLearn also offers personalized study plans and complete course pathways, designed to match your individual learning preferences and goals, with recommendations powered by Gemini AI.</p>
+            
+            <div class="course-filters">
+                <div class="filter-group">
+                    <select id="category">
+                        <option value="all">All Categories</option>
+                        <option value="technology">Technology</option>
+                        <option value="design">Design</option>
+                        <option value="business">Business</option>
+                        <option value="science">Science</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <select id="level">
+                        <option value="all">All Levels</option>
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <select id="sort">
+                        <option value="popular">Most Popular</option>
+                        <option value="newest">Newest</option>
+                        <option value="rating">Highest Rated</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="course-grid">
+                <div class="course-card">
+                    <div class="course-thumbnail">
+                        <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=500&h=300&fit=crop" alt="Web Development Course">
+                        <div class="course-overlay">
+                            <span class="course-level">Beginner</span>
+                            <span class="course-duration">20 Hours</span>
+                        </div>
+                    </div>
+                    <div class="course-content">
+                        <h3>Web Development Fundamentals</h3>
+                        <p>Learn the basics of web development with HTML, CSS, and JavaScript</p>
+                        <div class="course-meta">
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.8 (2.1k reviews)</span>
+                            </div>
+                            <span class="students"><i class="fas fa-user-graduate"></i> 15k students</span>
+                        </div>
+                        <a href="course-details.html?id=web-dev-101" class="cta-button">View Course</a>
+                    </div>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-thumbnail">
+                        <img src="https://www.infiraise.com/wp-content/uploads/2022/09/UI-Developers-And-UX-Developers.jpg" alt="UI/UX Design Course">
+                        <div class="course-overlay">
+                            <span class="course-level">Intermediate</span>
+                            <span class="course-duration">15 Hours</span>
+                        </div>
+                    </div>
+                    <div class="course-content">
+                        <h3>UI/UX Design Essentials</h3>
+                        <p>Master the fundamentals of user interface and experience design</p>
+                        <div class="course-meta">
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.9 (1.8k reviews)</span>
+                            </div>
+                            <span class="students"><i class="fas fa-user-graduate"></i> 12k students</span>
+                        </div>
+                        <a href="course-details.html?id=uiux-101" class="cta-button">View Course</a>
+                    </div>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-thumbnail">
+                        <img src="https://www.mindinventory.com/blog/wp-content/uploads/2023/11/ai-ml-in-business-processes.webp" alt="Machine Learning Course">
+                        <div class="course-overlay">
+                            <span class="course-level">Advanced</span>
+                            <span class="course-duration">25 Hours</span>
+                        </div>
+                    </div>
+                    <div class="course-content">
+                        <h3>Machine Learning & AI</h3>
+                        <p>Dive into machine learning algorithms and artificial intelligence</p>
+                        <div class="course-meta">
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.7 (1.5k reviews)</span>
+                            </div>
+                            <span class="students"><i class="fas fa-user-graduate"></i> 10k students</span>
+                        </div>
+                        <a href="course-details.html?id=ml-ai-101" class="cta-button">View Course</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="view-all-courses">
+                <a href="courses.html" class="cta-button secondary">View All Courses</a>
+            </div>
+        </section>
+
+        <!-- Learning Journey Section -->
+        <section class="learning-journey" data-aos="fade-up">
+            <h2>Your Learning Journey</h2>
+            <div class="journey-cards">
+                <div class="journey-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="journey-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <div class="journey-content">
+                        <h3>Start Your Journey</h3>
+                        <p>Begin your personalized learning experience with AI-guided path recommendations and adaptive content.</p>
+                        <div class="journey-metrics">
+                            <div class="metric">
+                                <div class="metric-value">500+</div>
+                                <div class="metric-label">Learning Paths</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value">95%</div>
+                                <div class="metric-label">Success Rate</div>
+                            </div>
+                        </div>
+                        <ul class="journey-steps">
+                            <li class="journey-step">
+                                <span class="step-number">1</span>
+                                <span class="step-text">Choose your learning path</span>
+                            </li>
+                            <li class="journey-step">
+                                <span class="step-number">2</span>
+                                <span class="step-text">Get AI-powered recommendations</span>
+                            </li>
+                            <li class="journey-step">
+                                <span class="step-number">3</span>
+                                <span class="step-text">Track your progress</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="journey-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="journey-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="journey-content">
+                        <h3>Master Skills</h3>
+                        <p>Develop expertise through interactive learning experiences and real-world projects.</p>
+                        <div class="journey-metrics">
+                            <div class="metric">
+                                <div class="metric-value">1000+</div>
+                                <div class="metric-label">Projects</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value">24/7</div>
+                                <div class="metric-label">AI Support</div>
+                            </div>
+                        </div>
+                        <ul class="journey-steps">
+                            <li class="journey-step">
+                                <span class="step-number">1</span>
+                                <span class="step-text">Practice with interactive exercises</span>
+                            </li>
+                            <li class="journey-step">
+                                <span class="step-number">2</span>
+                                <span class="step-text">Build real-world projects</span>
+                            </li>
+                            <li class="journey-step">
+                                <span class="step-number">3</span>
+                                <span class="step-text">Earn certifications</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="journey-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="journey-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="journey-content">
+                        <h3>Grow Together</h3>
+                        <p>Connect with peers, join study groups, and participate in collaborative projects.</p>
+                        <div class="journey-metrics">
+                            <div class="metric">
+                                <div class="metric-value">50K+</div>
+                                <div class="metric-label">Community</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value">100+</div>
+                                <div class="metric-label">Study Groups</div>
+                            </div>
+                        </div>
+                        <ul class="journey-steps">
+                            <li class="journey-step">
+                                <span class="step-number">1</span>
+                                <span class="step-text">Join study groups</span>
+                            </li>
+                            <li class="journey-step">
+                                <span class="step-number">2</span>
+                                <span class="step-text">Collaborate on projects</span>
+                            </li>
+                            <li class="journey-step">
+                                <span class="step-number">3</span>
+                                <span class="step-text">Share knowledge</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action Section -->
+        <section class="cta">
+            <div class="cta-content">
+                <h2>Ready to Transform Your Future?</h2>
+                <p>Join thousands of learners and start your personalized learning journey today</p>
+                <div class="cta-buttons">
+                    <a href="login.html" class="cta-button">Get Started Free</a>
+                    <a href="courses.html" class="cta-button secondary">Explore Courses</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>AetherLearn</h3>
+                <p>Transforming education through AI-powered personalized learning paths and free resources.</p>
+                <div class="social-icons">
+                    <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" title="Discord"><i class="fab fa-discord"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="courses.html">Courses</a>
+                <a href="ai-assistant.html">AI Assistant</a>
+                <a href="community.html">Community</a>
+                <a href="about.html">About Us</a>
+            </div>
+
+            <div class="footer-section">
+                <h3>Resources</h3>
+                <a href="blog.html">Blog</a>
+                <a href="faq.html">FAQs</a>
+                <a href="support.html">Support</a>
+                <a href="privacy.html">Privacy Policy</a>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <a href="mailto:support@aetherlearn.com">support@aetherlearn.com</a>
+                <a href="tel:+1234567890">+1 (234) 567-890</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 AetherLearn. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../js/navbar.js"></script>
+    <script src="../js/script.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 600,
+            easing: 'ease-out',
+            once: false,
+            offset: 50,
+            delay: 50,
+            mirror: true,
+            anchorPlacement: 'top-bottom'
+        });
+    </script>
+</body>
+</html>
