@@ -18,10 +18,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="loading-screen">
-        <div class="loader"></div>
-    </div>
-
     <div id="navbar-placeholder"></div>
 
     <main class="ai-assistant-container">
@@ -55,35 +51,6 @@
 
         <!-- Main Chat Interface -->
         <section class="chat-interface">
-            <!-- Left Sidebar -->
-            <aside class="chat-sidebar">
-                <div class="sidebar-header">
-                    <h3>Learning Topics</h3>
-                </div>
-                <div class="topic-list">
-                    <button class="topic-button active">
-                        <i class="fas fa-terminal"></i>
-                        <span>Programming</span>
-                    </button>
-                    <button class="topic-button">
-                        <i class="fas fa-laptop-code"></i>
-                        <span>Web Development</span>
-                    </button>
-                    <button class="topic-button">
-                        <i class="fas fa-database"></i>
-                        <span>Databases</span>
-                    </button>
-                    <button class="topic-button">
-                        <i class="fas fa-robot"></i>
-                        <span>Machine Learning</span>
-                    </button>
-                    <button class="topic-button">
-                        <i class="fas fa-mobile-alt"></i>
-                        <span>Mobile Dev</span>
-                    </button>
-                </div>
-            </aside>
-
             <!-- Chat Area -->
             <div class="chat-main">
                 <div class="chat-header">
@@ -157,31 +124,6 @@
                 </div>
             </div>
 
-            <!-- Right Sidebar -->
-            <aside class="context-sidebar">
-                <div class="context-header">
-                    <h3>Current Topic</h3>
-                </div>
-                <div class="context-content">
-                    <div class="context-card">
-                        <h4>Related Resources</h4>
-                        <ul class="resource-list">
-                            <li>
-                                <i class="fas fa-book"></i>
-                                <span>Documentation</span>
-                            </li>
-                            <li>
-                                <i class="fas fa-video"></i>
-                                <span>Video Tutorials</span>
-                            </li>
-                            <li>
-                                <i class="fas fa-tasks"></i>
-                                <span>Practice Exercises</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </aside>
         </section>
     </main>
 
@@ -190,16 +132,6 @@
     <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/lib/highlight.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/github.css">
     <script src="../js/navbar.js"></script>
-    <script>
-        // Ensure loading screen is handled properly
-        document.addEventListener('DOMContentLoaded', () => {
-            const loadingScreen = document.getElementById('loading-screen');
-            if (loadingScreen) {
-                loadingScreen.style.display = 'flex';
-                loadingScreen.style.opacity = '1';
-            }
-        });
-    </script>
     <script src="../js/script.js"></script>
 </body>
 </html>

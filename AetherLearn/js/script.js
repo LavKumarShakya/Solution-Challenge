@@ -1,48 +1,48 @@
-// Loading Screen and Page Initialization
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialize features first
-    initializePage();
+// Chat Interface Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const chatForm = document.getElementById('chatForm');
+    const messageInput = chatForm?.querySelector('textarea');
+    const chatMessages = document.getElementById('chatMessages');
 
-    // Handle loading screen once everything is ready
-    document.addEventListener('readystatechange', () => {
-        if (document.readyState === 'complete') {
-            setTimeout(() => {
-                const loadingScreen = document.getElementById('loading-screen');
-                if (loadingScreen) {
-                    loadingScreen.classList.add('hidden');
-                    loadingScreen.addEventListener('transitionend', () => {
-                        loadingScreen.style.display = 'none';
-                    });
-                }
-            }, 500); // Consistent delay for smooth transition
-        }
-    });
-});
-
-// Initialize page features
-function initializePage() {
-    // Get current page
-    const currentPath = window.location.pathname;
-    
-    // Initialize common features
-    initializeSearch();
-    initializeMobileMenu();
-    initializePageTransitions();
-
-    // Initialize AI Assistant if we're on the AI assistant page
-    if (currentPath.includes('ai-assistant')) {
-        initializeAIChat();
+    if (messageInput) {
+        messageInput.addEventListener('keydown', function(e) {
+            // If Enter is pressed without Shift
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault(); // Prevent default newline
+                submitMessage();
+            }
+        });
     }
-    
-    // Only run course functionality if we're on the courses page
-    if (currentPath.includes('courses')) {
-        // Filter functionality
-        const filters = {
-            category: document.getElementById('category'),
-            level: document.getElementById('level'),
-            duration: document.getElementById('duration'),
-            sort: document.getElementById('sort')
-        };
+
+    if (chatForm) {
+        chatForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            submitMessage();
+        });
+    }
+
+    function submitMessage() {
+        if (!messageInput?.value.trim()) return;
+
+        // Create and append user message
+        appendMessage(messageInput.value, 'user');
+
+        // Clear input
+        messageInput.value = '';
+        messageInput.style.height = 'auto';
+
+        // Simulate AI response (for demo)
+        setTimeout(() => {
+            appendMessage('This is a demo response from the AI assistant.', 'ai');
+        }, 1000);
+    }
+
+    function appendMessage(content, type) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${type}-message`;
+        
+        const avatar = document.createElement('div');
+        avatar.className = 'message-avatar';
 
         // Course filtering system
         Object.values(filters).forEach(filter => {
