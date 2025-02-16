@@ -206,7 +206,7 @@ nav {
 .sign-in-btn {
     padding: 0.8rem 1.5rem;
     background: transparent;
-    border: 2px solid var(--accent-primary);
+    border: 2px solid var(--input-border);
     color: var(--text-primary);
     border-radius: 8px;
     font-weight: 600;
@@ -238,6 +238,7 @@ nav {
 .sign-in-btn:hover {
     color: var(--text-primary); /* Text color on hover */
     border-color: var(--accent-secondary);
+    box-shadow: none; /* Explicitly remove box-shadow */
 }
 
 .sign-in-btn:hover::before {
