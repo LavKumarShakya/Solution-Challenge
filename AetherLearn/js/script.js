@@ -203,11 +203,11 @@ class AIChat {
     constructor() {
         this.chatForm = document.querySelector('#chatForm');
         this.chatMessages = document.querySelector('#chatMessages');
-        this.suggestionsChips = document.querySelectorAll('.suggestion-chip');
+        this.chatInput = document.querySelector('#chatInput');
         this.clearButton = document.querySelector('.action-btn[title="Clear Chat"]');
         
-
         this.setupEventListeners();
+        this.setupInputHandling();
     }
 
     setupEventListeners() {
@@ -215,15 +215,78 @@ class AIChat {
             this.chatForm.addEventListener('submit', (e) => this.handleSubmit(e));
         }
 
-        if (this.suggestionsChips) {
-            this.suggestionsChips.forEach(btn => {
-                btn.addEventListener('click', () => this.handleQuickAction(btn));
-            });
-        }
-
         if (this.clearButton) {
             this.clearButton.addEventListener('click', () => this.clearChat());
         }
+
+        // Add input handling for textarea auto-resize
+        if (this.chatInput) {
+            ['input', 'change'].forEach(event => {
+                this.chatInput.addEventListener(event, () => this.adjustTextareaHeight());
+            });
+
+            // Handle Enter for submit (Shift+Enter or Ctrl+Enter for newline)
+            this.chatInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    if (e.shiftKey || e.ctrlKey) {
+                        // For Shift+Enter or Ctrl+Enter, insert a newline
+                        const start = this.chatInput.selectionStart;
+                        const end = this.chatInput.selectionEnd;
+                        const value = this.chatInput.value;
+                        
+                        // Insert newline at cursor position
+                        this.chatInput.value = value.substring(0, start) + '\n' + value.substring(end);
+                        
+                        // Move cursor after newline
+                        this.chatInput.selectionStart = this.chatInput.selectionEnd = start + 1;
+                        
+                        e.preventDefault();
+                    } else {
+                        // Regular Enter sends the message
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const fakeSubmitEvent = new Event('submit', {
+                            cancelable: true,
+                            bubbles: true
+                        });
+                        this.handleSubmit(fakeSubmitEvent);
+                    }
+                }
+            });
+
+            // Prevent form from submitting normally
+            this.chatForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+            }, true);
+        }
+    }
+
+    setupInputHandling() {
+        if (!this.chatInput) return;
+
+        // Set initial height
+        this.adjustTextareaHeight();
+
+        // Clear extra whitespace on focus
+        this.chatInput.addEventListener('focus', () => {
+            this.chatInput.value = this.chatInput.value.trim();
+        });
+    }
+
+    adjustTextareaHeight() {
+        const textarea = this.chatInput;
+        if (!textarea) return;
+
+        // Reset height to auto to get proper scrollHeight
+        textarea.style.height = 'auto';
+        
+        // Calculate new height (with max-height limit)
+        const maxHeight = 150;
+        const newHeight = Math.min(textarea.scrollHeight, maxHeight);
+        textarea.style.height = `${newHeight}px`;
+        
+        // Add scrollbar if content exceeds max height
+        textarea.style.overflowY = textarea.scrollHeight > maxHeight ? 'auto' : 'hidden';
     }
 
     async handleSubmit(e) {
@@ -289,25 +352,60 @@ class AIChat {
                     contents: [{
                         role: 'user',
                         parts: [{
-                            text: `You are AetherLearn's AI learning assistant, an expert in technology education and programming. Your role is to provide helpful, accurate, and engaging responses to help users learn and grow in their tech journey.
-    
-    Key Guidelines:
-    - Be friendly, encouraging, and maintain a supportive learning environment
-    - Use clear explanations with practical examples
-    - For code examples, use markdown code blocks with language specification (e.g. \`\`\`javascript)
-    - Break down complex concepts into digestible parts
-    - Relate answers to real-world applications where possible
-    - Keep responses focused and concise
-    - Use bullet points and headers (markdown) to organize information
-    - Recommend relevant AetherLearn courses or resources when appropriate
-    
+                            text: `You are AetherLearn's AI learning companion, a friendly and knowledgeable assistant passionate about helping users learn and grow across all disciplines. Your role is to provide engaging, personalized support while making learning fun and accessible.
+
+    Personality Traits:
+    - Friendly and approachable, like a knowledgeable friend
+    - Enthusiastic about learning with an upbeat attitude
+    - Professional yet warm in communication
+    - Engaging with appropriate humor when suitable
+    - Patient and understanding with all skill levels
+    - Creative in suggesting learning approaches
+
+    Key Capabilities:
+    - Create personalized learning paths for any subject
+    - Generate study materials (summaries, flashcards, mind maps)
+    - Provide multi-style explanations (visual, theoretical, practical)
+    - Find and recommend free educational resources
+    - Help with content organization and study planning
+    - Assist with various subjects beyond just technology
+    - Support different learning preferences and styles
+    - Offer step-by-step problem-solving guidance
+
+    Available AI Tools:
+    - Smart Study Assistant: Real-time explanations and solutions
+    - Learning Path Creator: Personalized roadmap generation
+    - Content Enhancer: Transform content into interactive materials
+    - Resource Organizer: Smart bookmarking and progress tracking
+    - Mind Map Generator: Visual concept mapping
+    - Quiz Generator: Create personalized practice tests
+    - Community Features: Study groups and resource sharing
+
     Focus Areas:
-    - Programming & Software Development
-    - Web Development (Frontend/Backend)
-    - Data Science & Machine Learning
-    - Cloud Computing & DevOps
-    - System Design & Architecture
-    - Best Practices & Industry Standards
+    - Technology & Programming
+    - Science & Engineering
+    - Arts & Digital Design
+    - Business & Economics
+    - Language Learning
+    - Personal Development
+    - Academic Subjects
+    - Hobbies & Creative Skills
+
+    Response Guidelines:
+    - Use markdown formatting for clear structure
+    - Include relevant examples and practical applications
+    - Suggest appropriate AI tools for complex tasks
+    - Break down complex topics into digestible parts
+    - Provide links to free learning resources
+    - Support answers with visuals when helpful
+    - Keep an encouraging and positive tone
+    - Be concise yet comprehensive
+    - Do not hallucinate or generate false information
+
+    For non-relevant or off-topic questions:
+    - Respond with friendly humor while staying professional
+    - Guide the conversation back to learning when appropriate
+    - Maintain helpfulness while setting clear boundaries
     
     User's message: ${message}`
                         }]
@@ -352,32 +450,44 @@ class AIChat {
 
         try {
             const formattedHtml = marked.parse(text);
-            // Wrap response in a div for proper styling
             return `<div class="markdown-content">${formattedHtml}</div>`;
         } catch (error) {
             console.error('Markdown parsing error:', error);
-            return `<p>${text}</p>`;
+            return `<p>${this.escapeHtml(text)}</p>`;
         }
     }
 
+    formatUserMessage(text) {
+        return this.escapeHtml(text).replace(/\n/g, '<br>');
+    }
+
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
     addMessage(type, content) {
-        console.log('addMessage called', type, content);
         const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${type}`;
+        messageDiv.className = `message ${type}-message`;
         
         messageDiv.innerHTML = `
             <div class="message-avatar">
                 <i class="fas fa-${type === 'ai' ? 'robot' : 'user'}"></i>
             </div>
             <div class="message-content">
-                ${type === 'ai' ? this.formatResponse(content) : `<p>${content}</p>`}
+                <div class="message-bubble">
+                    ${type === 'ai' ?
+                        this.formatResponse(content) :
+                        `<div class="message-text"><p>${this.formatUserMessage(content)}</p></div>`
+                    }
+                </div>
             </div>
         `;
         
         this.chatMessages.appendChild(messageDiv);
         this.scrollToBottom();
 
-        // Add syntax highlighting for code blocks if response is from AI
         if (type === 'ai') {
             messageDiv.querySelectorAll('pre code').forEach(block => {
                 hljs.highlightElement(block);

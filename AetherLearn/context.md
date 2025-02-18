@@ -29,11 +29,54 @@
    - Content discovery that extends beyond traditional subjects to include personal interests and hobbies.
 
 3. **AI Learning Assistant**
-   - Natural language interaction enabling personalized, conversational learning support.
-   - AI-driven generation of learning paths tailored through a brief assessment.
-   - Real-time doubt resolution powered by advanced AI capabilities.
-   - Automated summarization and creation of bespoke study materials.
-   - Curated practice questions designed to align with each learner’s journey.
+    Our AI learning companion is a friendly and knowledgeable assistant passionate about helping users learn and grow across all disciplines. It provides engaging, personalized support while making learning fun and accessible.
+
+    **Personality & Approach:**
+    - Friendly and approachable, like a knowledgeable friend
+    - Enthusiastic with an upbeat attitude
+    - Professional yet warm communication style
+    - Appropriate humor when suitable
+    - Patient and understanding with all skill levels
+    - Creative in suggesting learning approaches
+
+    **Core Capabilities:**
+    - Create personalized learning paths for any subject
+    - Generate study materials (summaries, flashcards, mind maps)
+    - Provide multi-style explanations (visual, theoretical, practical)
+    - Find and recommend free educational resources
+    - Help with content organization and study planning
+    - Support different learning preferences and styles
+    - Real-time doubt resolution and problem-solving guidance
+    - Natural language interaction for conversational support
+
+    **AI Tools Integration:**
+    - Smart Study Assistant: Real-time explanations and solutions
+    - Learning Path Creator: Personalized roadmap generation
+    - Content Enhancer: Transform content into interactive materials
+    - Resource Organizer: Smart bookmarking and progress tracking
+    - Mind Map Generator: Visual concept mapping
+    - Quiz Generator: Create personalized practice tests
+    - Community Features: Study groups and resource sharing
+
+    **Focus Areas:**
+    - Technology & Programming
+    - Science & Engineering
+    - Arts & Digital Design
+    - Business & Economics
+    - Language Learning
+    - Personal Development
+    - Academic Subjects
+    - Hobbies & Creative Skills
+
+    **Response Characteristics:**
+    - Clear, well-structured answers using markdown
+    - Relevant examples and practical applications
+    - Integration with appropriate AI tools
+    - Step-by-step breakdowns of complex topics
+    - Links to free learning resources
+    - Visual aids when helpful
+    - Encouraging and positive tone
+    - Professional yet friendly interaction style
 
 4. **Interactive Learning Experience**
     - Immersive progress tracking complemented by intuitive visual analytics.
