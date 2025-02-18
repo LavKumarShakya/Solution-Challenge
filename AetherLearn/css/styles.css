@@ -97,6 +97,15 @@ body.page-transition {
   margin: 0 auto;
 }
 
+/* Updated Heading Styles with Glow Effect */
+h1, h2, h3 {
+  transition: text-shadow 0.3s ease;
+}
+
+h1:hover, h2:hover, h3:hover {
+  text-shadow: 0 0 15px rgba(64, 224, 208, 0.3);
+}
+
 .hero h1 {
   font-size: 3.5rem;
   margin-bottom: 1.5rem;
@@ -148,6 +157,40 @@ body.page-transition {
   outline: none;
   box-shadow: 0 0 20px rgba(64, 224, 208, 0.2);
   background-color: rgba(28, 42, 58, 0.95);
+}
+
+/* Search Suggestions */
+.search-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--bg-tertiary);
+  border-radius: 0 0 var(--hero-radius-lg) var(--hero-radius-lg);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  margin-top: 0.5rem;
+  overflow: hidden;
+  z-index: 10;
+  border: 1px solid var(--input-border);
+}
+
+.search-suggestion-item {
+  padding: 1rem 1.5rem;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+  cursor: default;
+  user-select: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.search-suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.search-suggestion-item:hover {
+  background: rgba(64, 224, 208, 0.1);
+  color: var(--text-primary);
+  transform: translateX(10px);
 }
 
 .hero-search-button {
@@ -251,10 +294,16 @@ body.page-transition {
   text-align: center;
 }
 
-.learning-paths h2 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  color: var(--text-primary);
+.learning-paths h2,
+.features h2,
+.curated-courses h2,
+.learning-journey h2 {
+  font-size: 2.8rem;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(120deg, var(--accent-primary), var(--accent-secondary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .learning-paths p {
@@ -395,11 +444,8 @@ body.page-transition {
   z-index: 2;
 }
 
-.features h2 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  color: var(--text-primary);
-}
+/* Features heading inherits the common gradient style from .learning-paths h2,
+.features h2, .curated-courses h2, .learning-journey h2 defined above */
 
 .features p {
   color: var(--text-secondary);

@@ -643,16 +643,18 @@ document.addEventListener('DOMContentLoaded', () => {
     function displaySuggestions(suggestions) {
         suggestionsContainer.innerHTML = suggestions
             .map(suggestion => `
-                <div class="suggestion-item">${suggestion}</div>
+                <div class="search-suggestion-item">
+                    <i class="fas fa-search"></i>
+                    ${suggestion}
+                </div>
             `)
             .join('');
 
-        // Add click handlers for suggestions
-        const suggestionItems = suggestionsContainer.querySelectorAll('.suggestion-item');
+        // Don't add click handlers - suggestions are for display only
+        const suggestionItems = suggestionsContainer.querySelectorAll('.search-suggestion-item');
         suggestionItems.forEach(item => {
-            item.addEventListener('click', () => {
+            item.addEventListener('mouseover', () => {
                 searchInput.value = item.textContent.trim();
-                suggestionsContainer.style.display = 'none';
             });
         });
     }
