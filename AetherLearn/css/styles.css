@@ -953,12 +953,28 @@ h1:hover, h2:hover, h3:hover {
 
 /* Footer */
 footer {
-  background: var(--bg-secondary);
+  background: var(--gradient-dark);
   padding: 4rem 2rem 2rem;
   color: var(--text-primary);
+  position: relative;
+  overflow: hidden;
+}
+
+footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg-feature-sections);
+  opacity: 0.05;
+  z-index: 1;
 }
 
 .footer-content {
+  position: relative;
+  z-index: 2;
   max-width: var(--max-width);
   margin: 0 auto;
   display: grid;
@@ -966,50 +982,132 @@ footer {
   gap: 3rem;
 }
 
+.footer-section {
+  position: relative;
+  padding: 1.5rem;
+  border-radius: var(--hero-radius-lg);
+  background: rgba(255, 255, 255, 0.02);
+  transition: all 0.3s ease;
+}
+
+.footer-section:hover {
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
 .footer-section h3 {
   color: var(--accent-secondary);
   margin-bottom: 1.5rem;
   font-size: 1.3rem;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  transition: all 0.3s ease;
+}
+
+.footer-section:hover h3 {
+  transform: scale(1.05);
 }
 
 .footer-section p {
   color: var(--text-secondary);
   margin-bottom: 1.5rem;
+  transition: color 0.3s ease;
 }
 
-.footer-section a {
+.footer-section:hover p {
+  color: var(--text-primary);
+}
+
+.footer-section a:not(.social-icons a) {
   display: block;
   color: var(--text-secondary);
   margin-bottom: 0.8rem;
   transition: all 0.3s ease;
+  position: relative;
+  padding-left: 1.5rem;
+  text-decoration: none;
 }
 
-.footer-section a:hover {
+.footer-section a:not(.social-icons a)::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all 0.3s ease;
+}
+
+.footer-section a:not(.social-icons a):hover {
   color: var(--accent-secondary);
   transform: translateX(5px);
+}
+
+.footer-section a:not(.social-icons a):hover::before {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .social-icons {
   display: flex;
   gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.social-icons a {
+  padding: 0;
+  transform: none;
+  text-decoration: none;
 }
 
 .social-icons a {
   color: var(--text-secondary);
   font-size: 1.5rem;
   transition: all 0.3s ease;
+  padding: 0.5rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
 }
 
 .social-icons a:hover {
   color: var(--accent-secondary);
-  transform: translateY(-3px);
+  transform: translateY(-3px) rotate(8deg);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 5px 15px rgba(64, 224, 208, 0.2);
 }
 
 .footer-bottom {
+  position: relative;
+  z-index: 2;
   text-align: center;
   padding-top: 2rem;
   margin-top: 2rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.footer-bottom::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 1px;
+  background: var(--gradient-primary);
+  transition: width 0.5s ease;
+}
+
+footer:hover .footer-bottom::before {
+  width: 100%;
 }
 
 /* Buttons */
