@@ -1,4 +1,4 @@
-/* Profile Page Styles */
+ /* Profile Page Styles */
 .profile-page {
   padding-top: 80px;
   min-height: 100vh;
@@ -13,7 +13,9 @@
   position: relative;
   overflow: hidden;
   border-radius: 20px;
-  margin: 2rem;
+  margin: 2rem auto;
+  max-width: var(--max-width);
+  width: calc(100% - 4rem);
   animation: heroFadeIn 1s ease-out forwards;
 }
 
@@ -84,6 +86,7 @@
   padding: 2rem;
   max-width: var(--max-width);
   margin: 0 auto;
+  width: calc(100% - 4rem);
 }
 
 /* Dashboard Items */
@@ -91,9 +94,11 @@
   background: var(--bg-tertiary);
   border-radius: 16px;
   padding: 2rem;
-  margin-bottom: 2rem;
+  margin: 2rem auto;
   transition: all 0.3s ease;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  max-width: var(--max-width);
+  width: calc(100% - 4rem);
 }
 
 .dashboard-item:hover {
@@ -110,8 +115,299 @@
 }
 
 .item-header h2 {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+/* Learning Progress Section */
+.progress-charts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  padding: 0;
+  margin: 2rem auto;
+  max-width: var(--max-width);
+  width: calc(100% - 4rem);
+}
+
+.chart-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background: var(--bg-tertiary);
+  border-radius: var(--hero-radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all var(--hero-transition-normal);
+  overflow: hidden;
+}
+
+.chart-container:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent-secondary);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes floatingChart {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0); }
+}
+
+.progress-charts .chart-container:hover {
+  animation: floatingChart 2s ease-in-out infinite;
+}
+
+
+.pie-chart {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, var(--accent-primary) var(--progress), var(--bg-secondary) var(--progress));
+  box-shadow: 0 0 25px rgba(65, 105, 225, 0.15);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.pie-chart::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120px;
+  height: 120px;
+  background: var(--bg-tertiary);
+  border-radius: 50%;
+  z-index: 1;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pie-chart.completion {
+  --progress: 234deg;
+  background: conic-gradient(from 0deg, #4169E1 var(--progress), var(--bg-secondary) var(--progress));
+}
+
+.pie-chart.activity {
+  --progress: 280.8deg;
+  background: conic-gradient(from 0deg, #40E0D0 var(--progress), var(--bg-secondary) var(--progress));
+}
+
+.pie-chart.performance {
+  --progress: 331.2deg;
+  background: conic-gradient(from 0deg, #8A2BE2 var(--progress), var(--bg-secondary) var(--progress));
+}
+
+.chart-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.8rem;
+  font-weight: 700;
   color: var(--text-primary);
+  z-index: 2;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  text-shadow: none;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  line-height: 1.8rem;
+  pointer-events: none;
+}
+
+.chart-container:hover .chart-label {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  transform: translate(-50%, -50%);
+  letter-spacing: 1px;
+}
+
+.chart-description {
+  margin-top: 1.5rem;
+  font-size: 1rem;
+  color: var(--text-secondary);
+  text-align: center;
+  font-weight: 500;
+  position: relative;
+  z-index: 1;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0.9;
+}
+
+/* Enhanced hover effects for charts */
+.chart-container:hover .pie-chart {
+  transform: scale(1.05) rotate(360deg);
+}
+
+.chart-container:hover .pie-chart::before {
+  transform: translate(-50%, -50%) scale(0.95);
+  background: var(--bg-secondary);
+}
+
+.chart-container:hover .pie-chart.completion {
+  box-shadow: 0 0 30px rgba(65, 105, 225, 0.4),
+              inset 0 0 20px rgba(65, 105, 225, 0.4);
+}
+
+.chart-container:hover .pie-chart.activity {
+  box-shadow: 0 0 30px rgba(64, 224, 208, 0.4),
+              inset 0 0 20px rgba(64, 224, 208, 0.4);
+}
+
+.chart-container:hover .pie-chart.performance {
+  box-shadow: 0 0 30px rgba(138, 43, 226, 0.4),
+              inset 0 0 20px rgba(138, 43, 226, 0.4);
+}
+
+/* Refined animations */
+@keyframes pieChartLoad {
+  0% {
+    transform: rotate(-90deg) scale(0.5);
+    opacity: 0;
+    filter: blur(10px);
+  }
+  50% {
+    filter: blur(0);
+  }
+  100% {
+    transform: rotate(0deg) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes chartDescriptionLoad {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pie-chart {
+  animation: pieChartLoad 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.chart-description {
+  animation: chartDescriptionLoad 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation-delay: 0.6s;
+}
+
+.pie-chart.activity {
+  animation-delay: 0.2s;
+}
+
+.pie-chart.performance {
+  animation-delay: 0.4s;
+}
+
+/* Remove floating chart animation for activity section */
+.activity .chart-container:hover {
+  animation: none;
+  transform: none !important;
+}
+
+/* Add data attributes for chart info */
+.chart-container::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-secondary);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.chart-container:hover::after {
+  opacity: 1;
+  bottom: -50px;
+}
+
+/* Enhanced hover effects */
+.chart-container:hover .pie-chart {
+  transform: scale(1.05);
+}
+
+.chart-container:hover .pie-chart.completion {
+  box-shadow: 0 0 30px rgba(65, 105, 225, 0.25);
+}
+
+.chart-container:hover .pie-chart.activity {
+  box-shadow: 0 0 30px rgba(64, 224, 208, 0.25);
+}
+
+.chart-container:hover .pie-chart.performance {
+  box-shadow: 0 0 30px rgba(138, 43, 226, 0.25);
+}
+
+/* Refined animations */
+@keyframes pieChartLoad {
+  from {
+    transform: rotate(-90deg) scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: rotate(0deg) scale(1);
+    opacity: 1;
+  }
+}
+
+.pie-chart {
+  animation: pieChartLoad 1s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+.pie-chart.activity {
+  animation-delay: 0.2s;
+}
+
+.pie-chart.performance {
+  animation-delay: 0.4s;
+}
+
+@keyframes pulse {
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
+  50% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
+}
+
+.chart-container:hover .chart-label {
+  animation: pulse 2s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  transform: translate(-50%, -50%) scale(1.1);
+  letter-spacing: 1px;
+  width: 100%;
+  height: 100%;
 }
 
 /* View Options and Buttons */
@@ -186,129 +482,14 @@
   border-color: var(--accent-secondary);
 }
 
-/* Learning Progress Section */
-.progress-summary {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  margin-bottom: 2rem;
-}
-
-.pie-chart {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background: conic-gradient(
-    var(--accent-primary) 0% 45%,
-    var(--accent-secondary) 45% 80%,
-    var(--bg-secondary) 80% 100%
-  );
-  position: relative;
-}
-
-.pie-chart::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80%;
-  height: 80%;
-  background: var(--bg-tertiary);
-  border-radius: 50%;
-}
-
-.progress-stats {
-  flex: 1;
-}
-
-.progress-stat {
-  margin-bottom: 1rem;
-}
-
-.progress-stat .stat-number {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--accent-secondary);
-  display: block;
-  margin-bottom: 0.3rem;
-}
-
-.progress-stat .stat-label {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-}
-
-.chart-legend {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 1rem;
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-}
-
-.legend-color {
-  width: 12px;
-  height: 12px;
-  border-radius: 4px;
-}
-
-.legend-value {
-  margin-left: auto;
-  color: var(--text-primary);
-}
-
-/* Achievement Item Consistency */
-.achievement-item {
-  border: 1px solid var(--accent-secondary);
-}
-
-.achievement-item .achievement-ring {
-  background: var(--bg-tertiary);
-  border: 2px solid var(--accent-secondary);
-}
-
-.achievement-item .achievement-ring i {
-  color: var(--accent-secondary);
-}
-
-.achievement-date,
-.achievement-progress {
-  color: var(--accent-secondary);
-  font-size: 0.9rem;
-  margin-top: 0.5rem;
-  display: block;
-  font-weight: 500;
-}
-
-.ring-progress {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-}
-
-.achievement-item[data-unlocked="true"] .ring-progress {
-  stroke: var(--accent-primary);
-}
-
-.achievement-item[data-unlocked="false"] .ring-progress {
-  stroke: var(--accent-secondary);
-}
-
 /* Stats Grid */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1.5rem;
-  margin-bottom: 2rem;
+  margin: 2rem auto;
+  max-width: var(--max-width);
+  width: calc(100% - 4rem);
 }
 
 .stat-card {
@@ -374,13 +555,18 @@
 
 /* Achievements */
 .achievements-section {
-  margin-top: 2rem;
+  margin: 2rem auto;
+  max-width: var(--max-width);
+  width: calc(100% - 4rem);
 }
 
 .achievement-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem;
+  margin: 2rem auto;
+  max-width: var(--max-width);
+  width: calc(100% - 4rem);
 }
 
 .achievement-item {
@@ -413,10 +599,6 @@
   transform: scale(1.1) rotate(10deg);
 }
 
-.achievement-item:hover .ring-progress {
-  stroke: var(--accent-primary);
-}
-
 .achievement-ring {
   width: 80px;
   height: 80px;
@@ -428,6 +610,7 @@
   justify-content: center;
   background: var(--bg-secondary);
   transition: all 0.3s ease;
+  border: 2px solid var(--accent-secondary);
 }
 
 .achievement-item[data-unlocked="true"] .achievement-ring {
@@ -440,10 +623,6 @@
   transition: transform 0.3s ease;
 }
 
-.achievement-item:hover .achievement-ring i {
-  transform: scale(1.1) rotate(10deg);
-}
-
 .achievement-info {
   margin-top: 1rem;
 }
@@ -452,6 +631,10 @@
   color: var(--text-primary);
   margin-bottom: 0.5rem;
   font-size: 1.2rem;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .achievement-info p {
@@ -475,13 +658,14 @@
   color: var(--accent-primary);
 }
 
-/* Remove any duplicate styles */
-
 /* Course Cards */
 .courses-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1.5rem;
+  margin: 2rem auto;
+  max-width: var(--max-width);
+  width: calc(100% - 4rem);
 }
 
 .course-card {
@@ -526,6 +710,10 @@
 .course-details h3 {
   color: var(--text-primary);
   margin-bottom: 0.5rem;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .course-meta {
@@ -580,17 +768,123 @@
 .next-milestone span {
   display: block;
   color: var(--text-primary);
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.2px;
 }
 
 .next-milestone small {
   color: var(--text-secondary);
+  font-size: 0.95rem;
+  opacity: 0.9;
+  line-height: 1.4;
+}
+
+
+/* Weekly Activity Styles */
+.dashboard-item.activity {
+  margin: 2rem auto;
+  max-width: var(--max-width);
+  width: calc(100% - 4rem);
+}
+
+.activity .chart-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background: var(--bg-tertiary);
+  border-radius: var(--hero-radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 1.5rem 0;
+  height: 300px;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.activity .chart-container:hover {
+  animation: none;
+  transform: translateY(0);
+  border-color: var(--accent-secondary);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.activity .chart-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.activity .chart-container:hover {
+  transform: none !important;
+  animation: none !important;
+  box-shadow: none;
+}
+
+.activity-highlights {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.highlight-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding: 1.8rem;
+  background: var(--bg-tertiary);
+  border-radius: 16px;
+  border: 1px solid var(--accent-secondary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.highlight-item i {
+  font-size: 1.8rem;
+  color: var(--accent-primary);
+  background: var(--bg-secondary);
+  padding: 1.2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.highlight-info h4 {
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  letter-spacing: 0.5px;
+  opacity: 0.9;
+}
+
+.highlight-info p {
+  color: var(--accent-primary);
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .profile-hero,
+  .profile-overview,
+  .dashboard-item,
+  .progress-charts,
+  .courses-grid,
+  .achievement-grid,
+  .stats-grid,
+  .achievements-section {
+    margin: 1rem auto;
+    width: calc(100% - 2rem);
+  }
+
   .profile-hero {
-    margin: 1rem;
     padding: 2rem 1rem;
   }
 
@@ -639,9 +933,13 @@
   }
 
   .item-header {
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
     gap: 1rem;
-    text-align: center;
+  }
+
+  .progress-charts {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -653,5 +951,10 @@
   .profile-avatar {
     width: 120px;
     height: 120px;
+  }
+
+  .item-header {
+    flex-direction: column;
+    text-align: center;
   }
 }

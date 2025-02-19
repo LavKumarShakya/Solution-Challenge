@@ -5,19 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="AetherLearn - Dashboard">
     <title>Dashboard - AetherLearn</title>
-    
+
     <!-- Core Styles -->
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/navbar.css">
-    
+
     <!-- Page Specific Styles -->
     <link rel="stylesheet" href="../css/dashboard.css">
-    
+
     <!-- External Resources -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-
     <!-- Include the common navbar -->
     <header>
         <nav>
@@ -82,12 +81,6 @@
             </div>
         </section>
 
-        <!-- Profile Overview -->
-        <section class="profile-overview">
-            <div class="container">
-                <!-- Stats Grid -->
-                <div class="stats-grid">
-
         <!-- Stats Overview Section -->
         <section class="dashboard-content">
             <div class="container">
@@ -135,7 +128,7 @@
                     <!-- Learning Progress -->
                     <div class="dashboard-item learning-progress">
                         <div class="item-header">
-                            <h2>Learning Progress</h2>
+                            <h2 class="gradient-text">Learning Progress</h2>
                             <div class="view-options">
                                 <button class="view-btn active" data-view="weekly">
                                     <i class="fas fa-calendar-week"></i> Weekly
@@ -145,36 +138,21 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="chart-container">
-                            <div class="progress-summary">
-                                <div class="pie-chart"></div>
-                                <div class="progress-stats">
-                                    <div class="progress-stat">
-                                        <span class="stat-number">65%</span>
-                                        <span class="stat-label">Overall Progress</span>
-                                    </div>
-                                    <div class="progress-stat">
-                                        <span class="stat-number">12</span>
-                                        <span class="stat-label">Days Streak</span>
-                                    </div>
-                                </div>
+                        <div class="progress-charts">
+                            <div class="chart-container">
+                                <div class="pie-chart completion"></div>
+                                <div class="chart-label">65%</div>
+                                <div class="chart-description">Course Completion</div>
                             </div>
-                            <div class="chart-legend">
-                                <div class="legend-item">
-                                    <span class="legend-color" style="background: var(--accent-primary)"></span>
-                                    <span class="legend-label">Completed</span>
-                                    <span class="legend-value">45%</span>
-                                </div>
-                                <div class="legend-item">
-                                    <span class="legend-color" style="background: var(--accent-secondary)"></span>
-                                    <span class="legend-label">In Progress</span>
-                                    <span class="legend-value">35%</span>
-                                </div>
-                                <div class="legend-item">
-                                    <span class="legend-color" style="background: var(--success)"></span>
-                                    <span class="legend-label">Upcoming</span>
-                                    <span class="legend-value">20%</span>
-                                </div>
+                            <div class="chart-container">
+                                <div class="pie-chart activity"></div>
+                                <div class="chart-label">78%</div>
+                                <div class="chart-description">Weekly Activity</div>
+                            </div>
+                            <div class="chart-container">
+                                <div class="pie-chart performance"></div>
+                                <div class="chart-label">92%</div>
+                                <div class="chart-description">Performance Score</div>
                             </div>
                         </div>
                     </div>
@@ -182,7 +160,7 @@
                     <!-- Recent Achievements -->
                     <div class="dashboard-item achievements">
                         <div class="item-header">
-                            <h2>Recent Achievements</h2>
+                            <h2 class="gradient-text">Recent Achievements</h2>
                             <button class="view-all-btn">
                                 View All <i class="fas fa-chevron-right"></i>
                             </button>
@@ -191,12 +169,9 @@
                             <div class="achievement-item" data-unlocked="true">
                                 <div class="achievement-ring">
                                     <i class="fas fa-star"></i>
-                                    <svg class="ring-progress" viewBox="0 0 36 36">
-                                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--accent-secondary)" stroke-width="2" stroke-dasharray="100, 100"/>
-                                    </svg>
                                 </div>
                                 <div class="achievement-info">
-                                    <h3>Quick Learner</h3>
+                                    <h3 class="gradient-text">Quick Learner</h3>
                                     <p>Complete 5 courses in a month</p>
                                     <span class="achievement-date">Unlocked Feb 10</span>
                                 </div>
@@ -204,12 +179,9 @@
                             <div class="achievement-item" data-unlocked="true">
                                 <div class="achievement-ring">
                                     <i class="fas fa-award"></i>
-                                    <svg class="ring-progress" viewBox="0 0 36 36">
-                                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--accent-secondary)" stroke-width="2" stroke-dasharray="100, 100"/>
-                                    </svg>
                                 </div>
                                 <div class="achievement-info">
-                                    <h3>Course Master</h3>
+                                    <h3 class="gradient-text">Course Master</h3>
                                     <p>Achieve 90%+ in all assignments</p>
                                     <span class="achievement-date">Unlocked Feb 8</span>
                                 </div>
@@ -217,12 +189,9 @@
                             <div class="achievement-item" data-unlocked="false">
                                 <div class="achievement-ring locked">
                                     <i class="fas fa-medal"></i>
-                                    <svg class="ring-progress" viewBox="0 0 36 36">
-                                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-dasharray="60, 100"/>
-                                    </svg>
                                 </div>
                                 <div class="achievement-info">
-                                    <h3>Top Performer</h3>
+                                    <h3 class="gradient-text">Top Performer</h3>
                                     <p>Maintain study streak for 30 days</p>
                                     <span class="achievement-progress">20/30 days</span>
                                 </div>
@@ -233,7 +202,7 @@
                     <!-- Weekly Activity -->
                     <div class="dashboard-item activity">
                         <div class="item-header">
-                            <h2>Weekly Activity</h2>
+                            <h2 class="gradient-text">Weekly Activity</h2>
                             <div class="activity-stats">
                                 <div class="activity-stat">
                                     <span class="stat-value">28.5</span>
@@ -269,7 +238,7 @@
                     <!-- Course Progress -->
                     <div class="dashboard-item courses">
                         <div class="item-header">
-                            <h2>Current Courses</h2>
+                            <h2 class="gradient-text">Current Courses</h2>
                             <div class="course-filters">
                                 <button class="filter-btn active">All</button>
                                 <button class="filter-btn">In Progress</button>
@@ -283,7 +252,7 @@
                                         <i class="fas fa-code"></i>
                                     </div>
                                     <div class="course-details">
-                                        <h3>Web Development</h3>
+                                        <h3 class="gradient-text">Web Development</h3>
                                         <div class="course-meta">
                                             <span class="course-duration">
                                                 <i class="fas fa-clock"></i> 8 weeks
@@ -314,7 +283,7 @@
                                         <i class="fas fa-brain"></i>
                                     </div>
                                     <div class="course-details">
-                                        <h3>Machine Learning</h3>
+                                        <h3 class="gradient-text">Machine Learning</h3>
                                         <div class="course-meta">
                                             <span class="course-duration">
                                                 <i class="fas fa-clock"></i> 12 weeks
@@ -388,7 +357,7 @@
 
     <!-- External Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
+
     <!-- App Scripts -->
     <script src="../js/navbar.js"></script>
     <script>
