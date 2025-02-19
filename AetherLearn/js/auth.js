@@ -53,8 +53,90 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Login form handling
+    // Password Reset Popup functionality
+    const forgotPasswordLink = document.querySelector('.forgot-password');
+    const resetPopup = document.getElementById('reset-popup');
+    const closePopupBtn = document.querySelector('.close-popup');
     const loginForm = document.getElementById('login-form');
+    const resetForm = document.getElementById('reset-form');
+
+    function openResetPopup() {
+        resetPopup.style.display = 'flex';
+        // Trigger reflow
+        resetPopup.offsetHeight;
+        resetPopup.classList.add('active');
+    }
+
+    function closeResetPopup() {
+        resetPopup.classList.remove('active');
+        setTimeout(() => {
+            resetPopup.style.display = 'none';
+            resetForm.reset();
+        }, 500);
+    }
+
+    if (forgotPasswordLink) {
+        forgotPasswordLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            openResetPopup();
+        });
+    }
+
+    if (closePopupBtn) {
+        closePopupBtn.addEventListener('click', () => {
+            closeResetPopup();
+        });
+    }
+
+    // Close popup when clicking outside
+    resetPopup.addEventListener('click', (e) => {
+        if (e.target === resetPopup) {
+            closeResetPopup();
+        }
+    });
+
+    // Close popup on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && resetPopup.classList.contains('active')) {
+            closeResetPopup();
+        }
+    });
+
+    // Password reset form handling
+    if (resetForm) {
+        resetForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('reset-email').value;
+            
+            try {
+                // Simulate loading state
+                const btn = e.target.querySelector('button[type="submit"]');
+                const originalText = btn.textContent;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                btn.disabled = true;
+                
+                // Add your password reset logic here
+                await new Promise(resolve => setTimeout(resolve, 1500)); // Simulated API call
+                
+                // Show success message
+                alert('Password reset instructions have been sent to your email.');
+                
+                // Switch back to login form
+                switchForm(resetForm, loginForm);
+                
+                // Reset form and button
+                resetForm.reset();
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            } catch (error) {
+                console.error('Password reset error:', error);
+                // Handle reset error (show message to user)
+            }
+        });
+    }
+
+    // Login form handling
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();

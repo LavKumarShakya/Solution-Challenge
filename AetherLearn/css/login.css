@@ -104,6 +104,73 @@ body {
     transition: color 0.3s ease;
 }
 
+/* Reset Password Popup */
+.reset-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    display: none;
+    justify-content: center;
+    align-items: flex-start;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.reset-popup.active {
+    display: flex;
+    opacity: 1;
+}
+
+.reset-popup-content {
+    background: rgba(var(--card-bg-rgb), 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2.5rem;
+    width: 95%;
+    max-width: 600px;
+    position: relative;
+    margin-top: -100%;
+    transition: margin-top 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.reset-popup.active .reset-popup-content {
+    margin-top: 100px;
+}
+
+.close-popup {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.close-popup:hover {
+    color: var(--accent-secondary);
+    transform: rotate(90deg);
+}
+
+.reset-popup h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
 .auth-form input {
     width: 100%;
     padding: 1rem 1rem 1rem 3rem;

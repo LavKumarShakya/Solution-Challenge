@@ -25,7 +25,7 @@
     <main class="auth-container">
         <div class="auth-card">
             <h2>Welcome Back</h2>
-            <form id="login-form" class="auth-form active">
+            <form id="login-form" class="auth-form active" data-form="login">
                 <div class="form-group">
                     <label for="login-email">Email</label>
                     <div class="input-group">
@@ -71,6 +71,7 @@
 
                 <p class="auth-switch">Don't have an account? <a href="signup.html">Sign Up</a></p>
             </form>
+
         </div>
 
         <div class="auth-features">
@@ -109,9 +110,28 @@
             <a href="support.html">Support</a>
         </div>
     </footer>
+<!-- Password Reset Popup -->
+<div id="reset-popup" class="reset-popup">
+    <div class="reset-popup-content">
+        <button class="close-popup"><i class="fas fa-times"></i></button>
+        <h2>Reset Password</h2>
+        <form id="reset-form" class="auth-form" data-form="reset">
+            <div class="form-group">
+                <label for="reset-email">Email</label>
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="reset-email" placeholder="Enter your email" required>
+                </div>
+            </div>
 
-    <!-- Scripts -->
-    <script src="../js/navbar.js"></script>
-    <script src="../js/auth.js"></script>
+            <button type="submit" class="cta-button">Reset Password</button>
+        </form>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="../js/navbar.js"></script>
+<script src="../js/auth.js"></script>
+</body>
 </body>
 </html>
