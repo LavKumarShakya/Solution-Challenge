@@ -171,7 +171,7 @@ h1:hover, h2:hover, h3:hover {
   margin-top: 0.5rem;
   overflow: hidden;
   z-index: 10;
-  border: 1px solid var(--input-border);
+
 }
 
 .search-suggestion-item {
@@ -180,7 +180,7 @@ h1:hover, h2:hover, h3:hover {
   transition: all 0.3s ease;
   cursor: default;
   user-select: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
 }
 
 .search-suggestion-item:last-child {
