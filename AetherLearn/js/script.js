@@ -1,3 +1,8 @@
+// Configuration
+const CONFIG = {
+    GEMINI_API_KEY: 'AIzaSyCTXQs7wWnAsekXkYban3EJvuBPwm0qDRM'
+};
+
 // Initialize page features
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize features first
@@ -218,6 +223,20 @@ class AIChat {
         
         this.setupEventListeners();
         this.setupInputHandling();
+        this.loadSavedMessages();
+    }
+
+    async loadSavedMessages() {
+        // Keep the welcome message
+        const welcomeMessage = this.chatMessages.firstElementChild;
+        this.chatMessages.innerHTML = '';
+        this.chatMessages.appendChild(welcomeMessage);
+
+        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+            navigator.serviceWorker.controller.postMessage({
+                type: 'GET_CHAT_MESSAGES'
+            });
+        }
     }
 
     setupEventListeners() {
@@ -227,6 +246,18 @@ class AIChat {
 
         if (this.clearButton) {
             this.clearButton.addEventListener('click', () => this.clearChat());
+        }
+
+        // Listen for service worker messages
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.addEventListener('message', (event) => {
+                if (event.data.type === 'CHAT_MESSAGES') {
+                    // Add saved messages to chat
+                    event.data.data.forEach(message => {
+                        this.addMessage(message.type, message.content, false);
+                    });
+                }
+            });
         }
 
         // Add input handling for textarea auto-resize
@@ -349,8 +380,8 @@ class AIChat {
     }
 
     async getAIResponse(message) {
-        const API_KEY = 'AIzaSyCTXQs7wWnAsekXkYban3EJvuBPwm0qDRM';
-        const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
+        const API_KEY = CONFIG.GEMINI_API_KEY;
+        const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
         
         try {
             const response = await fetch(`${API_URL}?key=${API_KEY}`, {
@@ -477,7 +508,7 @@ class AIChat {
         return div.innerHTML;
     }
 
-    addMessage(type, content) {
+    addMessage(type, content, store = true) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${type}-message`;
         
@@ -501,6 +532,14 @@ class AIChat {
         if (type === 'ai') {
             messageDiv.querySelectorAll('pre code').forEach(block => {
                 hljs.highlightElement(block);
+            });
+        }
+
+        // Store message if needed
+        if (store && 'serviceWorker' in navigator && navigator.serviceWorker.controller) {
+            navigator.serviceWorker.controller.postMessage({
+                type: 'STORE_CHAT_MESSAGE',
+                data: { type, content }
             });
         }
     }
@@ -536,6 +575,13 @@ class AIChat {
     clearChat() {
         while (this.chatMessages.children.length > 1) {
             this.chatMessages.removeChild(this.chatMessages.lastChild);
+        }
+
+        // Clear stored messages
+        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+            navigator.serviceWorker.controller.postMessage({
+                type: 'CLEAR_CHAT'
+            });
         }
     }
 }

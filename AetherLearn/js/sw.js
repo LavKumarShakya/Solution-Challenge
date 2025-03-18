@@ -1,4 +1,6 @@
 const CACHE_NAME = 'aetherlearn-v1';
+const CHAT_DB_NAME = 'aetherlearn-chat';
+const CHAT_STORE_NAME = 'chat-messages';
 const ASSETS = [
     '/',
     '/index.html',
@@ -17,12 +19,34 @@ const ASSETS = [
 // Install Service Worker
 self.addEventListener('install', (event) => {
     event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then((cache) => {
-                return cache.addAll(ASSETS);
-            })
+        Promise.all([
+            caches.open(CACHE_NAME)
+                .then((cache) => {
+                    return cache.addAll(ASSETS);
+                }),
+            // Initialize chat database
+            initChatDB()
+        ])
     );
 });
+
+// Initialize IndexedDB for chat storage
+const initChatDB = () => {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(CHAT_DB_NAME, 1);
+
+        request.onerror = () => reject(request.error);
+
+        request.onupgradeneeded = (event) => {
+            const db = event.target.result;
+            if (!db.objectStoreNames.contains(CHAT_STORE_NAME)) {
+                db.createObjectStore(CHAT_STORE_NAME, { keyPath: 'timestamp' });
+            }
+        };
+
+        request.onsuccess = () => resolve();
+    });
+};
 
 // Activate Service Worker
 self.addEventListener('activate', (event) => {
@@ -39,6 +63,88 @@ self.addEventListener('activate', (event) => {
     );
 });
 
+// Handle chat operations
+self.addEventListener('message', async (event) => {
+    const { type, data } = event.data;
+
+    switch (type) {
+        case 'STORE_CHAT_MESSAGE':
+            await storeChatMessage(data);
+            break;
+        case 'GET_CHAT_MESSAGES':
+            const messages = await getChatMessages();
+            event.source.postMessage({
+                type: 'CHAT_MESSAGES',
+                data: messages
+            });
+            break;
+        case 'CLEAR_CHAT':
+            await clearChatMessages();
+            break;
+    }
+});
+
+// Store chat message in IndexedDB
+const storeChatMessage = async (message) => {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(CHAT_DB_NAME, 1);
+
+        request.onerror = () => reject(request.error);
+
+        request.onsuccess = () => {
+            const db = request.result;
+            const tx = db.transaction(CHAT_STORE_NAME, 'readwrite');
+            const store = tx.objectStore(CHAT_STORE_NAME);
+            
+            store.put({
+                ...message,
+                timestamp: Date.now()
+            });
+
+            tx.oncomplete = () => resolve();
+            tx.onerror = () => reject(tx.error);
+        };
+    });
+};
+
+// Get all chat messages
+const getChatMessages = () => {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(CHAT_DB_NAME, 1);
+
+        request.onerror = () => reject(request.error);
+
+        request.onsuccess = () => {
+            const db = request.result;
+            const tx = db.transaction(CHAT_STORE_NAME, 'readonly');
+            const store = tx.objectStore(CHAT_STORE_NAME);
+            const getRequest = store.getAll();
+
+            getRequest.onsuccess = () => resolve(getRequest.result);
+            getRequest.onerror = () => reject(getRequest.error);
+        };
+    });
+};
+
+// Clear all chat messages
+const clearChatMessages = () => {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(CHAT_DB_NAME, 1);
+
+        request.onerror = () => reject(request.error);
+
+        request.onsuccess = () => {
+            const db = request.result;
+            const tx = db.transaction(CHAT_STORE_NAME, 'readwrite');
+            const store = tx.objectStore(CHAT_STORE_NAME);
+            const clearRequest = store.clear();
+
+            clearRequest.onsuccess = () => resolve();
+            clearRequest.onerror = () => reject(clearRequest.error);
+        };
+    });
+};
+
 // Fetch Strategy: Cache First, Network Fallback
 self.addEventListener('fetch', (event) => {
     event.respondWith(
@@ -49,7 +155,6 @@ self.addEventListener('fetch', (event) => {
                 }
                 return fetch(event.request)
                     .then((response) => {
-                        // Cache new resources
                         if (!response || response.status !== 200 || response.type !== 'basic') {
                             return response;
                         }
@@ -61,119 +166,8 @@ self.addEventListener('fetch', (event) => {
                         return response;
                     })
                     .catch(() => {
-                        // Return a custom offline page or asset
                         return caches.match('/offline.html');
                     });
             })
     );
 });
-
-// Background Sync
-self.addEventListener('sync', event => {
-  if (event.tag === 'sync-learning-progress') {
-    event.waitUntil(
-      // Sync learning progress when online
-      syncLearningProgress()
-    );
-  }
-});
-
-// Push Notifications
-self.addEventListener('push', event => {
-  const options = {
-    body: event.data.text(),
-    icon: '/icon.png',
-    badge: '/badge.png',
-    vibrate: [100, 50, 100],
-    data: {
-      dateOfArrival: Date.now(),
-      primaryKey: 1
-    },
-    actions: [
-      {
-        action: 'explore',
-        title: 'View Course'
-      },
-      {
-        action: 'close',
-        title: 'Close'
-      }
-    ]
-  };
-
-  event.waitUntil(
-    self.registration.showNotification('AetherLearn Update', options)
-  );
-});
-
-// Handle Notification Click
-self.addEventListener('notificationclick', event => {
-  event.notification.close();
-
-  if (event.action === 'explore') {
-    event.waitUntil(
-      clients.openWindow('/')
-    );
-  }
-});
-
-// Function to sync learning progress
-const syncLearningProgress = async () => {
-  try {
-    const response = await fetch('/api/sync-progress', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        // Get progress data from IndexedDB
-        progress: await getProgressFromIndexedDB()
-      })
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to sync progress');
-    }
-
-    // Clear synced data from IndexedDB
-    await clearSyncedProgress();
-  } catch (error) {
-    console.error('Error syncing progress:', error);
-    throw error;
-  }
-};
-
-// IndexedDB functions
-const getProgressFromIndexedDB = () => {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open('AetherLearn', 1);
-
-    request.onerror = () => reject(request.error);
-    request.onsuccess = () => {
-      const db = request.result;
-      const tx = db.transaction('progress', 'readonly');
-      const store = tx.objectStore('progress');
-      const getRequest = store.getAll();
-
-      getRequest.onsuccess = () => resolve(getRequest.result);
-      getRequest.onerror = () => reject(getRequest.error);
-    };
-  });
-};
-
-const clearSyncedProgress = () => {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open('AetherLearn', 1);
-
-    request.onerror = () => reject(request.error);
-    request.onsuccess = () => {
-      const db = request.result;
-      const tx = db.transaction('progress', 'readwrite');
-      const store = tx.objectStore('progress');
-      const clearRequest = store.clear();
-
-      clearRequest.onsuccess = () => resolve();
-      clearRequest.onerror = () => reject(clearRequest.error);
-    };
-  });
-};
