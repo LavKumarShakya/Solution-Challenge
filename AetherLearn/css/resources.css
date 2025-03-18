@@ -69,6 +69,9 @@
     position: relative;
     overflow: hidden;
     transform-origin: center;
+    display: flex; /* Enable flexbox for tool-card */
+    flex-direction: column; /* Stack content vertically */
+    justify-content: space-between; /* Distribute space between content and button */
 }
 
 .tool-card::before {
@@ -161,6 +164,7 @@
 .cta-button {
     display: inline-flex;
     align-items: center;
+    justify-content: center; /* Center text horizontally */
     gap: 0.8rem;
     padding: 1rem 2rem;
     background: var(--gradient-primary);
@@ -174,6 +178,7 @@
     text-decoration: none;
     position: relative;
     overflow: hidden;
+    text-align: center; /* Ensure text is centered */
 }
 
 .cta-button::before {
@@ -300,11 +305,27 @@
     position: relative;
 }
 
+.feature-highlights li {
+    transition: transform 0.3s ease; /* Add transition to li for smooth text movement */
+    position: relative; /* Needed for positioning the pseudo-element */
+    padding-left: 1.5rem; /* Keep padding for arrow spacing */
+}
+
 .feature-highlights li::before {
     content: '→';
     position: absolute;
     left: 0;
     color: var(--accent-secondary);
+    transition: transform 0.3s ease;
+    display: inline-block;
+}
+
+.feature-highlights li:hover {
+    transform: translateX(5px); /* Move the entire list item (text and arrow) */
+}
+
+.feature-highlights li:hover::before {
+    color: var(--accent-primary);
 }
 
 .demo-button {
