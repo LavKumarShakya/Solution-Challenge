@@ -67,14 +67,24 @@ function initializePage() {
             });
         });
 
-        // Initialize lazy loading for course images
+        // Initialize images for course thumbnails - fixing issue with black screens
         const courseImages = document.querySelectorAll('.course-thumbnail img');
         if ('IntersectionObserver' in window) {
             const imageObserver = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         const img = entry.target;
-                        img.src = img.dataset.src;
+                        // Check if data-src exists, otherwise use the existing src attribute
+                        if (img.dataset.src) {
+                            img.src = img.dataset.src;
+                        } else {
+                            // Ensure the src attribute is properly loaded
+                            const currentSrc = img.getAttribute('src');
+                            if (currentSrc) {
+                                // Force a reload of the image if needed
+                                img.src = currentSrc;
+                            }
+                        }
                         img.classList.add('loaded');
                         observer.unobserve(img);
                     }
