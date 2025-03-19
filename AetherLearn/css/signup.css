@@ -1,6 +1,9 @@
 /* Signup Page Styles */
 body {
     padding-top: 80px; /* Add padding to body instead of margin to container */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .signup-page {

@@ -1,6 +1,9 @@
 /* Login Page Styles */
 body {
-    padding-top: 80px; /* Add padding to body instead of margin to container */
+    padding-top: 80px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .login-page {
@@ -73,7 +76,6 @@ body {
     text-align: center;
     position: relative;
 }
-
 
 .auth-card h2::after {
     content: '';
@@ -295,7 +297,6 @@ body {
     z-index: 1;
     color: var(--text-secondary);
 }
-
 
 .social-buttons {
     display: flex;
