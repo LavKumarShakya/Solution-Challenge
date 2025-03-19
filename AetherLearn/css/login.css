@@ -33,7 +33,7 @@ body {
 
 .auth-container {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.5fr 1fr;
     gap: 3rem;
     max-width: 1200px;
     width: 100%;
@@ -73,6 +73,7 @@ body {
     text-align: center;
     position: relative;
 }
+
 
 .auth-card h2::after {
     content: '';
