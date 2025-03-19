@@ -18,8 +18,43 @@
 </head>
 <body>
 
-    <!-- Navbar Placeholder -->
-    <div id="navbar-placeholder"></div>
+    <!-- Include the common navbar -->
+    <header>
+        <nav>
+            <a href="/" class="logo">
+                <span>Aether</span>Learn
+            </a>
+            <div class="nav-links">
+                <a href="/">
+                    <i class="fas fa-home"></i>
+                    Home
+                </a>
+                <a href="courses.html">
+                    <i class="fas fa-graduation-cap"></i>
+                    Courses
+                </a>
+                <a href="ai-assistant.html">
+                    <i class="fas fa-robot"></i>
+                    AI Assistant
+                </a>
+                <a href="resources.html">
+                    <i class="fas fa-cube"></i>
+                    Resources
+                </a>
+                <a href="community.html" class="active">
+                    <i class="fas fa-users"></i>
+                    Community
+                </a>
+                <button class="nav-search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+                <a href="login.html" class="sign-in-btn">
+                    <i class="fas fa-user"></i>
+                    Sign In
+                </a>
+            </div>
+        </nav>
+    </header>
 
     <main class="community-page">
         <!-- Community Header -->
@@ -40,6 +75,261 @@
                         <span class="stat-number">100+</span>
                         <span class="stat-label">Study Groups</span>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resource Sharing Section -->
+        <section class="resource-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="gradient-text">Top-Rated Community Resources</h2>
+                    <div class="resource-actions">
+                        <div class="share-options">
+                            <div class="share-dropdown">
+                                <button class="cta-button primary dropdown-toggle">
+                                    <i class="fas fa-plus"></i>
+                                    Share Resources
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <button class="dropdown-item">
+                                        <i class="fas fa-link"></i>
+                                        External Resource
+                                    </button>
+                                    <button class="dropdown-item">
+                                        <i class="fas fa-magic"></i>
+                                        AI-Generated Notes
+                                    </button>
+                                    <button class="dropdown-item">
+                                        <i class="fas fa-book"></i>
+                                        Course Summary
+                                    </button>
+                                    <button class="dropdown-item">
+                                        <i class="fas fa-map"></i>
+                                        Mind Map
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="share-dropdown">
+                                <button class="cta-button secondary dropdown-toggle">
+                                    <i class="fas fa-wand-magic-sparkles"></i>
+                                    Create with AI
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <button class="dropdown-item">
+                                        <i class="fas fa-file-alt"></i>
+                                        Convert to Study Notes
+                                    </button>
+                                    <button class="dropdown-item">
+                                        <i class="fas fa-brain"></i>
+                                        Generate Mind Map
+                                    </button>
+                                    <button class="dropdown-item">
+                                        <i class="fas fa-clipboard-check"></i>
+                                        Create Practice Quiz
+                                    </button>
+                                    <button class="dropdown-item">
+                                        <i class="fas fa-route"></i>
+                                        Custom Learning Path
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="resource-filters">
+                            <button class="filter-btn active">All Resources</button>
+                            <button class="filter-btn">Highest Rated</button>
+                            <button class="filter-btn">Most Used</button>
+                            <button class="filter-btn">Recently Added</button>
+                            <button class="filter-btn">AI-Generated</button>
+                            <button class="filter-btn">Community Verified</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="resource-grid">
+                    <!-- Resource Card -->
+                    <article class="resource-card">
+                        <div class="resource-thumbnail">
+                            <img src="https://picsum.photos/300/200" alt="Resource thumbnail">
+                            <span class="resource-type">Course</span>
+                        </div>
+                        <div class="resource-content">
+                            <div class="resource-header">
+                                <h3>Complete Web Development Bootcamp</h3>
+                                <div class="resource-meta">
+                                    <span class="author">
+                                        <img src="https://i.pravatar.cc/40?img=1" alt="Author avatar">
+                                        Sarah Johnson
+                                    </span>
+                                    <span class="date">2 days ago</span>
+                                </div>
+                            </div>
+                            <p class="resource-description">A comprehensive guide to modern web development, covering HTML, CSS, JavaScript, and more.</p>
+                            <div class="resource-tags">
+                                <span>#webdev</span>
+                                <span>#frontend</span>
+                                <span>#coding</span>
+                            </div>
+                            <div class="resource-stats">
+                                <span><i class="fas fa-heart"></i> 245</span>
+                                <span><i class="fas fa-bookmark"></i> 123</span>
+                                <span><i class="fas fa-comment"></i> 45</span>
+                            </div>
+                            <div class="resource-actions">
+                                <button class="cta-button secondary">
+                                    <i class="fas fa-external-link-alt"></i>
+                                    View Resource
+                                </button>
+                                <button class="bookmark-btn">
+                                    <i class="fas fa-bookmark"></i>
+                                    Save
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Second Resource Card -->
+                    <article class="resource-card">
+                        <div class="resource-thumbnail">
+                            <img src="https://picsum.photos/300/200?random=2" alt="Resource thumbnail">
+                            <span class="resource-type">Video</span>
+                        </div>
+                        <div class="resource-content">
+                            <div class="resource-header">
+                                <h3>Machine Learning Fundamentals</h3>
+                                <div class="resource-meta">
+                                    <span class="author">
+                                        <img src="https://i.pravatar.cc/40?img=2" alt="Author avatar">
+                                        Alex Chen
+                                    </span>
+                                    <span class="date">1 week ago</span>
+                                </div>
+                            </div>
+                            <p class="resource-description">An introduction to machine learning concepts, algorithms, and practical applications.</p>
+                            <div class="resource-tags">
+                                <span>#ml</span>
+                                <span>#ai</span>
+                                <span>#python</span>
+                            </div>
+                            <div class="resource-stats">
+                                <span><i class="fas fa-heart"></i> 189</span>
+                                <span><i class="fas fa-bookmark"></i> 95</span>
+                                <span><i class="fas fa-comment"></i> 32</span>
+                            </div>
+                            <div class="resource-actions">
+                                <button class="cta-button secondary">
+                                    <i class="fas fa-external-link-alt"></i>
+                                    Watch Video
+                                </button>
+                                <button class="bookmark-btn">
+                                    <i class="fas fa-bookmark"></i>
+                                    Save
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Project Collaboration Space -->
+        <section class="project-space">
+            <div class="container">
+                <div class="section-header project-header-content">
+                    <div class="header-main">
+                        <h2 class="gradient-text">Collaborative Projects Hub</h2>
+                        <p class="header-description">Join exciting projects or start your own to learn and build together</p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="cta-button primary project-cta">
+                            <i class="fas fa-plus-circle"></i>
+                            Start New Project
+                        </button>
+                        <button class="cta-button secondary">
+                            <i class="fas fa-compass"></i>
+                            Explore Projects
+                        </button>
+                    </div>
+                </div>
+
+                <div class="project-grid">
+                    <!-- Active Project Card -->
+                    <article class="project-card">
+                        <div class="project-header">
+                            <h3>AI Learning Assistant</h3>
+                            <span class="project-status active">Active</span>
+                        </div>
+                        <p class="project-description">Building an AI-powered learning assistant using the Gemini API to help students with their studies.</p>
+                        <div class="project-meta">
+                            <div class="team-members">
+                                <div class="member-avatars">
+                                    <img src="https://i.pravatar.cc/30?img=1" alt="Team member">
+                                    <img src="https://i.pravatar.cc/30?img=2" alt="Team member">
+                                    <img src="https://i.pravatar.cc/30?img=3" alt="Team member">
+                                    <span class="more-members">+2</span>
+                                </div>
+                                <span>5 members</span>
+                            </div>
+                            <div class="project-stats">
+                                <span><i class="fas fa-tasks"></i> 12/20 tasks</span>
+                                <span><i class="fas fa-clock"></i> 5 days left</span>
+                            </div>
+                        </div>
+                        <div class="tech-stack">
+                            <span>Python</span>
+                            <span>TensorFlow</span>
+                            <span>React</span>
+                        </div>
+                        <div class="project-progress">
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 60%"></div>
+                            </div>
+                            <span>60% Complete</span>
+                        </div>
+                        <div class="project-actions">
+                            <button class="cta-button">View Project</button>
+                            <button class="cta-button secondary">Join Team</button>
+                        </div>
+                    </article>
+
+                    <!-- Second Project Card -->
+                    <article class="project-card">
+                        <div class="project-header">
+                            <h3>Educational Game Development</h3>
+                            <span class="project-status recruiting">Recruiting</span>
+                        </div>
+                        <p class="project-description">Creating an interactive educational game to teach programming concepts through gamification.</p>
+                        <div class="project-meta">
+                            <div class="team-members">
+                                <div class="member-avatars">
+                                    <img src="https://i.pravatar.cc/30?img=4" alt="Team member">
+                                    <img src="https://i.pravatar.cc/30?img=5" alt="Team member">
+                                </div>
+                                <span>2 members</span>
+                            </div>
+                            <div class="project-stats">
+                                <span><i class="fas fa-tasks"></i> 3/15 tasks</span>
+                                <span><i class="fas fa-clock"></i> 2 weeks left</span>
+                            </div>
+                        </div>
+                        <div class="tech-stack">
+                            <span>Unity</span>
+                            <span>C#</span>
+                            <span>3D Design</span>
+                        </div>
+                        <div class="project-progress">
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 20%"></div>
+                            </div>
+                            <span>20% Complete</span>
+                        </div>
+                        <div class="project-actions">
+                            <button class="cta-button">View Project</button>
+                            <button class="cta-button secondary">Join Team</button>
+                        </div>
+                    </article>
                 </div>
             </div>
         </section>
@@ -96,10 +386,45 @@
 
             <!-- Main Discussion Feed -->
             <section class="discussion-feed">
-                <div class="feed-filters">
-                    <button class="filter-btn active">Latest</button>
-                    <button class="filter-btn">Most Discussed</button>
-                    <button class="filter-btn">Top Rated</button>
+                <div class="feed-header">
+                    <h2 class="gradient-text">Community Discussions</h2>
+                    <div class="feed-filters">
+                        <button class="filter-btn active">
+                            <i class="fas fa-clock"></i>
+                            Latest
+                        </button>
+                        <button class="filter-btn">
+                            <i class="fas fa-fire"></i>
+                            Trending
+                        </button>
+                        <button class="filter-btn">
+                            <i class="fas fa-star"></i>
+                            Top Rated
+                        </button>
+                        <button class="filter-btn">
+                            <i class="fas fa-certificate"></i>
+                            Featured
+                        </button>
+                    </div>
+                </div>
+
+                <div class="quick-post">
+                    <img src="https://i.pravatar.cc/40?img=1" alt="Your avatar" class="user-avatar">
+                    <div class="post-input">
+                        <input type="text" placeholder="Share your thoughts or ask a question...">
+                        <div class="post-actions">
+                            <button title="Attach file">
+                                <i class="fas fa-paperclip"></i>
+                            </button>
+                            <button title="Add code snippet">
+                                <i class="fas fa-code"></i>
+                            </button>
+                            <button title="Add image">
+                                <i class="fas fa-image"></i>
+                            </button>
+                            <button class="cta-button">Post</button>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="posts">
@@ -191,7 +516,7 @@
             <div class="footer-section">
                 <h3>AetherLearn</h3>
                 <p>Transforming education through AI-powered personalized learning paths and free resources.</p>
-                <div class="social-icons"></div>
+                <div class="social-icons">
                     <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
                     <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
                     <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
@@ -203,8 +528,8 @@
                 <h3>Quick Links</h3>
                 <a href="courses.html">Courses</a>
                 <a href="ai-assistant.html">AI Assistant</a>
-                <a href="topics.html">Topics</a>
-                <a href="resources.html">Resources</a>
+                <a href="community.html">Community</a>
+                <a href="about.html">About Us</a>
             </div>
 
             <div class="footer-section">
@@ -222,7 +547,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 AetherLearn. All rights reserved.</p>
+            <p>&copy; 2025 AetherLearn. All rights reserved.</p>
         </div>
     </footer>
 
