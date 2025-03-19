@@ -846,17 +846,30 @@
   padding: 1.8rem;
   background: var(--bg-tertiary);
   border-radius: 16px;
-  border: 1px solid var(--accent-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.highlight-item:hover {
+  transform: translateY(-8px);
+  border-color: var(--accent-secondary);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
 .highlight-item i {
   font-size: 1.8rem;
-  color: var(--accent-primary);
+  color: var(--accent-secondary);
   background: var(--bg-secondary);
   padding: 1.2rem;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.highlight-item:hover i {
+  transform: scale(1.1) rotate(10deg);
+  color: var(--accent-primary);
 }
 
 .highlight-info h4 {
@@ -865,7 +878,7 @@
   font-weight: 600;
   margin-bottom: 1rem;
   letter-spacing: 0.5px;
-  opacity: 0.9;
+  transition: all 0.3s ease;
 }
 
 .highlight-info p {
@@ -877,6 +890,14 @@
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  transition: all 0.3s ease;
+}
+
+.highlight-item:hover .highlight-info p {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  transform: scale(1.05);
 }
 
 /* Responsive Design */
