@@ -17,7 +17,7 @@
     <!-- Navbar Placeholder -->
     <div id="navbar-placeholder"></div>
 
-    <main class="resources-page">
+    <main class="resources-page" data-aos="fade-up">
         <!-- Resource Categories Section -->
         <section class="resource-categories">
             <div class="section-header">
@@ -94,7 +94,7 @@
             <div class="features-grid">
                 <div class="feature-demo">
                     <div class="demo-visual">
-                        <img src="https://easyaibeginner.com/wp-content/uploads/a_depiction_of_a_mind_map_4.jpg" alt="AI Mind Map Generator Demo" />
+                        <img loading="lazy" src="https://easyaibeginner.com/wp-content/uploads/a_depiction_of_a_mind_map_4.jpg" alt="AI Mind Map Generator Demo" />
                     </div>
                     <div class="demo-content">
                         <h3>AI Mind Map Generator</h3>
@@ -110,7 +110,7 @@
 
                 <div class="feature-demo reversed">
                     <div class="demo-visual">
-                        <img src="https://images.prismic.io/edapp-website/ZsvEwkaF0TcGJYSv_Header.jpg?auto=format,compress&rect=0,2,1200,627&w=1200&h=627" alt="Smart Quiz Generator Demo" />
+                        <img loading="lazy" src="https://images.prismic.io/edapp-website/ZsvEwkaF0TcGJYSv_Header.jpg?auto=format,compress&rect=0,2,1200,627&w=1200&h=627" alt="Smart Quiz Generator Demo" />
                     </div>
                     <div class="demo-content">
                         <h3>Smart Quiz Generator</h3>
@@ -202,5 +202,17 @@
     <!-- Scripts -->
     <script src="../js/navbar.js"></script>
     <script src="../js/script.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 600,
+            easing: 'ease-out',
+            once: true,
+            offset: 50,
+            delay: 50,
+            mirror: false,
+            anchorPlacement: 'top-bottom'
+        });
+    </script>
 </body>
 </html>
