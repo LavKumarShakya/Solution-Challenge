@@ -944,12 +944,24 @@
 .post:hover::after {
     opacity: 1;
 }
+.post {
+    display: flex;
+    flex-direction: column;
+}
+
+.post-content {
+    width: 100%;
+}
 
 .post-votes {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    gap: 0.5rem;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .vote-btn {
