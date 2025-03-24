@@ -257,32 +257,12 @@
     background-clip: text;
     color: transparent;
     opacity: 0;
-    animation: fadeIn 0.8s ease-out forwards;
+    animation: fadeIn 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .course-header p {
-    opacity: 0;
-    animation: slideUp 0.8s ease-out 0.2s forwards;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    opacity: 1;
+    color: var(--text-secondary);
 }
 
 /* Course Filters */
@@ -294,8 +274,6 @@
     border-radius: 12px;
     padding: 1.5rem 2rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    opacity: 0;
-    animation: slideUp 0.8s ease-out 0.4s forwards;
 }
 
 .filter-group {
@@ -339,9 +317,7 @@
     position: relative;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     backdrop-filter: blur(10px);
-    opacity: 0;
-    transform: translateY(30px);
-    animation: slideUp 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+    transform: translateY(0);
 }
 
 /* Course Thumbnail */
@@ -475,8 +451,7 @@
     align-items: center;
     gap: 0.8rem;
     margin: 3rem 0;
-    opacity: 0;
-    animation: slideUp 0.8s ease-out 0.6s forwards;
+    opacity: 1;
 }
 
 .pagination-btn {

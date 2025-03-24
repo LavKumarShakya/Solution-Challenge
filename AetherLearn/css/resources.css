@@ -3,6 +3,8 @@
     padding-top: 80px;
     min-height: 100vh;
     background: var(--bg-primary);
+    opacity: 0;
+    animation: fadeIn 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 /* Resource Categories Section */
@@ -29,6 +31,8 @@
     margin-bottom: 4rem;
     position: relative;
     z-index: 2;
+    opacity: 0;
+    animation: fadeIn 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .section-header h2 {
@@ -38,6 +42,8 @@
     background-clip: text;
     color: transparent;
     margin-bottom: 1rem;
+    opacity: 0;
+    animation: fadeIn 1s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
 }
 
 .section-header p {
@@ -46,6 +52,8 @@
     line-height: 1.6;
     max-width: 800px;
     margin: 0 auto;
+    opacity: 0;
+    animation: fadeIn 1s cubic-bezier(0.4, 0, 0.2, 1) 0.4s forwards;
 }
 
 /* Tool Cards Grid */
