@@ -1,22 +1,43 @@
 document.addEventListener('DOMContentLoaded', async function() {
     const navbarContainer = document.getElementById('navbar-placeholder');
     try {
-        const response = await fetch('navbar.html');
+        // Check if we're on the index page or in a subdirectory
+        const isIndexPage = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/');
+        const navbarPath = isIndexPage ? 'AetherLearn/html/navbar.html' : '../html/navbar.html';
+        const response = await fetch(navbarPath);
         if (!response.ok) {
             throw new Error('Failed to load navbar');
         }
         const html = await response.text();
         navbarContainer.innerHTML = html;
 
-        // Set active nav link based on current page
+        // Adjust links and set active state
         const currentPage = window.location.pathname.split('/').pop() || 'index.html';
         const navLinks = document.querySelectorAll('.nav-links a');
         navLinks.forEach(link => {
             const href = link.getAttribute('href');
-            if (href === currentPage || 
-                (href === '/' && currentPage === 'index.html') ||
-                (currentPage.startsWith(href.split('.')[0]))) {
-                link.classList.add('active');
+            // Skip the home link
+            if (href !== '/') {
+                if (isIndexPage) {
+                    // On index page, add AetherLearn/html/ prefix
+                    const newHref = href.startsWith('AetherLearn/html/') ? href : 'AetherLearn/html/' + href;
+                    link.setAttribute('href', newHref);
+                    if (currentPage === 'index.html' && href === 'index.html') {
+                        link.classList.add('active');
+                    }
+                } else {
+                    // In subdirectories, remove AetherLearn/html/ prefix if present
+                    const newHref = href.replace('AetherLearn/html/', '');
+                    link.setAttribute('href', newHref);
+                    if (currentPage === newHref) {
+                        link.classList.add('active');
+                    }
+                }
+            } else {
+                // Handle home link
+                if (currentPage === 'index.html' || currentPage === '/') {
+                    link.classList.add('active');
+                }
             }
         });
 
