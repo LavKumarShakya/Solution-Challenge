@@ -1,38 +1,3 @@
-/* Loading Screen */
-#loading-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: var(--bg-primary);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    transition: opacity 0.3s ease-in-out;
-    opacity: 1;
-}
-
-#loading-screen.hidden {
-    opacity: 0;
-    pointer-events: none;
-}
-
-.loader {
-    width: 60px;
-    height: 60px;
-    border: 3px solid var(--bg-secondary);
-    border-top: 3px solid var(--accent-secondary);
-    border-radius: 50%;
-    animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
 /* Course Discovery Page */
 .course-discovery {
     padding-top: 80px;
@@ -284,23 +249,6 @@
     overflow: hidden;
 }
 
-.course-header::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--bg-feature-sections);
-    opacity: 0.05;
-    z-index: 1;
-}
-
-.course-header > * {
-    position: relative;
-    z-index: 2;
-}
-
 .course-header h1 {
     font-size: 3rem;
     margin-bottom: 1rem;
@@ -308,6 +256,33 @@
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    opacity: 0;
+    animation: fadeIn 0.8s ease-out forwards;
+}
+
+.course-header p {
+    opacity: 0;
+    animation: slideUp 0.8s ease-out 0.2s forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Course Filters */
@@ -319,6 +294,8 @@
     border-radius: 12px;
     padding: 1.5rem 2rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    opacity: 0;
+    animation: slideUp 0.8s ease-out 0.4s forwards;
 }
 
 .filter-group {
@@ -362,18 +339,9 @@
     position: relative;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     backdrop-filter: blur(10px);
-    animation: fadeIn 0.5s ease-out;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    opacity: 0;
+    transform: translateY(30px);
+    animation: slideUp 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
 
 /* Course Thumbnail */
@@ -419,11 +387,6 @@
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
-.course-card:hover .course-thumbnail img {
-    transform: scale(1.1);
-}
-
-/* Course Overlay */
 .course-overlay {
     position: absolute;
     top: 1rem;
@@ -512,6 +475,8 @@
     align-items: center;
     gap: 0.8rem;
     margin: 3rem 0;
+    opacity: 0;
+    animation: slideUp 0.8s ease-out 0.6s forwards;
 }
 
 .pagination-btn {

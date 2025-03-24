@@ -71,23 +71,11 @@ body.page-transition {
 
 /* Hero Section */
 .hero {
-  padding: 6rem 2rem 4rem;
+  padding: 9rem 2rem 4rem;
   background: var(--gradient-dark);
   position: relative;
   overflow: hidden;
   text-align: center;
-}
-
-.hero::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--bg-feature-sections);
-  opacity: 0.05;
-  z-index: 1;
 }
 
 .hero-content {
@@ -114,6 +102,8 @@ h1:hover, h2:hover, h3:hover {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  opacity: 0;
+  animation: fadeIn 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .hero p {
@@ -123,6 +113,28 @@ h1:hover, h2:hover, h3:hover {
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
+  opacity: 0;
+  animation: slideUp 1s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Hero Search */
@@ -134,11 +146,15 @@ h1:hover, h2:hover, h3:hover {
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
+  opacity: 0;
+  animation: slideUp 1s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
 }
 
 .ai-search-container {
   width: 100%;
   position: relative;
+  opacity: 0;
+  animation: slideUp 1s cubic-bezier(0.4, 0, 0.2, 1) 0.4s forwards;
 }
 
 .hero-search-input {
@@ -213,20 +229,23 @@ h1:hover, h2:hover, h3:hover {
 .ai-assistant-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.8rem;
-  padding: 1rem 2rem;
+  padding: 1rem 2.3rem;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 25px;
   color: var(--text-primary);
   text-decoration: none;
   transition: all 0.3s ease;
-  margin-top: 1.5rem;
+  margin-top: 1rem;
+  opacity: 0;
+  animation: slideUp 1s cubic-bezier(0.4, 0, 0.2, 1) 0.5s forwards;
 }
 
 .ai-assistant-btn:hover {
   background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
-  box-shadow: 0 0 20px rgba(64, 224, 208, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(64, 224, 208, 0.2);
 }
 
 .ai-assistant-btn i {
@@ -235,7 +254,7 @@ h1:hover, h2:hover, h3:hover {
 }
 
 .ai-assistant-btn:hover i {
-  transform: rotate(15deg);
+  transform: scale(1.1) rotate(15deg);
 }
 
 /* Hero Features */
@@ -255,7 +274,7 @@ h1:hover, h2:hover, h3:hover {
   font-size: 1.1rem;
   opacity: 0;
   transform: translateY(20px);
-  animation: featureSlideUp 0.5s ease forwards;
+  animation: slideUp 1s cubic-bezier(0.4, 0, 0.2, 1) 0.6s forwards;
   transition: all 0.3s ease;
 }
 
@@ -282,10 +301,10 @@ h1:hover, h2:hover, h3:hover {
   }
 }
 
-.hero-features span:nth-child(1) { animation-delay: 0.2s; }
-.hero-features span:nth-child(2) { animation-delay: 0.4s; }
-.hero-features span:nth-child(3) { animation-delay: 0.6s; }
-.hero-features span:nth-child(4) { animation-delay: 0.8s; }
+.hero-features span:nth-child(1) { animation-delay: 0.7s; }
+.hero-features span:nth-child(2) { animation-delay: 0.8s; }
+.hero-features span:nth-child(3) { animation-delay: 0.9s; }
+.hero-features span:nth-child(4) { animation-delay: 1.0s; }
 
 /* Learning Paths Section */
 .learning-paths {
@@ -1112,7 +1131,10 @@ footer:hover .footer-bottom::before {
 
 /* Buttons */
 .cta-button {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
   padding: 1rem 2.5rem;
   border-radius: 25px;
   font-size: 1.1rem;
@@ -1121,6 +1143,9 @@ footer:hover .footer-bottom::before {
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  min-width: 200px;
+  opacity: 0;
+  animation: slideUp 1s cubic-bezier(0.4, 0, 0.2, 1) 0.5s forwards;
 }
 
 .cta-button::before {
