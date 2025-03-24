@@ -221,23 +221,6 @@
     flex-wrap: wrap;
 }
 
-.resource-filters {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-    width: 100%;
-}
-
-.filter-btn {
-    background: var(--bg-tertiary);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 0.8rem 1.5rem;
-    border-radius: var(--hero-radius-md);
-    color: var(--text-secondary);
-    transition: all 0.3s ease;
-}
-
 .share-dropdown {
     position: relative;
 }
@@ -302,30 +285,6 @@
     transform: translateX(5px);
 }
 
-.resource-filters {
-    display: flex;
-    gap: 1rem;
-    overflow-x: auto;
-    padding-bottom: 0.5rem;
-    max-width: 100%;
-    scrollbar-width: thin;
-    scrollbar-color: var(--accent-secondary) var(--bg-tertiary);
-}
-
-.resource-filters::-webkit-scrollbar {
-    height: 6px;
-}
-
-.resource-filters::-webkit-scrollbar-track {
-    background: var(--bg-tertiary);
-    border-radius: 3px;
-}
-
-.resource-filters::-webkit-scrollbar-thumb {
-    background: var(--accent-secondary);
-    border-radius: 3px;
-}
-
 .filter-btn {
     white-space: nowrap;
     padding: 0.8rem 1.5rem;
@@ -369,6 +328,8 @@
         rgba(65, 105, 225, 0.05) 100%);
     opacity: 0;
     transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: 1;
 }
 
 .resource-card:hover {
@@ -452,6 +413,8 @@
     color: transparent;
     letter-spacing: -0.3px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 2;
 }
 
 .resource-header h3:hover {
@@ -490,13 +453,15 @@
     margin-bottom: 1.5rem;
     line-height: 1.6;
 }
-
 .resource-tags {
     display: flex;
     gap: 0.8rem;
     margin-bottom: 1.5rem;
     flex-wrap: wrap;
+    position: relative;
+    z-index: 2;
 }
+
 
 .resource-tags span {
     background: rgba(64, 224, 208, 0.1);
@@ -517,6 +482,8 @@
     display: flex;
     gap: 1.5rem;
     margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 2;
 }
 
 .resource-stats span {
@@ -525,15 +492,29 @@
     gap: 0.5rem;
     color: var(--text-secondary);
     font-size: 0.9rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.resource-stats span:hover {
+    color: var(--text-primary);
+    transform: translateY(-2px);
 }
 
 .resource-stats i {
     color: var(--accent-secondary);
+    transition: color 0.3s ease;
 }
 
+.resource-stats span:hover i {
+    color: var(--accent-primary);
+}
 .resource-actions {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 2;
     align-items: center;
     gap: 1rem;
 }
@@ -825,7 +806,7 @@
 }
 
 .feed-header h2:hover {
-    box-shadow: 0 8px 20px rgba(64, 224, 208, 0.3);
+    text-shadow: 0 0 20px rgba(64, 224, 208, 0.4);
     transform: translateY(-2px);
 }
 
