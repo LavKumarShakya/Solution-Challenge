@@ -5,8 +5,6 @@
     display: flex;
     flex-direction: column;
     position: relative;
-    opacity: 0;
-    animation: fadeIn 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 /* Chat Container */
@@ -58,16 +56,12 @@
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    opacity: 0;
-    animation: fadeIn 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .header-text p {
     color: var(--text-secondary);
     font-size: 1.2rem;
     line-height: 1.6;
-    opacity: 0;
-    animation: fadeIn 1s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
 }
 
 /* Chat Interface */

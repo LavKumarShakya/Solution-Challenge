@@ -4,36 +4,34 @@
   min-height: 100vh;
   background-color: var(--bg-primary);
   color: var(--text-primary);
+  opacity: 0;
+  animation: fadeIn 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 /* Profile Hero Section */
 .profile-hero {
-  background: var(--gradient-dark);
-  padding: 4rem 2rem;
-  position: relative;
-  overflow: hidden;
-  border-radius: 20px;
-  margin: 2rem auto;
-  max-width: var(--max-width);
-  width: calc(100% - 4rem);
-  animation: heroFadeIn 1s ease-out forwards;
+   background: var(--gradient-dark);
+   padding: 4rem 2rem;
+   position: relative;
+   overflow: hidden;
+   border-radius: 20px;
+   margin: 2rem auto;
+   max-width: var(--max-width);
+   width: calc(100% - 4rem);
+   opacity: 0;
+   animation: fadeIn 1s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
 }
 
 .profile-hero::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--bg-feature-sections);
-  opacity: 0.05;
-  pointer-events: none;
-}
-
-@keyframes heroFadeIn {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
+   content: '';
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   background: var(--bg-feature-sections);
+   opacity: 0.05;
+   pointer-events: none;
 }
 
 .profile-header {
@@ -66,6 +64,8 @@
   background-clip: text;
   color: transparent;
   margin-bottom: 0.5rem;
+  opacity: 0;
+  animation: fadeIn 1s cubic-bezier(0.4, 0, 0.2, 1) 0.4s forwards;
 }
 
 .profile-info .hero-subtitle {

@@ -460,11 +460,12 @@
         AOS.init({
             duration: 600,
             easing: 'ease-out',
-            once: false,
+            once: true,
             offset: 50,
             delay: 50,
-            mirror: true,
-            anchorPlacement: 'top-bottom'
+            mirror: false,
+            anchorPlacement: 'top-bottom',
+            disable: window.location.pathname.includes('courses.html') // Disable AOS on courses page
         });
     </script>
 </body>
