@@ -215,28 +215,68 @@ function handleSearch(e) {
 
 // AI Chat Integration
 class AIChat {
+    static STORAGE_KEY = 'aetherlearn-chat-messages';
+
     constructor() {
         this.chatForm = document.querySelector('#chatForm');
         this.chatMessages = document.querySelector('#chatMessages');
         this.chatInput = document.querySelector('#chatInput');
         this.clearButton = document.querySelector('.action-btn[title="Clear Chat"]');
         
+        // Initialize storage
+        this.initializeStorage();
+        
         this.setupEventListeners();
         this.setupInputHandling();
         this.loadSavedMessages();
     }
 
-    async loadSavedMessages() {
+    initializeStorage() {
+        try {
+            if (!sessionStorage.getItem(AIChat.STORAGE_KEY)) {
+                sessionStorage.setItem(AIChat.STORAGE_KEY, JSON.stringify([]));
+            }
+            // Validate stored data
+            const stored = sessionStorage.getItem(AIChat.STORAGE_KEY);
+            const parsed = JSON.parse(stored);
+            if (!Array.isArray(parsed)) {
+                throw new Error('Invalid storage format');
+            }
+        } catch (error) {
+            console.error('Storage initialization error:', error);
+            sessionStorage.setItem(AIChat.STORAGE_KEY, JSON.stringify([]));
+        }
+    }
+
+    getStoredMessages() {
+        try {
+            const stored = sessionStorage.getItem(AIChat.STORAGE_KEY);
+            return stored ? JSON.parse(stored) : [];
+        } catch (error) {
+            console.error('Error reading messages:', error);
+            return [];
+        }
+    }
+
+    storeMessages(messages) {
+        try {
+            sessionStorage.setItem(AIChat.STORAGE_KEY, JSON.stringify(messages));
+        } catch (error) {
+            console.error('Error storing messages:', error);
+        }
+    }
+
+    loadSavedMessages() {
         // Keep the welcome message
         const welcomeMessage = this.chatMessages.firstElementChild;
         this.chatMessages.innerHTML = '';
         this.chatMessages.appendChild(welcomeMessage);
 
-        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-            navigator.serviceWorker.controller.postMessage({
-                type: 'GET_CHAT_MESSAGES'
-            });
-        }
+        // Load messages from session storage
+        const messages = this.getStoredMessages();
+        messages.forEach(message => {
+            this.addMessage(message.type, message.content, false);
+        });
     }
 
     setupEventListeners() {
@@ -246,18 +286,6 @@ class AIChat {
 
         if (this.clearButton) {
             this.clearButton.addEventListener('click', () => this.clearChat());
-        }
-
-        // Listen for service worker messages
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.addEventListener('message', (event) => {
-                if (event.data.type === 'CHAT_MESSAGES') {
-                    // Add saved messages to chat
-                    event.data.data.forEach(message => {
-                        this.addMessage(message.type, message.content, false);
-                    });
-                }
-            });
         }
 
         // Add input handling for textarea auto-resize
@@ -361,6 +389,7 @@ class AIChat {
                 sendButton.innerHTML = '<i class="fas fa-paper-plane"></i>';
                 textarea.focus();
                 textarea.value = '';
+                this.adjustTextareaHeight();
             }
         }
     }
@@ -536,11 +565,10 @@ class AIChat {
         }
 
         // Store message if needed
-        if (store && 'serviceWorker' in navigator && navigator.serviceWorker.controller) {
-            navigator.serviceWorker.controller.postMessage({
-                type: 'STORE_CHAT_MESSAGE',
-                data: { type, content }
-            });
+        if (store) {
+            const messages = this.getStoredMessages();
+            messages.push({ type, content, timestamp: Date.now() });
+            this.storeMessages(messages);
         }
     }
 
@@ -576,13 +604,10 @@ class AIChat {
         while (this.chatMessages.children.length > 1) {
             this.chatMessages.removeChild(this.chatMessages.lastChild);
         }
-
-        // Clear stored messages
-        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-            navigator.serviceWorker.controller.postMessage({
-                type: 'CLEAR_CHAT'
-            });
-        }
+        
+        // Clear messages from session storage
+        sessionStorage.removeItem(AIChat.STORAGE_KEY);
+        this.initializeStorage();
     }
 }
 
