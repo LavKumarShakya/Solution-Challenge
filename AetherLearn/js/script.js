@@ -823,8 +823,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Don't add click handlers - suggestions are for display only
         const suggestionItems = suggestionsContainer.querySelectorAll('.search-suggestion-item');
         suggestionItems.forEach(item => {
-            item.addEventListener('mouseover', () => {
+            item.addEventListener('click', () => {
                 searchInput.value = item.textContent.trim();
+                suggestionsContainer.style.display = 'none';
             });
         });
     }
