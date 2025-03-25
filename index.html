@@ -50,7 +50,237 @@
             </div>
         </section>
 
-        <!-- Technology Education Section -->
+        <!-- Search Process Overlays -->
+        <div class="search-process-container" id="searchProcessContainer">
+            <!-- Stage 1: Search Processing -->
+            <div class="search-process-stage" id="searchProcessingStage">
+                <div class="stage-content">
+                    <div class="stage-header">
+                        <h2>Analyzing Your Query</h2>
+                        <button class="close-process-btn" id="closeProcessBtn"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="brain-animation">
+                        <div class="brain-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div class="pulse-rings">
+                            <div class="ring"></div>
+                            <div class="ring"></div>
+                            <div class="ring"></div>
+                        </div>
+                    </div>
+                    <div class="query-display">
+                        <h3>Query: <span id="searchQueryText">Machine Learning</span></h3>
+                    </div>
+                    <div class="process-steps">
+                        <div class="process-step active">
+                            <div class="step-icon"><i class="fas fa-search"></i></div>
+                            <div class="step-text">
+                                <h4>Natural Language Processing</h4>
+                                <p>Breaking down your query to identify key concepts and learning objectives</p>
+                            </div>
+                            <div class="step-status"><i class="fas fa-check-circle"></i></div>
+                        </div>
+                        <div class="process-step">
+                            <div class="step-icon"><i class="fas fa-user-graduate"></i></div>
+                            <div class="step-text">
+                                <h4>Learning Profile Analysis</h4>
+                                <p>Determining optimal learning pathways based on subject complexity</p>
+                            </div>
+                            <div class="step-status"><i class="fas fa-spinner fa-spin"></i></div>
+                        </div>
+                        <div class="process-step">
+                            <div class="step-icon"><i class="fas fa-project-diagram"></i></div>
+                            <div class="step-text">
+                                <h4>Knowledge Graph Mapping</h4>
+                                <p>Creating connections between concepts for a comprehensive learning path</p>
+                            </div>
+                            <div class="step-status"><i class="fas fa-circle"></i></div>
+                        </div>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="analysisProgressBar">
+                            <div class="progress-fill"></div>
+                        </div>
+                        <div class="progress-text">Analysis in progress: <span id="analysisProgress">35</span>%</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stage 2: Resource Discovery -->
+            <div class="search-process-stage" id="resourceDiscoveryStage">
+                <div class="stage-content">
+                    <div class="stage-header">
+                        <h2>Discovering Resources</h2>
+                        <button class="close-process-btn"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="discovery-visualization">
+                        <div class="radar-container">
+                            <div class="radar-sweep"></div>
+                            <div class="radar-grid"></div>
+                            <div class="radar-center"></div>
+                            <div class="resource-dots" id="resourceDots">
+                                <!-- Resource dots will be added dynamically via JS -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="discovery-stats">
+                        <div class="stat-box">
+                            <div class="stat-number" id="resourcesFound">0</div>
+                            <div class="stat-label">Resources Found</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number" id="sourcesScanned">0</div>
+                            <div class="stat-label">Sources Scanned</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number" id="avgQualityScore">0</div>
+                            <div class="stat-label">Avg. Quality Score</div>
+                        </div>
+                    </div>
+                    <div class="discovery-feed-container">
+                        <h3>Resource Discovery Feed</h3>
+                        <div class="discovery-feed" id="discoveryFeed">
+                            <!-- Feed items will be added dynamically via JS -->
+                        </div>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="discoveryProgressBar">
+                            <div class="progress-fill"></div>
+                        </div>
+                        <div class="progress-text">Discovery in progress: <span id="discoveryProgress">0</span>%</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stage 3: Learning Path Results -->
+            <div class="search-process-stage" id="learningPathResultsStage">
+                <div class="stage-content">
+                    <div class="stage-header">
+                        <h2>Your Personalized Learning Path</h2>
+                        <button class="close-process-btn"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="results-summary">
+                        <div class="result-query">
+                            <h3>Query: <span id="resultQueryText">Machine Learning</span></h3>
+                        </div>
+                        <div class="result-stats">
+                            <div class="result-stat">
+                                <i class="fas fa-book-open"></i>
+                                <span id="totalResourcesCount">24</span> resources
+                            </div>
+                            <div class="result-stat">
+                                <i class="fas fa-clock"></i>
+                                Estimated time: <span id="estimatedTime">19</span> hours
+                            </div>
+                            <div class="result-stat">
+                                <i class="fas fa-signal"></i>
+                                Difficulty: <span id="difficultyLevel">Intermediate</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="path-visualization">
+                        <div class="path-node start">
+                            <div class="node-icon"><i class="fas fa-play"></i></div>
+                            <div class="node-label">Start</div>
+                        </div>
+                        <div class="path-connection"></div>
+                        <div class="path-node module">
+                            <div class="node-icon"><i class="fas fa-cube"></i></div>
+                            <div class="node-label">Fundamentals</div>
+                        </div>
+                        <div class="path-connection"></div>
+                        <div class="path-node module">
+                            <div class="node-icon"><i class="fas fa-code"></i></div>
+                            <div class="node-label">Implementation</div>
+                        </div>
+                        <div class="path-connection"></div>
+                        <div class="path-node module">
+                            <div class="node-icon"><i class="fas fa-project-diagram"></i></div>
+                            <div class="node-label">Advanced</div>
+                        </div>
+                        <div class="path-connection"></div>
+                        <div class="path-node end">
+                            <div class="node-icon"><i class="fas fa-flag-checkered"></i></div>
+                            <div class="node-label">Mastery</div>
+                        </div>
+                    </div>
+                    <div class="modules-container">
+                        <h3>Learning Modules</h3>
+                        <div class="modules-grid">
+                            <div class="module-card">
+                                <div class="module-header">
+                                    <div class="module-icon"><i class="fas fa-cube"></i></div>
+                                    <h4>Module 1: Fundamentals</h4>
+                                </div>
+                                <div class="module-resources">
+                                    <div class="resource-item">
+                                        <div class="resource-icon video"><i class="fas fa-play-circle"></i></div>
+                                        <div class="resource-info">
+                                            <h5>Introduction to Machine Learning</h5>
+                                            <p>A comprehensive guide to ML basics</p>
+                                            <div class="resource-meta">
+                                                <span><i class="fas fa-clock"></i> 45 min</span>
+                                                <span><i class="fas fa-star"></i> 4.9</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="resource-item">
+                                        <div class="resource-icon article"><i class="fas fa-file-alt"></i></div>
+                                        <div class="resource-info">
+                                            <h5>Understanding ML Algorithms</h5>
+                                            <p>Overview of common algorithms and applications</p>
+                                            <div class="resource-meta">
+                                                <span><i class="fas fa-clock"></i> 20 min</span>
+                                                <span><i class="fas fa-star"></i> 4.7</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="module-card">
+                                <div class="module-header">
+                                    <div class="module-icon"><i class="fas fa-code"></i></div>
+                                    <h4>Module 2: Implementation</h4>
+                                </div>
+                                <div class="module-resources">
+                                    <div class="resource-item">
+                                        <div class="resource-icon interactive"><i class="fas fa-laptop-code"></i></div>
+                                        <div class="resource-info">
+                                            <h5>Building Your First ML Model</h5>
+                                            <p>Hands-on tutorial with Python and scikit-learn</p>
+                                            <div class="resource-meta">
+                                                <span><i class="fas fa-clock"></i> 1.5 hr</span>
+                                                <span><i class="fas fa-star"></i> 4.8</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="resource-item">
+                                        <div class="resource-icon video"><i class="fas fa-play-circle"></i></div>
+                                        <div class="resource-info">
+                                            <h5>Data Preprocessing Techniques</h5>
+                                            <p>Learn how to clean and prepare data for ML models</p>
+                                            <div class="resource-meta">
+                                                <span><i class="fas fa-clock"></i> 55 min</span>
+                                                <span><i class="fas fa-star"></i> 4.6</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="results-actions">
+                        <button class="action-button primary"><i class="fas fa-save"></i> Save Path</button>
+                        <button class="action-button secondary"><i class="fas fa-share"></i> Share</button>
+                        <button class="action-button secondary"><i class="fas fa-pencil-alt"></i> Customize</button>
+                        <button class="action-button secondary"><i class="fas fa-download"></i> Export PDF</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Learning Paths Section -->
         <section class="learning-paths" data-aos="fade-up">
             <h2>Explore Our Diverse Learning Paths</h2>
             <p>Discover curated paths that align with your goals and interests</p>
