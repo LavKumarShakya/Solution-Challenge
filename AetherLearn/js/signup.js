@@ -2,11 +2,16 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
 import {
   getAuth,
-  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
   GithubAuthProvider,
 } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-auth.js";
+import {
+  getFirestore,
+  doc,
+  setDoc,
+} from "https://www.gstatic.com/firebasejs/11.5.0/firebase-firestore.js";
 const firebaseConfig = {
   apiKey: "AIzaSyBicWD9ppun6U9muhLJM3oESrhNGybS_O8",
   authDomain: "aetherlearn-5c389.firebaseapp.com",
@@ -19,32 +24,52 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 
-const login = document.getElementById("login-submit");
+const auth = getAuth();
+auth.languageCode = "en";
 
-login.addEventListener("click", function (event) {
+const signup = document.getElementById("submit");
+
+signup.addEventListener("click", function (event) {
   event.preventDefault();
 
-  const email = document.getElementById("login-email").value;
-  const password = document.getElementById("login-password").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("signup-password").value;
+  const confirmPassword = document.getElementById("confirm-password").value;
+  const name = document.getElementById("name").value;
 
-  signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      const user = userCredential.user;
-      alert("Logged in successfully");
-      // ...
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      alert(errorMessage);
-      // ..
-    });
+  const db = getFirestore();
+  const interest = document.getElementById("interest").value;
+
+  if (password !== confirmPassword) {
+    event.preventDefault(); // Prevent form submission
+    alert("Passwords do not match!");
+  } else {
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed up
+        const user = userCredential.user;
+        const userData = {
+          email: email,
+          name: name,
+          interest: interest,
+        };
+        const docRef = doc(db, "users", user.uid);
+        setDoc(docRef, userData).then(() => {
+          window.location.href = "../../index.html";
+        });
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        alert(errorMessage);
+        // ..
+      });
+  }
 });
 
 const provider = new GoogleAuthProvider();
-const google_login = document.getElementById("google-login");
+const google_login = document.getElementById("google-signup");
 
 google_login.addEventListener("click", function (event) {
   event.preventDefault();
@@ -64,7 +89,7 @@ google_login.addEventListener("click", function (event) {
 });
 
 const provider1 = new GithubAuthProvider();
-const github_login = document.getElementById("github-login");
+const github_login = document.getElementById("github-signup");
 
 github_login.addEventListener("click", function (event) {
   event.preventDefault();
@@ -82,3 +107,4 @@ github_login.addEventListener("click", function (event) {
       alert(errorMessage);
     });
 });
+

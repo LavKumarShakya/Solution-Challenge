@@ -772,14 +772,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Dummy suggestions
     const dummySuggestions = [
-        'Machine Learning Fundamentals',
-        'Web Development with React',
-        'Python Programming',
-        'Data Science Basics',
-        'JavaScript Advanced Concepts',
-        'Mobile App Development',
-        'Cloud Computing AWS',
-        'Artificial Intelligence Ethics'
+        "Machine Learning Fundamentals",
+        "Web Development with React",
+        "Python Programming",
+        "Mobile App Development",
+        "Artificial Intelligence",
+        "Cloud Computing AWS",
+        "Data Science with Python",
+        "Cybersecurity Basics",
+        "Blockchain Technology",
+        "DevOps & CI/CD",
+        "Game Development with Unity",
+        "Full-Stack Web Development"
     ];
 
     if (searchInput && suggestionsContainer) {
@@ -833,6 +837,7 @@ document.addEventListener('DOMContentLoaded', () => {
         searchOverlay?.classList.remove('active');
         document.body.style.overflow = '';
     });
+
 
     // Close on escape key
     document.addEventListener('keydown', (e) => {

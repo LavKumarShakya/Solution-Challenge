@@ -16,6 +16,7 @@
     <!-- External Resources -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script type="module" src="../js/signup.js" defer></script>
 </head>
 <body class="auth-page">
 
@@ -30,20 +31,20 @@
                     <label for="signup-name">Full Name</label>
                     <div class="input-group">
                         <i class="fas fa-user"></i>
-                        <input type="text" id="signup-name" placeholder="Enter your full name" required>
+                        <input type="text" id="name" placeholder="Enter your full name" required>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="signup-email">Email</label>
+                    <label for="email">Email</label>
                     <div class="input-group">
                         <i class="fas fa-envelope"></i>
-                        <input type="email" id="signup-email" placeholder="Enter your email" required>
+                        <input type="email" id="email" placeholder="Enter your email" required>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="signup-password">Password</label>
+                    <label for="password">Password</label>
                     <div class="input-group">
                         <i class="fas fa-lock"></i>
                         <input type="password" id="signup-password" placeholder="Create a password" required>
@@ -56,6 +57,13 @@
                             <div class="strength-level" style="width: 0%"></div>
                         </div>
                         <span class="strength-text">Password strength</span>
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="confirm-password" placeholder="Confirm password" required>
+                            <button type="button" class="toggle-password">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -63,19 +71,19 @@
                     <label for="interests">Areas of Interest</label>
                     <div class="interest-tags">
                         <label class="interest-tag">
-                            <input type="checkbox" name="interests" value="technology">
+                            <input type="checkbox" name="interests" id="interest" value="technology">
                             <span>Technology</span>
                         </label>
                         <label class="interest-tag">
-                            <input type="checkbox" name="interests" value="design">
+                            <input type="checkbox" name="interests" id="interest" value="design">
                             <span>Design</span>
                         </label>
                         <label class="interest-tag">
-                            <input type="checkbox" name="interests" value="business">
+                            <input type="checkbox" name="interests" id="interest" value="business">
                             <span>Business</span>
                         </label>
                         <label class="interest-tag">
-                            <input type="checkbox" name="interests" value="science">
+                            <input type="checkbox" name="interests" id="interest" value="science">
                             <span>Science</span>
                         </label>
                     </div>
@@ -88,16 +96,16 @@
                     </label>
                 </div>
 
-                <button type="submit" class="cta-button">Create Account</button>
+                <button id="submit" type="submit" class="cta-button">Create Account</button>
 
                 <div class="social-auth">
                     <p>Or sign up with</p>
                     <div class="social-buttons">
-                        <button type="button" class="social-btn google">
+                        <button type="button" class="social-btn google" id="google-signup">
                             <i class="fab fa-google"></i>
                             <span>Google</span>
                         </button>
-                        <button type="button" class="social-btn github">
+                        <button type="button" class="social-btn github" id="github-signup">
                             <i class="fab fa-github"></i>
                             <span>GitHub</span>
                         </button>
@@ -179,5 +187,6 @@
     <!-- Scripts -->
     <script src="../js/navbar.js"></script>
     <script src="../js/auth.js"></script>
+
 </body>
 </html>

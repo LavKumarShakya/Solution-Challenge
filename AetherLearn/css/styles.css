@@ -177,7 +177,7 @@ h1:hover, h2:hover, h3:hover {
 
 /* Search Suggestions */
 .search-suggestions {
-  position: absolute;
+  position: relative;
   top: 100%;
   left: 0;
   right: 0;
@@ -187,8 +187,30 @@ h1:hover, h2:hover, h3:hover {
   margin-top: 0.5rem;
   overflow: hidden;
   z-index: 10;
+  max-height: 200px;
+  overflow-y: auto;
+  
 
 }
+
+.search-suggestions::-webkit-scrollbar {
+  width: 4px; /* Width of the scrollbar */
+}
+
+.search-suggestions::-webkit-scrollbar-thumb {
+  background: var(--accent-primary); /* Color of the scrollbar handle */
+  border-radius: 10px; /* Round edges */
+}
+
+.search-suggestions::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1); /* Background of the scrollbar track */
+  border-radius: 10px;
+}
+
+.search-suggestions::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-secondary); /* Changes color on hover */
+}
+
 
 .search-suggestion-item {
   padding: 1rem 1.5rem;

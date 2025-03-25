@@ -16,6 +16,7 @@
     <!-- External Resources -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script type="module" src="../js/login.js" defer></script>
 </head>
 <body class="auth-page">
 
@@ -53,16 +54,16 @@
                     <a href="#" class="forgot-password">Forgot Password?</a>
                 </div>
 
-                <button type="submit" class="cta-button">Log In</button>
+                <button type="submit" class="cta-button" id="login-submit">Log In</button>
 
                 <div class="social-auth">
                     <p>Or continue with</p>
                     <div class="social-buttons">
-                        <button type="button" class="social-btn google">
+                        <button type="button" class="social-btn google" id="google-login">
                             <i class="fab fa-google"></i>
                             <span>Google</span>
                         </button>
-                        <button type="button" class="social-btn github">
+                        <button type="button" class="social-btn github" id="github-login">
                             <i class="fab fa-github"></i>
                             <span>GitHub</span>
                         </button>

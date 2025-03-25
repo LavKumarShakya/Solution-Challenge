@@ -102,6 +102,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    
+    
+
     // Password reset form handling
     if (resetForm) {
         resetForm.addEventListener('submit', async (e) => {
