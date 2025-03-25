@@ -32,7 +32,7 @@
     position: relative;
     z-index: 2;
     opacity: 0;
-    animation: fadeIn 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .section-header h2 {
@@ -43,7 +43,7 @@
     color: transparent;
     margin-bottom: 1rem;
     opacity: 0;
-    animation: fadeIn 1s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
+    animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.1s forwards;
 }
 
 .section-header p {
@@ -53,7 +53,7 @@
     max-width: 800px;
     margin: 0 auto;
     opacity: 0;
-    animation: fadeIn 1s cubic-bezier(0.4, 0, 0.2, 1) 0.4s forwards;
+    animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
 }
 
 /* Tool Cards Grid */
@@ -65,6 +65,8 @@
     margin: 0 auto;
     position: relative;
     z-index: 2;
+    opacity: 0;
+    animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
 }
 
 .tool-card {

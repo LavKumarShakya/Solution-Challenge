@@ -32,14 +32,22 @@
     background-clip: text;
     color: transparent;
     letter-spacing: -0.5px;
-    opacity: 0;
-    animation: fadeIn 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: fadeIn 1s ease;
     transition: all 0.3s ease;
 }
 
 .community-hero h1:hover {
     text-shadow: 0 0 20px rgba(64, 224, 208, 0.4);
     transform: translateY(-2px);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes fadeInUp {
@@ -106,6 +114,8 @@
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
+    opacity: 0;
+    animation: fadeIn 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 /* Community Stats */
@@ -125,8 +135,7 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     opacity: 0;
-    transform: translateY(20px);
-    animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: fadeInUp 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .stat:nth-child(1) { animation-delay: 0.2s; }
@@ -196,10 +205,9 @@
     background-clip: text;
     color: transparent;
     letter-spacing: -0.5px;
-    animation: fadeIn 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: fadeIn 1s ease;
     transition: all 0.3s ease;
     margin-bottom: 0.5rem;
-    opacity: 0;
 }
 
 .section-header h2:hover {
@@ -326,7 +334,7 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     position: relative;
-    animation: fadeInUp 0.8s ease-out;
+    animation: fadeIn 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .resource-card::after {
@@ -788,7 +796,7 @@
     padding: 2.5rem;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.05);
-    animation: fadeInUp 1s ease-out;
+    animation: fadeIn 1.2s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
 }
 
@@ -811,7 +819,7 @@
 
 .feed-header {
     margin-bottom: 2.5rem;
-    animation: fadeInUp 0.8s ease-out;
+    animation: fadeIn 1s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
 }
 
