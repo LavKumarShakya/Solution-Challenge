@@ -1165,7 +1165,6 @@ footer:hover .footer-bottom::before {
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-  min-width: 200px;
   opacity: 0;
   animation: slideUp 1s cubic-bezier(0.4, 0, 0.2, 1) 0.5s forwards;
 }
