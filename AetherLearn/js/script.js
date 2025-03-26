@@ -1206,3 +1206,188 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+
+// Study Plan Generator Functionality
+document.addEventListener('DOMContentLoaded', function() {
+  // Elements
+  const studyPlanModal = document.getElementById('studyPlanModal');
+  const closeStudyPlanBtn = document.getElementById('closeStudyPlanModal');
+  const generateStudyPlanBtn = document.querySelector('.secondary-button');
+  const closeResultBtn = document.getElementById('closeResultBtn');
+  const processingStep = document.getElementById('processingStep');
+  const resultStep = document.getElementById('resultStep');
+  const progressFill = document.querySelector('.progress-fill');
+  const progressText = document.getElementById('aiProgressText');
+  const processingSteps = document.querySelectorAll('.processing-step');
+  
+  // Progress simulation with loading text animation
+  function simulateProcessing() {
+    let progress = 0;
+    const stepThresholds = [25, 50, 75, 100];
+    let currentStep = 0;
+
+    // Get loading animation elements
+    const loadingIcon = document.querySelector('.loading-icon');
+    const loadingText = document.querySelector('.loading-text');
+    
+    // Initialize loading state
+    if (loadingText) {
+      loadingText.textContent = 'Processing: 0%';
+      loadingText.classList.remove('fade-in');
+      setTimeout(() => loadingText.classList.add('fade-in'), 300);
+    }
+    
+    const progressInterval = setInterval(() => {
+      progress += 2;
+      progress = Math.min(progress, 100);
+      
+      // Update UI with percentage
+      progressFill.style.width = `${progress}%`;
+      if (progressText) {
+        progressText.textContent = `${Math.round(progress)}%`;
+        progressText.classList.add('fade-in');
+      }
+      
+      // Update loading text with percentage
+      if (loadingText) {
+        loadingText.textContent = `Processing: ${Math.round(progress)}%`;
+      }
+      
+      // Check if we've reached a new threshold
+      if (progress >= stepThresholds[currentStep]) {
+        if (currentStep < 3) {
+          // Update step status
+          updateProcessingStep(currentStep, 'completed');
+          updateProcessingStep(currentStep + 1, 'active');
+        } else {
+          // Complete final step and transition to results
+          updateProcessingStep(currentStep, 'completed');
+          if (loadingText) loadingText.classList.remove('fade-in');
+          if (loadingIcon) loadingIcon.style.animation = 'none';
+          setTimeout(showResults, 800);
+          clearInterval(progressInterval);
+        }
+        currentStep++;
+      }
+    }, 100);
+  }
+  
+  // Update step status with optimized icon handling
+  function updateProcessingStep(index, status) {
+    const step = processingSteps[index];
+    if (!step) return;
+
+    const statusIcon = step.querySelector('.step-status i');
+    step.classList.remove('active', 'completed');
+    
+    const iconMap = {
+      active: {
+        class: 'active',
+        icon: 'fas fa-spinner fa-spin'
+      },
+      completed: {
+        class: 'completed',
+        icon: 'fas fa-check'
+      },
+      pending: {
+        class: '',
+        icon: 'fas fa-circle'
+      }
+    };
+
+    const { class: className, icon } = iconMap[status] || iconMap.pending;
+    if (className) step.classList.add(className);
+    if (statusIcon) statusIcon.className = icon;
+
+    // Update the progress text position to stay under brain icon
+    const progressContainer = document.querySelector('.progress-container');
+    if (progressContainer) {
+      progressContainer.style.transform = 'translateY(-15px)';
+    }
+  }
+
+  // Show results with optimized animations
+  function showResults() {
+    processingStep.style.display = 'none';
+    resultStep.style.display = 'block';
+    
+    // Ensure results step scrolls to top when opened
+    resultStep.scrollTop = 0;
+
+    const elements = document.querySelectorAll('.week-node, .path-connection');
+    elements.forEach((el, i) => {
+      setTimeout(() => {
+        if (el.classList.contains('week-node')) {
+          el.style.cssText = 'opacity: 1; transform: scale(1);';
+        } else {
+          el.style.maxWidth = '100%';
+        }
+      }, i * 100);
+    });
+
+    initializeModules();
+  }
+
+  // Initialize modules with event delegation
+  function initializeModules() {
+    const moduleContainer = document.querySelector('.modules-container');
+    if (!moduleContainer) return;
+
+    moduleContainer.addEventListener('click', (e) => {
+      const header = e.target.closest('.module-header');
+      if (!header) return;
+
+      const moduleItem = header.parentElement;
+      const moduleToggle = header.querySelector('.module-toggle i');
+      const isExpanded = moduleItem.classList.toggle('expanded');
+      
+      moduleToggle.className = `fas fa-chevron-${isExpanded ? 'down' : 'right'}`;
+    });
+  }
+  
+  // Modal control with state management
+  const modalController = {
+    open() {
+      studyPlanModal?.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      this.reset();
+      
+      // Ensure modal body is scrolled to the top when opening
+      setTimeout(() => {
+        const modalBody = document.querySelector('.modal-body');
+        if (modalBody) modalBody.scrollTop = 0;
+      }, 10);
+      
+      simulateProcessing();
+    },
+
+    close() {
+      studyPlanModal?.classList.remove('active');
+      document.body.style.overflow = 'auto';
+      this.reset();
+    },
+
+    reset() {
+      if (processingStep) processingStep.style.display = 'block';
+      if (resultStep) resultStep.style.display = 'none';
+      if (progressFill) progressFill.style.width = '0%';
+      if (progressText) progressText.textContent = '0';
+      
+      processingSteps?.forEach((step, index) => {
+        updateProcessingStep(index, index === 0 ? 'active' : 'pending');
+      });
+    }
+  };
+
+  // Event listeners with null checks
+  generateStudyPlanBtn?.addEventListener('click', () => modalController.open());
+  closeStudyPlanBtn?.addEventListener('click', () => modalController.close());
+  closeResultBtn?.addEventListener('click', () => modalController.close());
+
+  // Escape key handler
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && studyPlanModal?.classList.contains('active')) {
+      modalController.close();
+    }
+  });
+});

@@ -312,6 +312,359 @@
       </section>
     </main>
 
+    <!-- Study Plan Generator Modal -->
+    <div class="study-plan-modal" id="studyPlanModal">
+      <div class="modal-backdrop"></div>
+      <div class="modal-container">
+        <div class="modal-header">
+          <h2>AI Study Plan Generator</h2>
+          <button class="modal-close-btn" id="closeStudyPlanModal">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Processing Step -->
+          <div class="form-step" id="processingStep">
+            <h3>Generating Your Personalized Study Plan</h3>
+            <p>Our AI is analyzing your profile, progress, and preferences to create a custom learning path that's optimized for your goals.</p>
+            
+            <!-- Loading Animation -->
+            <div class="loading-animation">
+              <div class="loading-icon">
+                <i class="fas fa-brain"></i>
+              </div>
+              <div class="loading-text">Analyzing...</div>
+            </div>
+            
+            <!-- Processing Steps -->
+            <div class="processing-steps">
+              <div class="processing-step">
+                <i class="fas fa-user"></i>
+                <span>Analyzing your profile and learning history</span>
+                <div class="step-status"><i class="fas fa-circle"></i></div>
+              </div>
+              <div class="processing-step">
+                <i class="fas fa-brain"></i>
+                <span>Identifying knowledge gaps and optimal learning paths</span>
+                <div class="step-status"><i class="fas fa-circle"></i></div>
+              </div>
+              <div class="processing-step">
+                <i class="fas fa-search"></i>
+                <span>Finding high-quality resources tailored to your learning style</span>
+                <div class="step-status"><i class="fas fa-circle"></i></div>
+              </div>
+              <div class="processing-step">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Creating a balanced schedule optimized for retention</span>
+                <div class="step-status"><i class="fas fa-circle"></i></div>
+              </div>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="progress-container">
+              <div class="progress-bar">
+                <div class="progress-fill"></div>
+              </div>
+              <div class="progress-text">Processing: <span id="aiProgressText">0</span>%</div>
+            </div>
+          </div>
+          
+          <!-- Result Step -->
+          <div class="form-step" id="resultStep" style="display: none;">
+            <div class="result-header">
+              <div class="result-topic">
+                <h3>Your Personalized Study Plan for</h3>
+                <h2 id="resultTopic">Web Development</h2>
+              </div>
+              <div class="result-meta">
+                <div class="meta-item">
+                  <i class="fas fa-calendar-alt"></i>
+                  Duration: <strong id="planDuration">8 weeks</strong>
+                </div>
+                <div class="meta-item">
+                  <i class="fas fa-clock"></i>
+                  <strong id="planHours">6 hours</strong> per week
+                </div>
+                <div class="meta-item">
+                  <i class="fas fa-signal"></i>
+                  Difficulty: <strong id="planDifficulty">Intermediate</strong>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Study Path Visualization -->
+            <div class="plan-visual">
+              <div class="study-path">
+                <div class="path-week">
+                  <div class="week-node">
+                    <div class="node-icon">
+                      <i class="fas fa-flag"></i>
+                    </div>
+                    <div class="node-label">Week 1-2</div>
+                  </div>
+                </div>
+                
+                <div class="path-connection"></div>
+                
+                <div class="path-week">
+                  <div class="week-node">
+                    <div class="node-icon">
+                      <i class="fas fa-code"></i>
+                    </div>
+                    <div class="node-label">Week 3-4</div>
+                  </div>
+                </div>
+                
+                <div class="path-connection"></div>
+                
+                <div class="path-week">
+                  <div class="week-node">
+                    <div class="node-icon">
+                      <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="node-label">Week 5-6</div>
+                  </div>
+                </div>
+                
+                <div class="path-connection"></div>
+                
+                <div class="path-week">
+                  <div class="week-node">
+                    <div class="node-icon">
+                      <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <div class="node-label">Week 7-8</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Module breakdown -->
+            <div class="study-modules">
+              <h3>Learning Modules</h3>
+              <div class="modules-list">
+                <!-- Module 1 -->
+                <div class="module-item">
+                  <div class="module-header">
+                    <div class="module-icon">
+                      <i class="fas fa-flag"></i>
+                    </div>
+                    <div class="module-title">
+                      <h4>Module 1: Fundamentals</h4>
+                      <div class="module-duration">2 weeks • 12 hours</div>
+                    </div>
+                    <div class="module-toggle">
+                      <i class="fas fa-chevron-right"></i>
+                    </div>
+                  </div>
+                  <div class="module-content">
+                    <div class="module-description">
+                      Master the core concepts of HTML, CSS, and JavaScript to build a solid foundation for web development.
+                    </div>
+                    <div class="module-resources">
+                      <div class="resource-item">
+                        <div class="resource-icon video">
+                          <i class="fas fa-play-circle"></i>
+                        </div>
+                        <div class="resource-info">
+                          <h5>Introduction to HTML5 & CSS3</h5>
+                          <p>Learn the latest HTML and CSS standards with practical examples</p>
+                          <div class="resource-meta">
+                            <span><i class="fas fa-clock"></i> 2.5 hours</span>
+                            <span><i class="fas fa-star"></i> 4.8/5</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="resource-item">
+                        <div class="resource-icon reading">
+                          <i class="fas fa-book"></i>
+                        </div>
+                        <div class="resource-info">
+                          <h5>JavaScript Essentials</h5>
+                          <p>Core JavaScript concepts with interactive code challenges</p>
+                          <div class="resource-meta">
+                            <span><i class="fas fa-clock"></i> 3 hours</span>
+                            <span><i class="fas fa-star"></i> 4.7/5</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Module 2 -->
+                <div class="module-item">
+                  <div class="module-header">
+                    <div class="module-icon">
+                      <i class="fas fa-code"></i>
+                    </div>
+                    <div class="module-title">
+                      <h4>Module 2: Frontend Frameworks</h4>
+                      <div class="module-duration">2 weeks • 12 hours</div>
+                    </div>
+                    <div class="module-toggle">
+                      <i class="fas fa-chevron-right"></i>
+                    </div>
+                  </div>
+                  <div class="module-content">
+                    <div class="module-description">
+                      Explore modern frontend frameworks like React to build dynamic user interfaces with reusable components.
+                    </div>
+                    <div class="module-resources">
+                      <div class="resource-item">
+                        <div class="resource-icon video">
+                          <i class="fas fa-play-circle"></i>
+                        </div>
+                        <div class="resource-info">
+                          <h5>React Fundamentals</h5>
+                          <p>Build your first React application with hooks and modern patterns</p>
+                          <div class="resource-meta">
+                            <span><i class="fas fa-clock"></i> 4 hours</span>
+                            <span><i class="fas fa-star"></i> 4.9/5</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="resource-item">
+                        <div class="resource-icon interactive">
+                          <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <div class="resource-info">
+                          <h5>Building a Todo App</h5>
+                          <p>Guided project to practice component architecture and state management</p>
+                          <div class="resource-meta">
+                            <span><i class="fas fa-clock"></i> 2.5 hours</span>
+                            <span><i class="fas fa-star"></i> 4.6/5</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Module 3 -->
+                <div class="module-item">
+                  <div class="module-header">
+                    <div class="module-icon">
+                      <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="module-title">
+                      <h4>Module 3: Backend Integration</h4>
+                      <div class="module-duration">2 weeks • 12 hours</div>
+                    </div>
+                    <div class="module-toggle">
+                      <i class="fas fa-chevron-right"></i>
+                    </div>
+                  </div>
+                  <div class="module-content">
+                    <div class="module-description">
+                      Learn how to connect your frontend applications to APIs and build simple backend services.
+                    </div>
+                    <div class="module-resources">
+                      <div class="resource-item">
+                        <div class="resource-icon reading">
+                          <i class="fas fa-book"></i>
+                        </div>
+                        <div class="resource-info">
+                          <h5>RESTful API Design</h5>
+                          <p>Best practices for designing and consuming REST APIs</p>
+                          <div class="resource-meta">
+                            <span><i class="fas fa-clock"></i> 2 hours</span>
+                            <span><i class="fas fa-star"></i> 4.7/5</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="resource-item">
+                        <div class="resource-icon video">
+                          <i class="fas fa-play-circle"></i>
+                        </div>
+                        <div class="resource-info">
+                          <h5>Node.js & Express Basics</h5>
+                          <p>Build a simple backend server with Node.js and Express</p>
+                          <div class="resource-meta">
+                            <span><i class="fas fa-clock"></i> 3.5 hours</span>
+                            <span><i class="fas fa-star"></i> 4.8/5</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Module 4 -->
+                <div class="module-item">
+                  <div class="module-header">
+                    <div class="module-icon">
+                      <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <div class="module-title">
+                      <h4>Module 4: Full-Stack Project</h4>
+                      <div class="module-duration">2 weeks • 12 hours</div>
+                    </div>
+                    <div class="module-toggle">
+                      <i class="fas fa-chevron-right"></i>
+                    </div>
+                  </div>
+                  <div class="module-content">
+                    <div class="module-description">
+                      Apply everything you've learned to build a complete full-stack web application from scratch.
+                    </div>
+                    <div class="module-resources">
+                      <div class="resource-item">
+                        <div class="resource-icon interactive">
+                          <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <div class="resource-info">
+                          <h5>Building a Social Media Dashboard</h5>
+                          <p>Guided project to create a fully functional web application</p>
+                          <div class="resource-meta">
+                            <span><i class="fas fa-clock"></i> 6 hours</span>
+                            <span><i class="fas fa-star"></i> 4.9/5</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="resource-item">
+                        <div class="resource-icon reading">
+                          <i class="fas fa-book"></i>
+                        </div>
+                        <div class="resource-info">
+                          <h5>Deployment & Best Practices</h5>
+                          <p>Learn how to deploy your application and follow industry standards</p>
+                          <div class="resource-meta">
+                            <span><i class="fas fa-clock"></i> 2 hours</span>
+                            <span><i class="fas fa-star"></i> 4.7/5</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="plan-actions">
+              <button class="cta-button primary-button">
+                <i class="fas fa-save"></i> Save Plan
+              </button>
+              <button class="cta-button secondary-button">
+                <i class="fas fa-share-alt"></i> Share
+              </button>
+              <button class="cta-button secondary-button">
+                <i class="fas fa-calendar-plus"></i> Add to Calendar
+              </button>
+              <button class="cta-button secondary-button">
+                <i class="fas fa-download"></i> Export PDF
+              </button>
+            </div>
+            
+            <div class="close-result">
+              <button class="close-result-btn" id="closeResultBtn">Back to Dashboard</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <footer>
       <div class="footer-content">
         <div class="footer-section">
