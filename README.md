@@ -216,6 +216,7 @@ Solution-Challenge/
 ├── index.html     # Main landing page
 ├── README.md      # Project documentation
 ├── CNAME          # Custom domain configuration
+├── .idx           # Project IDX configuration
 └── AetherLearn/   # Core application directory
     ├── css/             # Modular stylesheets
     ├── html/            # Page templates for each section
