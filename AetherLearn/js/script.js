@@ -1,7 +1,11 @@
 // Configuration
 const CONFIG = {
-    GEMINI_API_KEY: 'AIzaSyCTXQs7wWnAsekXkYban3EJvuBPwm0qDRM'
+    GEMINI_API_KEY: 'AIzaSyCTXQs7wWnAsekXkYban3EJvuBPwm0qDRM',
+    API_BASE_URL: 'http://localhost:8000/api'
 };
+
+// Import learning path functions
+import { LearningPathAPI, LearningPathUI } from './learning_path.js';
 
 // Initialize page features
 document.addEventListener('DOMContentLoaded', () => {
@@ -18,6 +22,7 @@ function initializePage() {
     initializeSearch();
     initializeMobileMenu();
     initializePageTransitions();
+    initializeLearningPathSearch();
 
     // Initialize AI Assistant if we're on the AI assistant page
     if (currentPath.includes('ai-assistant')) {
