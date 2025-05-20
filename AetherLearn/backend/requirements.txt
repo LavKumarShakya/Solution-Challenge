@@ -1,0 +1,15 @@
+fastapi==0.104.1
+uvicorn==0.23.2
+motor==3.3.1
+python-dotenv==1.0.0
+google-cloud-aiplatform==1.37.0
+pydantic==2.4.2
+beautifulsoup4==4.12.2
+aiohttp==3.8.6
+python-multipart==0.0.6
+passlib==1.7.4
+python-jose==3.3.0
+bcrypt==4.0.1
+httpx==0.25.0
+pytest==7.4.3
+pytest-asyncio==0.21.1
