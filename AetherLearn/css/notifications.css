@@ -1,0 +1,92 @@
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 15px 20px;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  z-index: 10000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  transform: translateY(-20px);
+  animation: slideIn 0.3s forwards, fadeOut 0.5s 4s forwards;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.notification i {
+  font-size: 1.2rem;
+}
+
+.notification.success {
+  background-color: #4caf50;
+}
+
+.notification.error {
+  background-color: #f44336;
+}
+
+.notification.warning {
+  background-color: #ff9800;
+}
+
+.notification.info {
+  background-color: #2196f3;
+}
+
+@keyframes slideIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+/* Debug Panel (only for development) */
+.debug-panel {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #00ff00;
+  font-family: monospace;
+  padding: 15px;
+  border-radius: 8px;
+  z-index: 10000;
+  max-width: 400px;
+  max-height: 300px;
+  overflow: auto;
+  display: none;
+}
+
+.debug-panel.active {
+  display: block;
+}
+
+.debug-panel .log-entry {
+  margin-bottom: 5px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 5px;
+}
+
+.debug-panel .log-entry.error {
+  color: #ff3333;
+}
+
+.debug-panel .log-entry.warning {
+  color: #ffaa33;
+}
+
+.debug-panel .log-entry.info {
+  color: #33aaff;
+}
+
+/* Press Ctrl+D to toggle debug panel */

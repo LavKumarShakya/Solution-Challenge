@@ -1,0 +1,6 @@
+/* Base-64 encoded SVG for a default user avatar */
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <circle cx="100" cy="100" r="100" fill="#6C757D"/>
+  <circle cx="100" cy="85" r="40" fill="#E9ECEF"/>
+  <path d="M160 170c0-33.1-26.9-60-60-60s-60 26.9-60 60h120z" fill="#E9ECEF"/>
+</svg>

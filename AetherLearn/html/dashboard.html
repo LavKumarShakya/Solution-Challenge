@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="AetherLearn - Dashboard" />
     <title>Dashboard - AetherLearn</title>
-
     <!-- Core Styles -->
     <link rel="stylesheet" href="../css/styles.css" />
     <link rel="stylesheet" href="../css/navbar.css" />
+    <link rel="stylesheet" href="../css/notifications.css" />
 
     <!-- Page Specific Styles -->
     <link rel="stylesheet" href="../css/dashboard.css" />
@@ -30,13 +30,15 @@
           <div class="hero-content">
             <div class="profile-header">
               <img
-                src="https://ui-avatars.com/api/?name=PS&background=4169E1&color=fff"
+                id="user-photo"
+                src=""
                 alt="Profile Picture"
                 class="profile-avatar"
               />
               <div class="profile-info">
-                <h1 class="gradient-text">Priyam Sri.</h1>
+                <h1 class="gradient-text"><span id="user-name"></span></h1>
                 <p class="hero-subtitle">Visual Learner</p>
+                <p id="user-email" class="user-email"></p>
                 <p class="user-interests">
                   Interested in Web development, Python, AI/ML
                 </p>
@@ -50,6 +52,13 @@
               <button class="cta-button secondary-button">
                 <i class="fas fa-book"></i>
                 Generate Study Plan
+              </button>
+              <button
+                id="dashboard-logout-btn"
+                class="cta-button tertiary-button"
+              >
+                <i class="fas fa-sign-out-alt"></i>
+                Sign Out
               </button>
             </div>
           </div>
@@ -326,8 +335,11 @@
           <!-- Processing Step -->
           <div class="form-step" id="processingStep">
             <h3>Generating Your Personalized Study Plan</h3>
-            <p>Our AI is analyzing your profile, progress, and preferences to create a custom learning path that's optimized for your goals.</p>
-            
+            <p>
+              Our AI is analyzing your profile, progress, and preferences to
+              create a custom learning path that's optimized for your goals.
+            </p>
+
             <!-- Loading Animation -->
             <div class="loading-animation">
               <div class="loading-icon">
@@ -335,7 +347,7 @@
               </div>
               <div class="loading-text">Analyzing...</div>
             </div>
-            
+
             <!-- Processing Steps -->
             <div class="processing-steps">
               <div class="processing-step">
@@ -345,32 +357,41 @@
               </div>
               <div class="processing-step">
                 <i class="fas fa-brain"></i>
-                <span>Identifying knowledge gaps and optimal learning paths</span>
+                <span
+                  >Identifying knowledge gaps and optimal learning paths</span
+                >
                 <div class="step-status"><i class="fas fa-circle"></i></div>
               </div>
               <div class="processing-step">
                 <i class="fas fa-search"></i>
-                <span>Finding high-quality resources tailored to your learning style</span>
+                <span
+                  >Finding high-quality resources tailored to your learning
+                  style</span
+                >
                 <div class="step-status"><i class="fas fa-circle"></i></div>
               </div>
               <div class="processing-step">
                 <i class="fas fa-calendar-alt"></i>
-                <span>Creating a balanced schedule optimized for retention</span>
+                <span
+                  >Creating a balanced schedule optimized for retention</span
+                >
                 <div class="step-status"><i class="fas fa-circle"></i></div>
               </div>
             </div>
-            
+
             <!-- Progress Bar -->
             <div class="progress-container">
               <div class="progress-bar">
                 <div class="progress-fill"></div>
               </div>
-              <div class="progress-text">Processing: <span id="aiProgressText">0</span>%</div>
+              <div class="progress-text">
+                Processing: <span id="aiProgressText">0</span>%
+              </div>
             </div>
           </div>
-          
+
           <!-- Result Step -->
-          <div class="form-step" id="resultStep" style="display: none;">
+          <div class="form-step" id="resultStep" style="display: none">
             <div class="result-header">
               <div class="result-topic">
                 <h3>Your Personalized Study Plan for</h3>
@@ -391,7 +412,7 @@
                 </div>
               </div>
             </div>
-            
+
             <!-- Study Path Visualization -->
             <div class="plan-visual">
               <div class="study-path">
@@ -403,9 +424,9 @@
                     <div class="node-label">Week 1-2</div>
                   </div>
                 </div>
-                
+
                 <div class="path-connection"></div>
-                
+
                 <div class="path-week">
                   <div class="week-node">
                     <div class="node-icon">
@@ -414,9 +435,9 @@
                     <div class="node-label">Week 3-4</div>
                   </div>
                 </div>
-                
+
                 <div class="path-connection"></div>
-                
+
                 <div class="path-week">
                   <div class="week-node">
                     <div class="node-icon">
@@ -425,9 +446,9 @@
                     <div class="node-label">Week 5-6</div>
                   </div>
                 </div>
-                
+
                 <div class="path-connection"></div>
-                
+
                 <div class="path-week">
                   <div class="week-node">
                     <div class="node-icon">
@@ -438,7 +459,7 @@
                 </div>
               </div>
             </div>
-            
+
             <!-- Module breakdown -->
             <div class="study-modules">
               <h3>Learning Modules</h3>
@@ -459,7 +480,8 @@
                   </div>
                   <div class="module-content">
                     <div class="module-description">
-                      Master the core concepts of HTML, CSS, and JavaScript to build a solid foundation for web development.
+                      Master the core concepts of HTML, CSS, and JavaScript to
+                      build a solid foundation for web development.
                     </div>
                     <div class="module-resources">
                       <div class="resource-item">
@@ -468,7 +490,10 @@
                         </div>
                         <div class="resource-info">
                           <h5>Introduction to HTML5 & CSS3</h5>
-                          <p>Learn the latest HTML and CSS standards with practical examples</p>
+                          <p>
+                            Learn the latest HTML and CSS standards with
+                            practical examples
+                          </p>
                           <div class="resource-meta">
                             <span><i class="fas fa-clock"></i> 2.5 hours</span>
                             <span><i class="fas fa-star"></i> 4.8/5</span>
@@ -481,7 +506,10 @@
                         </div>
                         <div class="resource-info">
                           <h5>JavaScript Essentials</h5>
-                          <p>Core JavaScript concepts with interactive code challenges</p>
+                          <p>
+                            Core JavaScript concepts with interactive code
+                            challenges
+                          </p>
                           <div class="resource-meta">
                             <span><i class="fas fa-clock"></i> 3 hours</span>
                             <span><i class="fas fa-star"></i> 4.7/5</span>
@@ -491,7 +519,7 @@
                     </div>
                   </div>
                 </div>
-                
+
                 <!-- Module 2 -->
                 <div class="module-item">
                   <div class="module-header">
@@ -508,7 +536,8 @@
                   </div>
                   <div class="module-content">
                     <div class="module-description">
-                      Explore modern frontend frameworks like React to build dynamic user interfaces with reusable components.
+                      Explore modern frontend frameworks like React to build
+                      dynamic user interfaces with reusable components.
                     </div>
                     <div class="module-resources">
                       <div class="resource-item">
@@ -517,7 +546,10 @@
                         </div>
                         <div class="resource-info">
                           <h5>React Fundamentals</h5>
-                          <p>Build your first React application with hooks and modern patterns</p>
+                          <p>
+                            Build your first React application with hooks and
+                            modern patterns
+                          </p>
                           <div class="resource-meta">
                             <span><i class="fas fa-clock"></i> 4 hours</span>
                             <span><i class="fas fa-star"></i> 4.9/5</span>
@@ -530,7 +562,10 @@
                         </div>
                         <div class="resource-info">
                           <h5>Building a Todo App</h5>
-                          <p>Guided project to practice component architecture and state management</p>
+                          <p>
+                            Guided project to practice component architecture
+                            and state management
+                          </p>
                           <div class="resource-meta">
                             <span><i class="fas fa-clock"></i> 2.5 hours</span>
                             <span><i class="fas fa-star"></i> 4.6/5</span>
@@ -540,7 +575,7 @@
                     </div>
                   </div>
                 </div>
-                
+
                 <!-- Module 3 -->
                 <div class="module-item">
                   <div class="module-header">
@@ -557,7 +592,8 @@
                   </div>
                   <div class="module-content">
                     <div class="module-description">
-                      Learn how to connect your frontend applications to APIs and build simple backend services.
+                      Learn how to connect your frontend applications to APIs
+                      and build simple backend services.
                     </div>
                     <div class="module-resources">
                       <div class="resource-item">
@@ -566,7 +602,9 @@
                         </div>
                         <div class="resource-info">
                           <h5>RESTful API Design</h5>
-                          <p>Best practices for designing and consuming REST APIs</p>
+                          <p>
+                            Best practices for designing and consuming REST APIs
+                          </p>
                           <div class="resource-meta">
                             <span><i class="fas fa-clock"></i> 2 hours</span>
                             <span><i class="fas fa-star"></i> 4.7/5</span>
@@ -579,7 +617,10 @@
                         </div>
                         <div class="resource-info">
                           <h5>Node.js & Express Basics</h5>
-                          <p>Build a simple backend server with Node.js and Express</p>
+                          <p>
+                            Build a simple backend server with Node.js and
+                            Express
+                          </p>
                           <div class="resource-meta">
                             <span><i class="fas fa-clock"></i> 3.5 hours</span>
                             <span><i class="fas fa-star"></i> 4.8/5</span>
@@ -589,7 +630,7 @@
                     </div>
                   </div>
                 </div>
-                
+
                 <!-- Module 4 -->
                 <div class="module-item">
                   <div class="module-header">
@@ -606,7 +647,8 @@
                   </div>
                   <div class="module-content">
                     <div class="module-description">
-                      Apply everything you've learned to build a complete full-stack web application from scratch.
+                      Apply everything you've learned to build a complete
+                      full-stack web application from scratch.
                     </div>
                     <div class="module-resources">
                       <div class="resource-item">
@@ -615,7 +657,10 @@
                         </div>
                         <div class="resource-info">
                           <h5>Building a Social Media Dashboard</h5>
-                          <p>Guided project to create a fully functional web application</p>
+                          <p>
+                            Guided project to create a fully functional web
+                            application
+                          </p>
                           <div class="resource-meta">
                             <span><i class="fas fa-clock"></i> 6 hours</span>
                             <span><i class="fas fa-star"></i> 4.9/5</span>
@@ -628,7 +673,10 @@
                         </div>
                         <div class="resource-info">
                           <h5>Deployment & Best Practices</h5>
-                          <p>Learn how to deploy your application and follow industry standards</p>
+                          <p>
+                            Learn how to deploy your application and follow
+                            industry standards
+                          </p>
                           <div class="resource-meta">
                             <span><i class="fas fa-clock"></i> 2 hours</span>
                             <span><i class="fas fa-star"></i> 4.7/5</span>
@@ -640,7 +688,7 @@
                 </div>
               </div>
             </div>
-            
+
             <!-- Action Buttons -->
             <div class="plan-actions">
               <button class="cta-button primary-button">
@@ -656,9 +704,11 @@
                 <i class="fas fa-download"></i> Export PDF
               </button>
             </div>
-            
+
             <div class="close-result">
-              <button class="close-result-btn" id="closeResultBtn">Back to Dashboard</button>
+              <button class="close-result-btn" id="closeResultBtn">
+                Back to Dashboard
+              </button>
             </div>
           </div>
         </div>
@@ -707,12 +757,12 @@
         <p>&copy; 2025 AetherLearn. All rights reserved.</p>
       </div>
     </footer>
-
     <!-- External Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <!-- App Scripts -->
-    <script src="../js/navbar.js"></script>
+    <script type="module" src="../js/navbar.js"></script>
+    <script type="module" src="../js/dashboard.js"></script>
     <script>
       // Initialize Activity Chart with enhanced styling
       const ctx = document.getElementById("activityChart").getContext("2d");
@@ -812,5 +862,6 @@
       });
     </script>
     <script src="../js/script.js"></script>
+    <script type="module" src="../js/dashboard.js"></script>
   </body>
 </html>

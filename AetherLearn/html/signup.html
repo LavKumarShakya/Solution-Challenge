@@ -1,192 +1,254 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="AetherLearn - Sign Up">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="AetherLearn - Sign Up" />
     <title>Sign Up - AetherLearn</title>
-    
-    <!-- Core Styles -->
-    <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="../css/navbar.css">
-    
-    <!-- Page Specific Styles -->
-    <link rel="stylesheet" href="../css/signup.css">
-    
-    <!-- External Resources -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script type="module" src="../js/signup.js" defer></script>
-</head>
-<body class="auth-page">
 
+    <!-- Core Styles -->
+    <link rel="stylesheet" href="../css/styles.css" />
+    <link rel="stylesheet" href="../css/navbar.css" />
+
+    <!-- Page Specific Styles -->
+    <link rel="stylesheet" href="../css/signup.css" />
+
+    <!-- External Resources -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script type="module" src="../js/signup.js" defer></script>
+  </head>
+  <body class="auth-page">
     <!-- Navbar Placeholder -->
     <div id="navbar-placeholder"></div>
 
     <main class="auth-container">
-        <div class="auth-card">
-            <h2>Create Your Account</h2>
-            <form id="signup-form" class="auth-form active">
-                <div class="form-group">
-                    <label for="signup-name">Full Name</label>
-                    <div class="input-group">
-                        <i class="fas fa-user"></i>
-                        <input type="text" id="name" placeholder="Enter your full name" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <div class="input-group">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" id="email" placeholder="Enter your email" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <div class="input-group">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="signup-password" placeholder="Create a password" required>
-                        <button type="button" class="toggle-password">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                    <div class="password-strength">
-                        <div class="strength-bar">
-                            <div class="strength-level" style="width: 0%"></div>
-                        </div>
-                        <span class="strength-text">Password strength</span>
-                        <div class="input-group">
-                            <i class="fas fa-lock"></i>
-                            <input type="password" id="confirm-password" placeholder="Confirm password" required>
-                            <button type="button" class="toggle-password">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="interests">Areas of Interest</label>
-                    <div class="interest-tags">
-                        <label class="interest-tag">
-                            <input type="checkbox" name="interests" id="interest" value="technology">
-                            <span>Technology</span>
-                        </label>
-                        <label class="interest-tag">
-                            <input type="checkbox" name="interests" id="interest" value="design">
-                            <span>Design</span>
-                        </label>
-                        <label class="interest-tag">
-                            <input type="checkbox" name="interests" id="interest" value="business">
-                            <span>Business</span>
-                        </label>
-                        <label class="interest-tag">
-                            <input type="checkbox" name="interests" id="interest" value="science">
-                            <span>Science</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="form-options">
-                    <label class="terms-check">
-                        <input type="checkbox" required>
-                        <span>I agree to the <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a></span>
-                    </label>
-                </div>
-
-                <button id="submit" type="submit" class="cta-button">Create Account</button>
-
-                <div class="social-auth">
-                    <p>Or sign up with</p>
-                    <div class="social-buttons">
-                        <button type="button" class="social-btn google" id="google-signup">
-                            <i class="fab fa-google"></i>
-                            <span>Google</span>
-                        </button>
-                        <button type="button" class="social-btn github" id="github-signup">
-                            <i class="fab fa-github"></i>
-                            <span>GitHub</span>
-                        </button>
-                    </div>
-                </div>
-
-                <p class="auth-switch">Already have an account? <a href="login.html">Log In</a></p>
-            </form>
-        </div>
-
-        <div class="auth-features">
-            <h2>Why Join AetherLearn?</h2>
-            <div class="features-grid">
-                <div class="feature">
-                    <i class="fas fa-robot"></i>
-                    <h3>AI-Powered Learning</h3>
-                    <p>Get personalized learning paths created by our advanced AI</p>
-                </div>
-                <div class="feature">
-                    <i class="fas fa-infinity"></i>
-                    <h3>Free Forever</h3>
-                    <p>Access quality education resources at no cost</p>
-                </div>
-                <div class="feature">
-                    <i class="fas fa-users"></i>
-                    <h3>Community Support</h3>
-                    <p>Learn together with peers who share your interests</p>
-                </div>
-                <div class="feature">
-                    <i class="fas fa-certificate"></i>
-                    <h3>Track Progress</h3>
-                    <p>Monitor your learning journey with detailed analytics</p>
-                </div>
+      <div class="auth-card">
+        <h2>Create Your Account</h2>
+        <form id="signup-form" class="auth-form active">
+          <div class="form-group">
+            <label for="signup-name">Full Name</label>
+            <div class="input-group">
+              <i class="fas fa-user"></i>
+              <input
+                type="text"
+                id="name"
+                placeholder="Enter your full name"
+                required
+              />
             </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email</label>
+            <div class="input-group">
+              <i class="fas fa-envelope"></i>
+              <input
+                type="email"
+                id="email"
+                placeholder="Enter your email"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-group">
+              <i class="fas fa-lock"></i>
+              <input
+                type="password"
+                id="signup-password"
+                placeholder="Create a password"
+                required
+              />
+              <button type="button" class="toggle-password">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+            <div class="password-strength">
+              <div class="strength-bar">
+                <div class="strength-level" style="width: 0%"></div>
+              </div>
+              <span class="strength-text">Password strength</span>
+              <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input
+                  type="password"
+                  id="confirm-password"
+                  placeholder="Confirm password"
+                  required
+                />
+                <button type="button" class="toggle-password">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="interests">Areas of Interest</label>
+            <div class="interest-tags">
+              <label class="interest-tag">
+                <input
+                  type="checkbox"
+                  name="interests"
+                  id="interest"
+                  value="technology"
+                />
+                <span>Technology</span>
+              </label>
+              <label class="interest-tag">
+                <input
+                  type="checkbox"
+                  name="interests"
+                  id="interest"
+                  value="design"
+                />
+                <span>Design</span>
+              </label>
+              <label class="interest-tag">
+                <input
+                  type="checkbox"
+                  name="interests"
+                  id="interest"
+                  value="business"
+                />
+                <span>Business</span>
+              </label>
+              <label class="interest-tag">
+                <input
+                  type="checkbox"
+                  name="interests"
+                  id="interest"
+                  value="science"
+                />
+                <span>Science</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-options">
+            <label class="terms-check">
+              <input type="checkbox" required />
+              <span
+                >I agree to the <a href="terms.html">Terms of Service</a> and
+                <a href="privacy.html">Privacy Policy</a></span
+              >
+            </label>
+          </div>
+
+          <button id="submit" type="submit" class="cta-button">
+            Create Account
+          </button>
+
+          <div class="social-auth">
+            <p>Or sign up with</p>
+            <div class="social-buttons">
+              <button
+                type="button"
+                class="social-btn google"
+                id="google-signup"
+              >
+                <i class="fab fa-google"></i>
+                <span>Google</span>
+              </button>
+              <button
+                type="button"
+                class="social-btn github"
+                id="github-signup"
+              >
+                <i class="fab fa-github"></i>
+                <span>GitHub</span>
+              </button>
+            </div>
+          </div>
+
+          <p class="auth-switch">
+            Already have an account? <a href="login.html">Log In</a>
+          </p>
+        </form>
+      </div>
+
+      <div class="auth-features">
+        <h2>Why Join AetherLearn?</h2>
+        <div class="features-grid">
+          <div class="feature">
+            <i class="fas fa-robot"></i>
+            <h3>AI-Powered Learning</h3>
+            <p>Get personalized learning paths created by our advanced AI</p>
+          </div>
+          <div class="feature">
+            <i class="fas fa-infinity"></i>
+            <h3>Free Forever</h3>
+            <p>Access quality education resources at no cost</p>
+          </div>
+          <div class="feature">
+            <i class="fas fa-users"></i>
+            <h3>Community Support</h3>
+            <p>Learn together with peers who share your interests</p>
+          </div>
+          <div class="feature">
+            <i class="fas fa-certificate"></i>
+            <h3>Track Progress</h3>
+            <p>Monitor your learning journey with detailed analytics</p>
+          </div>
         </div>
+      </div>
     </main>
 
     <!-- Footer -->
     <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>AetherLearn</h3>
-                <p>Transforming education through AI-powered personalized learning paths and free resources.</p>
-                <div class="social-icons">
-                    <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
-                    <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
-                    <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                    <a href="#" title="Discord"><i class="fab fa-discord"></i></a>
-                </div>
-            </div>
-
-            <div class="footer-section">
-                <h3>Quick Links</h3>
-                <a href="courses.html">Courses</a>
-                <a href="ai-assistant.html">AI Assistant</a>
-                <a href="community.html">Community</a>
-                <a href="about.html">About Us</a>
-            </div>
-
-            <div class="footer-section">
-                <h3>Resources</h3>
-                <a href="blog.html">Blog</a>
-                <a href="faq.html">FAQs</a>
-                <a href="support.html">Support</a>
-                <a href="privacy.html">Privacy Policy</a>
-            </div>
-
-            <div class="footer-section">
-                <h3>Contact Us</h3>
-                <a href="mailto:support@aetherlearn.com">support@aetherlearn.com</a>
-                <a href="tel:+1234567890">+1 (234) 567-890</a>
-            </div>
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>AetherLearn</h3>
+          <p>
+            Transforming education through AI-powered personalized learning
+            paths and free resources.
+          </p>
+          <div class="social-icons">
+            <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
+            <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+            <a href="#" title="Discord"><i class="fab fa-discord"></i></a>
+          </div>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 AetherLearn. All rights reserved.</p>
+
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <a href="courses.html">Courses</a>
+          <a href="ai-assistant.html">AI Assistant</a>
+          <a href="community.html">Community</a>
+          <a href="about.html">About Us</a>
         </div>
+
+        <div class="footer-section">
+          <h3>Resources</h3>
+          <a href="blog.html">Blog</a>
+          <a href="faq.html">FAQs</a>
+          <a href="support.html">Support</a>
+          <a href="privacy.html">Privacy Policy</a>
+        </div>
+
+        <div class="footer-section">
+          <h3>Contact Us</h3>
+          <a href="mailto:support@aetherlearn.com">support@aetherlearn.com</a>
+          <a href="tel:+1234567890">+1 (234) 567-890</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 AetherLearn. All rights reserved.</p>
+      </div>
     </footer>
 
     <!-- Scripts -->
-    <script src="../js/navbar.js"></script>
+    <script type="module" src="../js/navbar.js"></script>
     <script src="../js/auth.js"></script>
-
-</body>
+  </body>
 </html>
