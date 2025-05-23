@@ -1,6 +1,7 @@
 /**
  * Learning Path API Integration
  * Handles communication with the backend for creating and managing learning paths
+ * Updated for the Vertex AI Search implementation
  */
 
 // API URL Configuration
@@ -9,7 +10,7 @@ const API_BASE_URL = 'http://localhost:8000/api';
 // Learning Path API Functions
 class LearningPathAPI {
     /**
-     * Initiate a search for creating a learning path
+     * Initiate a search for creating a learning path using Vertex AI Search
      * @param {string} query - The search query
      * @param {Object} preferences - User preferences for the learning path
      * @returns {Promise<Object>} - Response with search ID
@@ -166,8 +167,8 @@ class LearningPathUI {
             document.getElementById('resourceDiscoveryStage').style.display = 'none';
             document.getElementById('learningPathResultsStage').style.display = 'none';
             
-            // Update the query display
-            document.getElementById('searchQueryDisplay').textContent = query;
+            // Initialize search process UI
+            this.initializeSearchProcessUI(query);
             
             // Initiate the search
             const preferences = this.collectUserPreferences();
@@ -178,6 +179,59 @@ class LearningPathUI {
         } catch (error) {
             console.error('Error starting search process:', error);
             this.showErrorMessage('Failed to start search process. Please try again.');
+        }
+    }
+    
+    /**
+     * Initialize search process UI with query and reset visuals
+     * @param {string} query - The search query
+     */
+    static initializeSearchProcessUI(query) {
+        // Set query text in all relevant places
+        const queryTextElements = document.querySelectorAll('#searchQueryText, #resultQueryText');
+        queryTextElements.forEach(element => {
+            if (element) element.textContent = query;
+        });
+        
+        // Reset progress bars
+        const progressBars = document.querySelectorAll('.progress-fill');
+        progressBars.forEach(bar => {
+            if (bar) bar.style.width = '0%';
+        });
+        
+        // Reset progress text
+        const progressTexts = document.querySelectorAll('#analysisProgress, #discoveryProgress');
+        progressTexts.forEach(text => {
+            if (text) text.textContent = '0';
+        });
+        
+        // Reset process steps
+        const processSteps = document.querySelectorAll('.process-step');
+        processSteps.forEach((step, index) => {
+            const statusIcon = step.querySelector('.step-status i');
+            if (index === 0) {
+                step.classList.add('active');
+                if (statusIcon) statusIcon.className = 'fas fa-spinner fa-spin';
+            } else {
+                step.classList.remove('active', 'completed');
+                if (statusIcon) statusIcon.className = 'fas fa-circle';
+            }
+        });
+        
+        // Reset discovery visualization
+        const resourceDots = document.getElementById('resourceDots');
+        if (resourceDots) resourceDots.innerHTML = '';
+        
+        // Reset discovery stats
+        const statElements = document.querySelectorAll('#resourcesFound, #sourcesScanned, #avgQualityScore');
+        statElements.forEach(element => {
+            if (element) element.textContent = '0';
+        });
+        
+        // Reset discovery feed
+        const discoveryFeed = document.getElementById('discoveryFeed');
+        if (discoveryFeed) {
+            discoveryFeed.innerHTML = '<div class="discovery-message">Preparing Vertex AI search engines...</div>';
         }
     }
     
@@ -216,9 +270,8 @@ class LearningPathUI {
             this.showErrorMessage('Error monitoring search progress. Please try again.');
         }
     }
-    
-    /**
-     * Update the search process UI based on status
+      /**
+     * Update the search process UI based on status from Vertex AI Search
      * @param {Object} status - The search status object
      */
     static updateSearchProcessUI(status) {
@@ -231,11 +284,22 @@ class LearningPathUI {
             progressText.textContent = `${status.progress}%`;
         }
         
+        // Update status message if provided
+        if (status.message) {
+            const statusElement = document.getElementById('statusMessage');
+            if (statusElement) {
+                statusElement.textContent = status.message;
+            }
+        }
+        
         // Update process steps based on status
         switch (status.status) {
             case 'INITIATED':
                 this.updateProcessStep('step1', 'active');
+                document.getElementById('searchProcessingStage').style.display = 'block';
+                document.getElementById('resourceDiscoveryStage').style.display = 'none';
                 break;
+                
             case 'DISCOVERING':
                 this.updateProcessStep('step1', 'completed');
                 this.updateProcessStep('step2', 'active');
@@ -243,8 +307,21 @@ class LearningPathUI {
                 // Show the resource discovery stage
                 document.getElementById('searchProcessingStage').style.display = 'none';
                 document.getElementById('resourceDiscoveryStage').style.display = 'block';
+                
+                // Update discovery stage progress
+                const discoveryProgressBar = document.querySelector('.discovery-progress-fill');
+                if (discoveryProgressBar) {
+                    discoveryProgressBar.style.width = `${status.progress * 2}%`; // Scale for this stage
+                }
+                
+                // Show dynamic message about discovery process
+                const discoveryStatusMsg = document.getElementById('discoveryStatusMessage');
+                if (discoveryStatusMsg) {
+                    discoveryStatusMsg.textContent = status.message || 'Discovering educational resources with Vertex AI Search...';
+                }
                 break;
-            case 'EXTRACTING':
+                
+            case 'PROCESSING':
                 this.updateProcessStep('step1', 'completed');
                 this.updateProcessStep('step2', 'completed');
                 this.updateProcessStep('step3', 'active');
@@ -303,10 +380,9 @@ class LearningPathUI {
     /**
      * Show learning path results
      * @param {string} learningPathId - The learning path ID
-     */
-    static async showLearningPathResults(learningPathId) {
+     */    static async showLearningPathResults(learningPathId) {
         try {
-            // Get the learning path data
+            // Get the learning path data 
             const learningPath = await LearningPathAPI.getLearningPath(learningPathId);
             
             // Hide the processing stages
@@ -314,7 +390,22 @@ class LearningPathUI {
             document.getElementById('resourceDiscoveryStage').style.display = 'none';
             
             // Show the results stage
-            document.getElementById('learningPathResultsStage').style.display = 'block';
+            const resultsStage = document.getElementById('learningPathResultsStage');
+            resultsStage.style.display = 'block';
+            
+            // Show a success message
+            const successMsg = document.createElement('div');
+            successMsg.className = 'success-message';
+            successMsg.innerHTML = `<i class="fas fa-check-circle"></i> Your learning path has been created with Vertex AI!`;
+            
+            // If there's an existing success message, remove it
+            const existingMsg = resultsStage.querySelector('.success-message');
+            if (existingMsg) {
+                existingMsg.remove();
+            }
+            
+            // Insert the success message at the top of the results stage
+            resultsStage.insertBefore(successMsg, resultsStage.firstChild);
             
             // Render the learning path
             this.renderLearningPath(learningPath);
@@ -323,9 +414,8 @@ class LearningPathUI {
             this.showErrorMessage('Failed to load learning path results. Please try again.');
         }
     }
-    
-    /**
-     * Render a learning path
+      /**
+     * Render a learning path generated by Vertex AI Search and Generation
      * @param {Object} learningPath - The learning path object
      */
     static renderLearningPath(learningPath) {
@@ -337,6 +427,15 @@ class LearningPathUI {
         document.getElementById('estimatedTime').textContent = learningPath.estimated_hours;
         document.getElementById('difficultyLevel').textContent = learningPath.difficulty;
         
+        // Add AI generation info
+        const resultHeader = document.querySelector('.learning-path-header');
+        if (resultHeader) {
+            const aiInfoBadge = document.createElement('div');
+            aiInfoBadge.className = 'ai-generation-badge';
+            aiInfoBadge.innerHTML = `<i class="fas fa-robot"></i> Generated by Vertex AI`;
+            resultHeader.appendChild(aiInfoBadge);
+        }
+        
         // Render the modules
         const modulesContainer = document.querySelector('.modules-container');
         if (modulesContainer) {
@@ -345,7 +444,25 @@ class LearningPathUI {
             learningPath.modules.forEach(module => {
                 let resourcesHTML = '';
                 
-                module.resources.forEach(resource => {
+                module.resources.forEach(resource => {                    // Prepare learning styles badges if available
+                    let learningStylesHTML = '';
+                    if (resource.learning_styles && resource.learning_styles.length > 0) {
+                        learningStylesHTML = `
+                            <div class="learning-styles">
+                                ${resource.learning_styles.map(style => 
+                                    `<span class="learning-style-badge ${style}">
+                                        <i class="${this.getLearningStyleIcon(style)}"></i> ${this.capitalizeFirstLetter(style)}
+                                    </span>`
+                                ).join('')}
+                            </div>
+                        `;
+                    }
+                    
+                    // Calculate quality score stars
+                    const qualityScore = resource.quality_score || 0.5;
+                    const starCount = Math.round(qualityScore * 5);
+                    const starsHTML = this.generateStarRating(starCount);
+                    
                     resourcesHTML += `
                         <div class="path-resource">
                             <div class="resource-icon">
@@ -358,7 +475,9 @@ class LearningPathUI {
                                     <span><i class="fas fa-clock"></i> ${resource.estimated_time_minutes} min</span>
                                     <span><i class="fas fa-signal"></i> ${resource.difficulty}</span>
                                     <span><i class="fas fa-globe"></i> ${resource.source}</span>
+                                    <span class="quality-score">${starsHTML}</span>
                                 </div>
+                                ${learningStylesHTML}
                                 <a href="${resource.url}" target="_blank" class="resource-link">
                                     <i class="fas fa-external-link-alt"></i> Open Resource
                                 </a>
@@ -403,13 +522,14 @@ class LearningPathUI {
         });
         return count;
     }
-    
-    /**
-     * Get icon class for resource type
+      /**
+     * Get icon class for resource type from Vertex AI Search
      * @param {string} resourceType - The resource type
      * @returns {string} - Font Awesome icon class
      */
     static getResourceIcon(resourceType) {
+        if (!resourceType) return 'fas fa-file';
+        
         switch (resourceType.toLowerCase()) {
             case 'video':
                 return 'fas fa-video';
@@ -419,9 +539,80 @@ class LearningPathUI {
                 return 'fas fa-graduation-cap';
             case 'interactive':
                 return 'fas fa-laptop-code';
+            case 'documentation':
+                return 'fas fa-book';
+            case 'repository':
+            case 'github':
+                return 'fab fa-github';
+            case 'academic':
+                return 'fas fa-university';
+            case 'tutorial':
+                return 'fas fa-chalkboard-teacher';
+            case 'podcast':
+                return 'fas fa-podcast';
+            case 'presentation':
+                return 'fas fa-presentation';
+            case 'ebook':
+                return 'fas fa-book-reader';
             default:
                 return 'fas fa-file';
         }
+    }
+    
+    /**
+     * Get icon for learning style
+     * @param {string} style - Learning style name
+     * @returns {string} - Font Awesome icon class
+     */
+    static getLearningStyleIcon(style) {
+        switch (style.toLowerCase()) {
+            case 'visual':
+                return 'fas fa-eye';
+            case 'auditory':
+                return 'fas fa-headphones';
+            case 'reading':
+                return 'fas fa-book-open';
+            case 'kinesthetic':
+                return 'fas fa-hand-paper';
+            case 'practical':
+                return 'fas fa-tools';
+            case 'analytical':
+                return 'fas fa-chart-line';
+            case 'structured':
+                return 'fas fa-list-ol';
+            default:
+                return 'fas fa-graduation-cap';
+        }
+    }
+    
+    /**
+     * Generate star rating HTML based on score
+     * @param {number} starCount - Number of stars (0-5)
+     * @returns {string} - HTML for star rating
+     */
+    static generateStarRating(starCount) {
+        let stars = '';
+        // Full stars
+        for (let i = 0; i < Math.min(starCount, 5); i++) {
+            stars += '<i class="fas fa-star"></i>';
+        }
+        
+        // Empty stars
+        for (let i = starCount; i < 5; i++) {
+            stars += '<i class="far fa-star"></i>';
+        }
+        
+        return stars;
+    }
+    
+    /**
+     * Capitalize first letter of a string
+     * @param {string} str - Input string
+     * @returns {string} - String with first letter capitalized
+     */
+    static capitalizeFirstLetter(str) {
+        if (!str) return '';
+        return str.charAt(0).toUpperCase() + str.slice(1);
     }
     
     /**
@@ -543,9 +734,8 @@ class LearningPathUI {
             this.showErrorMessage('Failed to customize learning path. Please try again.');
         }
     }
-    
-    /**
-     * Collect user preferences from the UI
+      /**
+     * Collect user preferences from the UI for Vertex AI Search and generation
      * @returns {Object} - User preferences
      */
     static collectUserPreferences() {
@@ -557,13 +747,22 @@ class LearningPathUI {
             preferences.difficulty = difficultySelect.value;
         }
         
-        // Get learning format preferences
-        const videoCheckbox = document.querySelector('input[value="video"]');
-        const interactiveCheckbox = document.querySelector('input[value="interactive"]');
+        // Get learning format preferences - expanded for more content types
+        const formatCheckboxes = {
+            video: document.querySelector('input[value="video"]'),
+            article: document.querySelector('input[value="article"]'), 
+            interactive: document.querySelector('input[value="interactive"]'),
+            course: document.querySelector('input[value="course"]'),
+            academic: document.querySelector('input[value="academic"]'),
+            documentation: document.querySelector('input[value="documentation"]')
+        };
         
         preferences.formats = [];
-        if (videoCheckbox && videoCheckbox.checked) preferences.formats.push('video');
-        if (interactiveCheckbox && interactiveCheckbox.checked) preferences.formats.push('interactive');
+        for (const [format, checkbox] of Object.entries(formatCheckboxes)) {
+            if (checkbox && checkbox.checked) {
+                preferences.formats.push(format);
+            }
+        }
         
         // Get focus area
         const focusArea = document.getElementById('focusArea');
@@ -575,6 +774,22 @@ class LearningPathUI {
         const timeCommitment = document.getElementById('timeCommitment');
         if (timeCommitment) {
             preferences.time_commitment = timeCommitment.value;
+        }
+        
+        // Get learning style preferences
+        const learningStyles = [];
+        const visualCheckbox = document.querySelector('input[value="visual"]');
+        const auditoryCheckbox = document.querySelector('input[value="auditory"]');
+        const readingCheckbox = document.querySelector('input[value="reading"]');
+        const kinestheticCheckbox = document.querySelector('input[value="kinesthetic"]');
+        
+        if (visualCheckbox && visualCheckbox.checked) learningStyles.push('visual');
+        if (auditoryCheckbox && auditoryCheckbox.checked) learningStyles.push('auditory');
+        if (readingCheckbox && readingCheckbox.checked) learningStyles.push('reading');
+        if (kinestheticCheckbox && kinestheticCheckbox.checked) learningStyles.push('kinesthetic');
+        
+        if (learningStyles.length > 0) {
+            preferences.learning_styles = learningStyles;
         }
         
         return preferences;

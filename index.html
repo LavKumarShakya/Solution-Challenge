@@ -10,9 +10,445 @@
     <link rel="stylesheet" href="AetherLearn/css/styles.css">
     <link rel="stylesheet" href="AetherLearn/css/navbar.css">
     
+    <!-- Learning Path Styles -->
+    <style>
+        /* Learning Path UI Styles for Vertex AI Integration */
+
+        /* Search Suggestions Styles */
+        .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            max-height: 200px;
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--input-border);
+            border-top: none;
+            border-radius: 0 0 var(--hero-radius-md) var(--hero-radius-md);
+            z-index: 100;
+            display: none;
+            overflow-y: auto;
+        }
+
+        .suggestion-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color var(--hero-transition-fast);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .suggestion-item:hover {
+            background-color: var(--bg-secondary);
+            color: var(--accent-hover);
+        }
+
+        /* Learning Style Badges */
+        .learning-styles {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .learning-style-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 8px;
+            border-radius: 14px;
+            font-size: 0.75rem;
+            color: var(--text-primary);
+            background-color: var(--bg-tertiary);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            animation: badge-fade-in 0.3s ease forwards;
+        }
+
+        .learning-style-badge i {
+            margin-right: 4px;
+            font-size: 0.8rem;
+        }
+
+        .learning-style-badge.visual {
+            background-color: rgba(65, 105, 225, 0.3);
+            border: 1px solid rgba(65, 105, 225, 0.6);
+        }
+
+        .learning-style-badge.auditory {
+            background-color: rgba(138, 43, 226, 0.3);
+            border: 1px solid rgba(138, 43, 226, 0.6);
+        }
+
+        .learning-style-badge.reading {
+            background-color: rgba(46, 139, 87, 0.3);
+            border: 1px solid rgba(46, 139, 87, 0.6);
+        }
+
+        .learning-style-badge.kinesthetic {
+            background-color: rgba(255, 140, 0, 0.3);
+            border: 1px solid rgba(255, 140, 0, 0.6);
+        }
+
+        /* Quality Rating Stars */
+        .quality-score {
+            color: #FFD700;
+            font-size: 0.85rem;
+        }
+
+        .quality-score i {
+            margin-right: 2px;
+        }
+
+        .far.fa-star {
+            color: var(--text-muted);
+        }
+
+        /* Resource Discovery Feed */
+        .discovery-feed {
+            max-height: 200px;
+            overflow-y: auto;
+            border-radius: var(--hero-radius-sm);
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        .feed-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            animation: feed-item-appear 0.3s ease forwards;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .feed-icon {
+            margin-right: 10px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--accent-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+        }
+
+        .feed-content {
+            flex: 1;
+        }
+
+        .feed-title {
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 250px;
+        }
+
+        .feed-source {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Resource Dots in Radar */
+        .resource-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-secondary);
+            border-radius: 50%;
+            transform: scale(0);
+            opacity: 0;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+        }
+
+        .resource-dot.found {
+            transform: scale(1);
+            opacity: 1;
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Vertex AI Success Message */
+        .vertex-success-message {
+            background-color: rgba(46, 139, 87, 0.2);
+            border-left: 3px solid #2E8B57;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            border-radius: var(--hero-radius-sm);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .vertex-success-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .vertex-success-message i {
+            color: #2E8B57;
+            font-size: 1.2rem;
+            margin-right: 10px;
+        }
+
+        .vertex-success-message span {
+            color: var(--text-primary);
+        }
+
+        /* AI Generation Badge */
+        .ai-generation-badge {
+            display: flex;
+            align-items: center;
+            padding: 5px 10px;
+            background-color: rgba(65, 105, 225, 0.2);
+            border-radius: var(--hero-radius-md);
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+
+        .ai-generation-badge i {
+            margin-right: 5px;
+            color: var(--accent-primary);
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            overflow: auto;
+        }
+        
+        .modal-content {
+            position: relative;
+            background-color: var(--bg-secondary);
+            margin: 10% auto;
+            width: 90%;
+            max-width: 600px;
+            border-radius: var(--hero-radius-md);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            animation: modal-appear 0.3s ease forwards;
+        }
+        
+        .modal-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--input-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            color: var(--text-primary);
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        
+        .close-modal {
+            color: var(--text-muted);
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: color var(--hero-transition-fast);
+        }
+        
+        .close-modal:hover {
+            color: var(--text-primary);
+        }
+        
+        .modal-body {
+            padding: 20px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        
+        /* Preferences Form Styles */
+        .preferences-form {
+            padding: 15px 0;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .form-group select,
+        .form-group input[type="text"],
+        .form-group input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--input-border);
+            border-radius: var(--hero-radius-sm);
+            color: var(--text-primary);
+        }
+        
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+        
+        .checkbox-label input {
+            margin-right: 6px;
+        }
+        
+        /* Quick Search Options */
+        .search-options {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .search-options .option {
+            display: flex;
+            align-items: center;
+            color: var(--text-primary);
+            user-select: none;
+        }
+        
+        .search-options .option input {
+            margin-right: 6px;
+        }
+        
+        .search-options .option label {
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        /* Hero Search Button Animation */
+        .hero-search-button {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .hero-search-button i {
+            margin-right: 6px;
+            transition: transform 0.3s ease;
+        }
+        
+        .hero-search-button:hover i {
+            transform: scale(1.2);
+        }
+        
+        .hero-search-button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 100%;
+            transform: scale(0);
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+        
+        .hero-search-button:hover::after {
+            transform: scale(20);
+            opacity: 0;
+        }
+        
+        .form-buttons {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+        
+        .form-button {
+            padding: 10px 20px;
+            background-color: var(--accent-primary);
+            color: white;
+            border: none;
+            border-radius: var(--hero-radius-sm);
+            cursor: pointer;
+            transition: background-color var(--hero-transition-fast);
+        }
+        
+        .form-button:hover {
+            background-color: var(--accent-hover);
+        }
+        
+        @keyframes modal-appear {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Animations */
+        @keyframes badge-fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes feed-item-appear {
+            0% {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(64, 224, 208, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(64, 224, 208, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(64, 224, 208, 0);
+            }
+        }
+    </style>
+    
     <!-- External Resources -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Scripts -->
+    <script src="AetherLearn/js/learning_path.js" defer></script>
+    <script src="AetherLearn/js/learning_path_search.js" defer></script>
 </head>
 <body>
     <!-- Navbar Placeholder -->
@@ -24,8 +460,7 @@
             <div class="hero-content">
                 <h1>Transform Your Learning Journey with AI</h1>
                 <p>Our AI creates personalized learning paths using the best free resources across the internet, tailored just for you.</p>
-                
-                <div class="search-and-cta">
+                  <div class="search-and-cta">
                     <div class="ai-search-container">
                         <div style="position: relative;">
                             <input type="text" class="hero-search-input" id="searchInput" placeholder="What do you want to learn today? (e.g., 'Machine Learning', 'Web Development')">
@@ -33,7 +468,23 @@
                         </div>
                     </div>
                     <div class="cta-group">
-                        <button class="hero-search-button clean-button">Create Learning Path</button>
+                        <button class="hero-search-button clean-button">
+                            <i class="fas fa-brain"></i> Create Learning Path with Vertex AI
+                        </button>
+                    </div>
+                </div>
+                <div class="search-options">
+                    <div class="option">
+                        <input type="checkbox" id="visualLearner" checked>
+                        <label for="visualLearner">Visual Learner</label>
+                    </div>
+                    <div class="option">
+                        <input type="checkbox" id="practicalFocus">
+                        <label for="practicalFocus">Practical Focus</label>
+                    </div>
+                    <div class="option">
+                        <input type="checkbox" id="includeExercises" checked>
+                        <label for="includeExercises">Include Exercises</label>
                     </div>
                 </div>
                 <a href="AetherLearn/html/ai-assistant.html" class="ai-assistant-btn">
@@ -682,20 +1133,47 @@
         </div>
     </footer>    <!-- Scripts -->
     <script src="AetherLearn/js/navbar.js"></script>
-    <script type="module" src="AetherLearn/js/learning_path.js"></script>
-    <script type="module" src="AetherLearn/js/learning_path_search.js"></script>
     <script type="module" src="AetherLearn/js/script.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init({
-            duration: 600,
-            easing: 'ease-out',
-            once: true,
-            offset: 50,
-            delay: 50,
-            mirror: false,
-            anchorPlacement: 'top-bottom',
-            disable: window.location.pathname.includes('courses.html') // Disable AOS on courses page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize AOS animations
+            AOS.init({
+                duration: 800,
+                easing: 'ease-in-out',
+                once: true
+            });
+            
+            // Modal functionality
+            const modal = document.getElementById('customizationModal');
+            const modalCloseBtn = document.querySelector('.close-modal');
+            
+            if (modal && modalCloseBtn) {
+                modalCloseBtn.addEventListener('click', () => {
+                    modal.style.display = 'none';
+                });
+                
+                window.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.style.display = 'none';
+                    }
+                });
+            }
+            
+            // Quick search options in hero section
+            const searchOptions = document.querySelectorAll('.search-options .option input');
+            searchOptions.forEach(option => {
+                option.addEventListener('change', () => {
+                    // Store preferences in localStorage for use in learning path generation
+                    localStorage.setItem(option.id, option.checked);
+                });
+                
+                // Initialize from localStorage if available
+                const savedValue = localStorage.getItem(option.id);
+                if (savedValue !== null) {
+                    option.checked = savedValue === 'true';
+                }
+            });
         });
     </script>
 </body>
