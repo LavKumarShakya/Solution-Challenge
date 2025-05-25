@@ -569,19 +569,19 @@ class VertexAIClient:
         """
         
         return prompt
-            
-        async def _execute_model_async(self, prompt: str, temperature: float = 0.2, max_tokens: int = 4096, 
+    
+    async def _execute_model_async(self, prompt: str, temperature: float = 0.2, max_tokens: int = 4096,
                                    top_p: float = 0.95, top_k: int = 40) -> str:
-                """
-                Execute the Vertex AI model asynchronously with configurable parameters
-            
-            Args:
-                prompt: The prompt to send to the model
-                temperature: Controls randomness (lower = more deterministic)
-                max_tokens: Maximum number of tokens to generate
-                top_p: Nucleus sampling parameter (higher = more diverse)
-                top_k: Top-k sampling parameter (higher = more diverse)
-            """
+        """
+        Execute the Vertex AI model asynchronously with configurable parameters
+        
+        Args:
+            prompt: The prompt to send to the model
+            temperature: Controls randomness (lower = more deterministic)
+            max_tokens: Maximum number of tokens to generate
+            top_p: Nucleus sampling parameter (higher = more diverse)
+            top_k: Top-k sampling parameter (higher = more diverse)
+        """
         try:
             # Track model usage
             token_estimate = len(prompt.split()) * 1.3  # Rough estimate

@@ -140,20 +140,11 @@ async def customize_learning_path(
     await db.search_status.insert_one(status_doc)
       # Start the customization process in the background
     background_tasks.add_task(
-        search_manager.customize_learning_path,
+        search_manager.customize_learning_path_with_status,
+        search_id=search_id,
         learning_path_id=request.learning_path_id,
         preferences=request.preferences,
         user_id=str(current_user.id)
-    )
-    
-    # Update the search status to indicate it's started
-    await search_manager.update_search_status(
-        search_id,
-        SearchStatusUpdate(
-            status="PROCESSING",
-            progress=10,
-            message="Customizing learning path"
-        )
     )
     
     return {"search_id": search_id, "message": "Customization initiated"}

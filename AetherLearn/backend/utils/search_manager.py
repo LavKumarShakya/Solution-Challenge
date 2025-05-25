@@ -182,67 +182,6 @@ class SearchManager:
             
         return stats
 
-    async def customize_learning_path(
-        self, search_id: str, learning_path_id: str, preferences: dict, user_id: str = None
-    ):
-        """Customize an existing learning path with new preferences"""
-        try:
-            # Update status to PROCESSING
-            await self.update_search_status(
-                search_id,
-                SearchStatusUpdate(
-                    status="PROCESSING",
-                    progress=30,
-                    message="Customizing learning path"
-                )
-            )
-            
-            # Get the original learning path
-            original_path = await db.learning_paths.find_one({"_id": learning_path_id})
-            if not original_path:
-                raise ValueError(f"Learning path with ID {learning_path_id} not found")
-            
-            # Use Vertex AI to customize the learning path
-            customized_path = await self.vertex_ai.customize_learning_path(
-                original_path, preferences
-            )
-            
-            # Store the customized learning path in the database
-            customized_path["user_id"] = user_id
-            customized_path["query"] = original_path["query"]
-            customized_path["created_at"] = datetime.utcnow()
-            customized_path["updated_at"] = datetime.utcnow()
-            customized_path["preferences"] = preferences
-            customized_path["original_path_id"] = learning_path_id
-            
-            result = await db.learning_paths.insert_one(customized_path)
-            new_learning_path_id = str(result.inserted_id)
-            
-            # Update status to COMPLETED
-            await self.update_search_status(
-                search_id,
-                SearchStatusUpdate(
-                    status="COMPLETED",
-                    progress=100,
-                    message="Learning path customization completed",
-                    learning_path_id=new_learning_path_id
-                )
-            )
-            
-            return new_learning_path_id
-            
-        except Exception as e:
-            # Update status to FAILED
-            await self.update_search_status(
-                search_id,
-                SearchStatusUpdate(
-                    status="FAILED",
-                    progress=0,
-                    message=f"Error: {str(e)}"
-                )
-            )
-            raise e
-
     async def customize_learning_path(self, learning_path_id: str, preferences: dict, user_id: str = None):
         """Customize an existing learning path based on user preferences"""
         try:
@@ -285,4 +224,47 @@ class SearchManager:
                 
         except Exception as e:
             logger.error(f"Error customizing learning path: {str(e)}")
+            raise e
+
+    async def customize_learning_path_with_status(
+        self, search_id: str, learning_path_id: str, preferences: dict, user_id: str = None
+    ):
+        """Customize an existing learning path with status tracking"""
+        try:
+            # Update status to PROCESSING
+            await self.update_search_status(
+                search_id,
+                SearchStatusUpdate(
+                    status="PROCESSING",
+                    progress=30,
+                    message="Customizing learning path"
+                )
+            )
+            
+            # Use the main customization method
+            new_learning_path_id = await self.customize_learning_path(learning_path_id, preferences, user_id)
+            
+            # Update status to COMPLETED
+            await self.update_search_status(
+                search_id,
+                SearchStatusUpdate(
+                    status="COMPLETED",
+                    progress=100,
+                    message="Learning path customization completed",
+                    learning_path_id=new_learning_path_id
+                )
+            )
+            
+            return new_learning_path_id
+            
+        except Exception as e:
+            # Update status to FAILED
+            await self.update_search_status(
+                search_id,
+                SearchStatusUpdate(
+                    status="FAILED",
+                    progress=0,
+                    message=f"Error: {str(e)}"
+                )
+            )
             raise e

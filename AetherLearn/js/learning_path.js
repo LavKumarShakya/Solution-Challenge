@@ -8,7 +8,7 @@
 const API_BASE_URL = 'http://localhost:8000/api';
 
 // Learning Path API Functions
-class LearningPathAPI {
+window.LearningPathAPI = class LearningPathAPI {
     /**
      * Initiate a search for creating a learning path using Vertex AI Search
      * @param {string} query - The search query
@@ -152,7 +152,7 @@ class LearningPathAPI {
 }
 
 // Search Process UI Functions
-class LearningPathUI {
+window.LearningPathUI = class LearningPathUI {
     /**
      * Start the search process
      * @param {string} query - The search query
@@ -741,55 +741,81 @@ class LearningPathUI {
     static collectUserPreferences() {
         const preferences = {};
         
-        // Get difficulty level
-        const difficultySelect = document.getElementById('difficultyLevel');
+        // First, get preferences from the modal form if available
+        const difficultySelect = document.getElementById('difficultySelect');
+        const timeCommitmentSelect = document.getElementById('timeCommitmentSelect');
+        
         if (difficultySelect) {
             preferences.difficulty = difficultySelect.value;
+        } else {
+            preferences.difficulty = 'intermediate';
         }
         
-        // Get learning format preferences - expanded for more content types
-        const formatCheckboxes = {
-            video: document.querySelector('input[value="video"]'),
-            article: document.querySelector('input[value="article"]'), 
-            interactive: document.querySelector('input[value="interactive"]'),
-            course: document.querySelector('input[value="course"]'),
-            academic: document.querySelector('input[value="academic"]'),
-            documentation: document.querySelector('input[value="documentation"]')
-        };
+        if (timeCommitmentSelect) {
+            preferences.time_commitment = timeCommitmentSelect.value;
+        } else {
+            preferences.time_commitment = '10-20 hours';
+        }
         
+        // Get format preferences from modal
+        const formatCheckboxes = document.querySelectorAll('#preferencesModal input[type="checkbox"][value]');
         preferences.formats = [];
-        for (const [format, checkbox] of Object.entries(formatCheckboxes)) {
-            if (checkbox && checkbox.checked) {
-                preferences.formats.push(format);
+        formatCheckboxes.forEach(checkbox => {
+            if (checkbox.checked && ['video', 'article', 'interactive', 'course', 'documentation', 'academic'].includes(checkbox.value)) {
+                preferences.formats.push(checkbox.value);
+            }
+        });
+        
+        // Fallback to default formats if none selected
+        if (preferences.formats.length === 0) {
+            preferences.formats = ['video', 'article', 'interactive', 'course'];
+        }
+        
+        // Get learning styles from modal
+        const learningStyleCheckboxes = document.querySelectorAll('#preferencesModal input[type="checkbox"][value]');
+        preferences.learning_styles = [];
+        learningStyleCheckboxes.forEach(checkbox => {
+            if (checkbox.checked && ['visual', 'auditory', 'reading', 'kinesthetic'].includes(checkbox.value)) {
+                preferences.learning_styles.push(checkbox.value);
+            }
+        });
+        
+        // If no modal preferences, fall back to hero section quick options
+        if (preferences.learning_styles.length === 0) {
+            const visualLearner = document.getElementById('visualLearner');
+            const practicalFocus = document.getElementById('practicalFocus');
+            
+            if (visualLearner && visualLearner.checked) {
+                preferences.learning_styles.push('visual');
+            }
+            if (practicalFocus && practicalFocus.checked) {
+                preferences.focus_area = 'practical';
+                preferences.learning_styles.push('kinesthetic');
             }
         }
         
-        // Get focus area
-        const focusArea = document.getElementById('focusArea');
-        if (focusArea && focusArea.value) {
-            preferences.focus_area = focusArea.value;
+        // Check include exercises from hero section
+        const includeExercises = document.getElementById('includeExercises');
+        if (includeExercises && includeExercises.checked) {
+            preferences.include_exercises = true;
+            // Prioritize interactive content
+            if (preferences.formats.includes('interactive')) {
+                preferences.formats = ['interactive', ...preferences.formats.filter(f => f !== 'interactive')];
+            }
         }
         
-        // Get time commitment
-        const timeCommitment = document.getElementById('timeCommitment');
-        if (timeCommitment) {
-            preferences.time_commitment = timeCommitment.value;
-        }
-        
-        // Get learning style preferences
-        const learningStyles = [];
-        const visualCheckbox = document.querySelector('input[value="visual"]');
-        const auditoryCheckbox = document.querySelector('input[value="auditory"]');
-        const readingCheckbox = document.querySelector('input[value="reading"]');
-        const kinestheticCheckbox = document.querySelector('input[value="kinesthetic"]');
-        
-        if (visualCheckbox && visualCheckbox.checked) learningStyles.push('visual');
-        if (auditoryCheckbox && auditoryCheckbox.checked) learningStyles.push('auditory');
-        if (readingCheckbox && readingCheckbox.checked) learningStyles.push('reading');
-        if (kinestheticCheckbox && kinestheticCheckbox.checked) learningStyles.push('kinesthetic');
-        
-        if (learningStyles.length > 0) {
-            preferences.learning_styles = learningStyles;
+        // Get additional preferences from localStorage if they exist
+        try {
+            const savedPrefs = localStorage.getItem('aetherlearn_preferences');
+            if (savedPrefs) {
+                const parsed = JSON.parse(savedPrefs);
+                // Only merge if modal form is not available (user hasn't customized)
+                if (!difficultySelect) {
+                    Object.assign(preferences, parsed);
+                }
+            }
+        } catch (error) {
+            console.warn('Could not load saved preferences:', error);
         }
         
         return preferences;

@@ -4,8 +4,7 @@ const CONFIG = {
     API_BASE_URL: 'http://localhost:8000/api'
 };
 
-// Import learning path functions
-import { LearningPathAPI, LearningPathUI } from './learning_path.js';
+// Learning path functions will be available from learning_path.js script
 
 // Initialize page features
 document.addEventListener('DOMContentLoaded', () => {

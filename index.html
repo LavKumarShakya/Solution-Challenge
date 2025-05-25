@@ -375,6 +375,43 @@
             opacity: 0;
         }
         
+        /* Customize Button Styles */
+        .hero-preferences-button {
+            margin-left: 10px;
+            padding: 12px 20px;
+            background-color: var(--bg-secondary);
+            border: 2px solid var(--accent-primary);
+            color: var(--accent-primary);
+            border-radius: var(--hero-radius-md);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .hero-preferences-button:hover {
+            background-color: var(--accent-primary);
+            color: var(--text-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(64, 224, 208, 0.3);
+        }
+        
+        .hero-preferences-button i {
+            margin-right: 6px;
+        }
+        
+        /* Responsive adjustments for buttons */
+        @media (max-width: 768px) {
+            .cta-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .hero-preferences-button {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+        
         .form-buttons {
             display: flex;
             justify-content: flex-end;
@@ -470,6 +507,9 @@
                     <div class="cta-group">
                         <button class="hero-search-button clean-button">
                             <i class="fas fa-brain"></i> Create Learning Path with Vertex AI
+                        </button>
+                        <button class="hero-preferences-button clean-button secondary" id="openPreferencesModal">
+                            <i class="fas fa-cog"></i> Customize
                         </button>
                     </div>
                 </div>
@@ -727,6 +767,84 @@
                         <button class="action-button secondary"><i class="fas fa-pencil-alt"></i> Customize</button>
                         <button class="action-button secondary"><i class="fas fa-download"></i> Export PDF</button>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preferences Modal -->
+        <div id="preferencesModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Customize Your Learning Path</h2>
+                    <span class="close-modal">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <form class="preferences-form" id="preferencesForm">
+                        <div class="form-group">
+                            <label for="difficultySelect">Difficulty Level</label>
+                            <select id="difficultySelect">
+                                <option value="beginner">Beginner</option>
+                                <option value="intermediate" selected>Intermediate</option>
+                                <option value="advanced">Advanced</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="timeCommitmentSelect">Time Commitment</label>
+                            <select id="timeCommitmentSelect">
+                                <option value="5-10 hours">5-10 hours</option>
+                                <option value="10-20 hours" selected>10-20 hours</option>
+                                <option value="20-40 hours">20-40 hours</option>
+                                <option value="40+ hours">40+ hours</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Content Formats (select all that apply)</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" value="video" checked> Videos
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" value="article" checked> Articles
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" value="interactive" checked> Interactive
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" value="course" checked> Courses
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" value="documentation"> Documentation
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" value="academic"> Academic Papers
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Learning Styles</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" value="visual" checked> Visual
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" value="auditory"> Auditory
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" value="reading"> Reading/Writing
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" value="kinesthetic"> Hands-on
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-buttons">
+                            <button type="button" class="form-button" id="savePreferences">Apply Preferences</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -1133,7 +1251,9 @@
         </div>
     </footer>    <!-- Scripts -->
     <script src="AetherLearn/js/navbar.js"></script>
-    <script type="module" src="AetherLearn/js/script.js"></script>
+    <script src="AetherLearn/js/learning_path.js"></script>
+    <script src="AetherLearn/js/learning_path_search.js"></script>
+    <script src="AetherLearn/js/script.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -1145,18 +1265,88 @@
             });
             
             // Modal functionality
-            const modal = document.getElementById('customizationModal');
-            const modalCloseBtn = document.querySelector('.close-modal');
+            const preferencesModal = document.getElementById('preferencesModal');
+            const customizationModal = document.getElementById('customizationModal');
+            const modalCloseBtns = document.querySelectorAll('.close-modal');
+            const openPreferencesBtn = document.getElementById('openPreferencesModal');
+            const savePreferencesBtn = document.getElementById('savePreferences');
             
-            if (modal && modalCloseBtn) {
-                modalCloseBtn.addEventListener('click', () => {
-                    modal.style.display = 'none';
+            // Open preferences modal
+            if (openPreferencesBtn && preferencesModal) {
+                openPreferencesBtn.addEventListener('click', () => {
+                    preferencesModal.style.display = 'block';
                 });
-                
-                window.addEventListener('click', (e) => {
-                    if (e.target === modal) {
+            }
+            
+            // Close modals
+            modalCloseBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const modal = e.target.closest('.modal');
+                    if (modal) {
                         modal.style.display = 'none';
                     }
+                });
+            });
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', (e) => {
+                if (e.target.classList.contains('modal')) {
+                    e.target.style.display = 'none';
+                }
+            });
+            
+            // Save preferences
+            if (savePreferencesBtn) {
+                savePreferencesBtn.addEventListener('click', () => {
+                    // Collect preferences from form and save to localStorage
+                    const formData = new FormData(document.getElementById('preferencesForm'));
+                    const preferences = {};
+                    
+                    // Get select values
+                    preferences.difficulty = document.getElementById('difficultySelect').value;
+                    preferences.time_commitment = document.getElementById('timeCommitmentSelect').value;
+                    
+                    // Get checkbox values
+                    const formatCheckboxes = document.querySelectorAll('#preferencesModal input[type="checkbox"]');
+                    preferences.formats = [];
+                    preferences.learning_styles = [];
+                    
+                    formatCheckboxes.forEach(checkbox => {
+                        if (checkbox.checked) {
+                            if (['video', 'article', 'interactive', 'course', 'documentation', 'academic'].includes(checkbox.value)) {
+                                preferences.formats.push(checkbox.value);
+                            } else if (['visual', 'auditory', 'reading', 'kinesthetic'].includes(checkbox.value)) {
+                                preferences.learning_styles.push(checkbox.value);
+                            }
+                        }
+                    });
+                    
+                    // Save to localStorage
+                    localStorage.setItem('aetherlearn_preferences', JSON.stringify(preferences));
+                    
+                    // Close modal
+                    preferencesModal.style.display = 'none';
+                    
+                    // Show confirmation
+                    const toast = document.createElement('div');
+                    toast.className = 'toast-message';
+                    toast.textContent = 'Preferences saved successfully!';
+                    toast.style.cssText = `
+                        position: fixed;
+                        top: 20px;
+                        right: 20px;
+                        background: var(--accent-primary);
+                        color: white;
+                        padding: 12px 20px;
+                        border-radius: 6px;
+                        z-index: 10000;
+                        animation: slideInRight 0.3s ease;
+                    `;
+                    document.body.appendChild(toast);
+                    
+                    setTimeout(() => {
+                        toast.remove();
+                    }, 3000);
                 });
             }
             
