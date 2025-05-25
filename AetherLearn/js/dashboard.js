@@ -3,6 +3,14 @@ import {
   onAuthStateChanged,
   signOut,
 } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-auth.js";
+import {
+  getFirestore,
+  doc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/11.5.0/firebase-firestore.js";
+
+// Initialize Firestore
+const db = getFirestore();
 
 // Show loading state while checking authentication
 showLoadingState();
@@ -72,6 +80,7 @@ onAuthStateChanged(auth, (user) => {
     // User is signed in
     console.log("User is signed in:", user);
     updateUserProfile(user);
+    loadUserPreferences(user.uid);
     hideLoadingState(); // Hide loading state when user data is loaded
   } else {
     // User is signed out, redirect to login page
@@ -179,4 +188,127 @@ function handleLogout() {
     .catch((error) => {
       console.error("Error signing out:", error);
     });
+}
+
+/**
+ * Load and display user preferences from Firebase
+ */
+async function loadUserPreferences(userId) {
+  try {
+    const preferencesRef = doc(db, 'users', userId, 'preferences', 'current');
+    const preferencesDoc = await getDoc(preferencesRef);
+    
+    if (preferencesDoc.exists()) {
+      const preferences = preferencesDoc.data();
+      updateDashboardWithPreferences(preferences);
+    } else {
+      // No preferences found, show default content
+      updateDashboardWithDefaultContent();
+    }
+  } catch (error) {
+    console.error('Error loading user preferences:', error);
+    updateDashboardWithDefaultContent();
+  }
+}
+
+/**
+ * Update dashboard hero section with user preferences
+ */
+function updateDashboardWithPreferences(preferences) {
+  const heroSubtitle = document.querySelector('.hero-subtitle');
+  const userInterests = document.querySelector('.user-interests');
+  
+  // Update learning style display
+  if (heroSubtitle && preferences.learningStyle && preferences.learningStyle.length > 0) {
+    const learningStyles = preferences.learningStyle.map(style => {
+      switch(style) {
+        case 'visual': return 'Visual Learner';
+        case 'auditory': return 'Auditory Learner';
+        case 'kinesthetic': return 'Kinesthetic Learner';
+        case 'reading-writing': return 'Reading/Writing Learner';
+        default: return style;
+      }
+    });
+    heroSubtitle.textContent = learningStyles.join(' • ');
+  }
+  
+  // Update interests display
+  if (userInterests && preferences.interests && preferences.interests.length > 0) {
+    userInterests.innerHTML = '';
+    
+    // Create interest tags
+    preferences.interests.forEach(interest => {
+      const tag = document.createElement('span');
+      tag.className = 'interest-tag';
+      tag.textContent = formatInterestName(interest);
+      userInterests.appendChild(tag);
+    });
+    
+    // Add learning goals if available
+    if (preferences.goals && preferences.goals.primary) {
+      const goalTag = document.createElement('span');
+      goalTag.className = 'goal-tag';
+      goalTag.innerHTML = `<i class="fas fa-target"></i> ${formatGoalName(preferences.goals.primary)}`;
+      userInterests.appendChild(goalTag);
+    }
+  }
+}
+
+/**
+ * Update dashboard with default content when no preferences are available
+ */
+function updateDashboardWithDefaultContent() {
+  const heroSubtitle = document.querySelector('.hero-subtitle');
+  const userInterests = document.querySelector('.user-interests');
+  
+  if (heroSubtitle) {
+    heroSubtitle.textContent = 'Welcome to AetherLearn!';
+  }
+  
+  if (userInterests) {
+    userInterests.innerHTML = `
+      <span class="setup-prompt">
+        <i class="fas fa-cog"></i>
+        <a href="../html/preferences-overlay.html">Complete your learning preferences setup</a>
+      </span>
+    `;
+  }
+}
+
+/**
+ * Format interest names for display
+ */
+function formatInterestName(interest) {
+  const interestMap = {
+    'web-development': 'Web Development',
+    'mobile-development': 'Mobile Development',
+    'data-science': 'Data Science',
+    'ai-ml': 'AI & Machine Learning',
+    'cybersecurity': 'Cybersecurity',
+    'cloud-computing': 'Cloud Computing',
+    'devops': 'DevOps',
+    'game-development': 'Game Development',
+    'mathematics': 'Mathematics',
+    'physics': 'Physics',
+    'chemistry': 'Chemistry',
+    'biology': 'Biology',
+    'business': 'Business',
+    'design': 'Design'
+  };
+  
+  return interestMap[interest] || interest.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+}
+
+/**
+ * Format goal names for display
+ */
+function formatGoalName(goal) {
+  const goalMap = {
+    'career-change': 'Career Change',
+    'skill-enhancement': 'Skill Enhancement',
+    'academic': 'Academic',
+    'hobby': 'Personal Interest'
+  };
+  
+  return goalMap[goal] || goal.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 }

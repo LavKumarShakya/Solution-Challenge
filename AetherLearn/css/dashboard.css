@@ -2074,47 +2074,98 @@
   scroll-behavior: smooth;
 }
 
-/* Loading Overlay */
-.loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
+/* User Interests and Preferences Styling */
+.user-interests {
   display: flex;
-  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
   align-items: center;
-  z-index: 9999;
 }
 
-.loading-spinner {
-  background: var(--bg-primary);
-  padding: 2rem;
-  border-radius: 1rem;
-  text-align: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  animation: fadeIn 0.3s ease forwards;
+.interest-tag {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
-.loading-spinner i {
-  font-size: 2.5rem;
-  color: var(--accent-secondary);
-  margin-bottom: 1rem;
-  animation: spin 1.5s linear infinite;
+.interest-tag:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-.loading-spinner span {
-  display: block;
-  color: var(--text-primary);
-  font-size: 1.1rem;
+.goal-tag {
+  background: linear-gradient(135deg, var(--success-color), #4ade80);
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: all 0.3s ease;
 }
 
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
+.goal-tag:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.setup-prompt {
+  background: rgba(var(--accent-primary-rgb), 0.1);
+  border: 2px dashed var(--accent-primary);
+  color: var(--accent-primary);
+  padding: 0.8rem 1.2rem;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.setup-prompt:hover {
+  background: rgba(var(--accent-primary-rgb), 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(var(--accent-primary-rgb), 0.3);
+}
+
+.setup-prompt a {
+  color: inherit;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.setup-prompt a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive adjustments for preferences */
+@media (max-width: 768px) {
+  .user-interests {
+    justify-content: center;
   }
-  100% {
-    transform: rotate(360deg);
+  
+  .interest-tag,
+  .goal-tag,
+  .setup-prompt {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
+  }
+  
+  .setup-prompt {
+    padding: 0.6rem 1rem;
+    text-align: center;
   }
 }
