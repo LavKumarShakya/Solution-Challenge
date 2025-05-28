@@ -30,7 +30,8 @@ window.LearningPathAPI = class LearningPathAPI {
             });
             
             if (!response.ok) {
-                throw new Error(`Error: ${response.status} ${response.statusText}`);
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.detail || `Error: ${response.status} ${response.statusText}`);
             }
             
             return await response.json();
@@ -735,73 +736,77 @@ window.LearningPathUI = class LearningPathUI {
         }
     }
       /**
-     * Collect user preferences from the UI for Vertex AI Search and generation
+     * Collect user preferences from the enhanced UI for Vertex AI Search and generation
      * @returns {Object} - User preferences
      */
     static collectUserPreferences() {
         const preferences = {};
         
-        // First, get preferences from the modal form if available
+        // Get basic parameters
         const difficultySelect = document.getElementById('difficultySelect');
         const timeCommitmentSelect = document.getElementById('timeCommitmentSelect');
         
-        if (difficultySelect) {
-            preferences.difficulty = difficultySelect.value;
-        } else {
-            preferences.difficulty = 'intermediate';
-        }
+        preferences.difficulty = difficultySelect ? difficultySelect.value : 'intermediate';
+        preferences.time_commitment = timeCommitmentSelect ? timeCommitmentSelect.value : '10-20 hours';
         
-        if (timeCommitmentSelect) {
-            preferences.time_commitment = timeCommitmentSelect.value;
-        } else {
-            preferences.time_commitment = '10-20 hours';
-        }
-        
-        // Get format preferences from modal
-        const formatCheckboxes = document.querySelectorAll('#preferencesModal input[type="checkbox"][value]');
-        preferences.formats = [];
+        // Get content format preferences from the enhanced modal
+        const formatCheckboxes = document.querySelectorAll('.content-format-grid input[type="checkbox"]');
+        preferences.content_formats = [];
         formatCheckboxes.forEach(checkbox => {
-            if (checkbox.checked && ['video', 'article', 'interactive', 'course', 'documentation', 'academic'].includes(checkbox.value)) {
-                preferences.formats.push(checkbox.value);
+            if (checkbox.checked) {
+                preferences.content_formats.push(checkbox.value);
             }
         });
         
         // Fallback to default formats if none selected
-        if (preferences.formats.length === 0) {
-            preferences.formats = ['video', 'article', 'interactive', 'course'];
+        if (preferences.content_formats.length === 0) {
+            preferences.content_formats = ['video', 'article', 'interactive', 'course'];
         }
         
-        // Get learning styles from modal
-        const learningStyleCheckboxes = document.querySelectorAll('#preferencesModal input[type="checkbox"][value]');
+        // Get learning style preferences from the enhanced modal
+        const styleCheckboxes = document.querySelectorAll('.learning-style-grid input[type="checkbox"]');
         preferences.learning_styles = [];
-        learningStyleCheckboxes.forEach(checkbox => {
-            if (checkbox.checked && ['visual', 'auditory', 'reading', 'kinesthetic'].includes(checkbox.value)) {
+        styleCheckboxes.forEach(checkbox => {
+            if (checkbox.checked) {
                 preferences.learning_styles.push(checkbox.value);
             }
         });
         
-        // If no modal preferences, fall back to hero section quick options
+        // Get quick preferences from toggle switches
+        const visualLearner = document.getElementById('visualLearner');
+        const practicalFocus = document.getElementById('practicalFocus');
+        const includeExercises = document.getElementById('includeExercises');
+        
+        preferences.visual_learner = visualLearner ? visualLearner.checked : false;
+        preferences.practical_focus = practicalFocus ? practicalFocus.checked : false;
+        preferences.include_exercises = includeExercises ? includeExercises.checked : false;
+        
+        // If visual learner is checked and no learning styles selected, add visual
+        if (preferences.visual_learner && preferences.learning_styles.length === 0) {
+            preferences.learning_styles.push('visual');
+        }
+        
+        // If practical focus is checked, add kinesthetic learning style
+        if (preferences.practical_focus && !preferences.learning_styles.includes('kinesthetic')) {
+            preferences.learning_styles.push('kinesthetic');
+        }
+        
+        // Ensure at least one learning style is selected
         if (preferences.learning_styles.length === 0) {
-            const visualLearner = document.getElementById('visualLearner');
-            const practicalFocus = document.getElementById('practicalFocus');
-            
-            if (visualLearner && visualLearner.checked) {
-                preferences.learning_styles.push('visual');
-            }
-            if (practicalFocus && practicalFocus.checked) {
-                preferences.focus_area = 'practical';
-                preferences.learning_styles.push('kinesthetic');
+            preferences.learning_styles = ['visual'];
+        }
+        
+        // Additional preference processing
+        if (preferences.include_exercises) {
+            // Prioritize interactive content if exercises are requested
+            if (!preferences.content_formats.includes('interactive')) {
+                preferences.content_formats.push('interactive');
             }
         }
         
-        // Check include exercises from hero section
-        const includeExercises = document.getElementById('includeExercises');
-        if (includeExercises && includeExercises.checked) {
-            preferences.include_exercises = true;
-            // Prioritize interactive content
-            if (preferences.formats.includes('interactive')) {
-                preferences.formats = ['interactive', ...preferences.formats.filter(f => f !== 'interactive')];
-            }
+        // Set focus area based on practical preference
+        if (preferences.practical_focus) {
+            preferences.focus_area = 'practical';
         }
         
         // Get additional preferences from localStorage if they exist
@@ -809,16 +814,27 @@ window.LearningPathUI = class LearningPathUI {
             const savedPrefs = localStorage.getItem('aetherlearn_preferences');
             if (savedPrefs) {
                 const parsed = JSON.parse(savedPrefs);
-                // Only merge if modal form is not available (user hasn't customized)
-                if (!difficultySelect) {
-                    Object.assign(preferences, parsed);
-                }
+                // Merge saved preferences, but current UI takes precedence
+                Object.keys(parsed).forEach(key => {
+                    if (preferences[key] === undefined) {
+                        preferences[key] = parsed[key];
+                    }
+                });
             }
         } catch (error) {
             console.warn('Could not load saved preferences:', error);
         }
         
-        return preferences;
+        // Ensure backend-compatible format
+        return {
+            skill_level: preferences.difficulty || 'intermediate',
+            time_available: preferences.time_commitment || '10-20 hours',
+            content_types: preferences.content_formats || ['video', 'article', 'interactive', 'course'],
+            learning_style: preferences.learning_styles || ['visual'],
+            include_exercises: preferences.include_exercises || false,
+            practical_focus: preferences.practical_focus || false,
+            visual_learner: preferences.visual_learner || false
+        };
     }
     
     /**

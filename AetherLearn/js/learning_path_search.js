@@ -1,7 +1,10 @@
 // Learning Path Search Initialization with Vertex AI Search integration
 function initializeLearningPathSearch() {
     const aiSearchInput = document.querySelector('.hero-search-input');
-    const aiSearchButton = document.querySelector('.hero-search-button');
+    const aiSearchButton = document.getElementById('createLearningPathBtn');
+    const preferencesButton = document.getElementById('openPreferencesModal');
+    const preferencesModal = document.getElementById('preferencesModal');
+    const closeModalButton = document.getElementById('closePreferencesModal');
     const searchProcessContainer = document.getElementById('searchProcessContainer');
     const closeButtons = document.querySelectorAll('.close-process-btn');
     
@@ -13,6 +16,10 @@ function initializeLearningPathSearch() {
             const query = aiSearchInput.value.trim();
             if (query) {
                 await startSearchProcess(query);
+            } else {
+                // Show error message if no query
+                showMessage('Please enter a topic you want to learn about!');
+                aiSearchInput.focus();
             }
         });
         
@@ -22,10 +29,15 @@ function initializeLearningPathSearch() {
                 const query = aiSearchInput.value.trim();
                 if (query) {
                     await startSearchProcess(query);
+                } else {
+                    showMessage('Please enter a topic you want to learn about!');
                 }
             }
         });
     }
+    
+    // Initialize preferences modal functionality
+    initializePreferencesModal();
     
     // Add close button functionality
     if (closeButtons) {
@@ -40,6 +52,157 @@ function initializeLearningPathSearch() {
     
     // Initialize action buttons in results stage
     initializeResultActionButtons();
+}
+
+// Initialize the enhanced preferences modal
+function initializePreferencesModal() {
+    const preferencesButton = document.getElementById('openPreferencesModal');
+    const preferencesModal = document.getElementById('preferencesModal');
+    const closeModalButton = document.getElementById('closePreferencesModal');
+    const savePreferencesButton = document.getElementById('savePreferences');
+    const resetPreferencesButton = document.getElementById('resetPreferences');
+    
+    // Open modal
+    if (preferencesButton && preferencesModal) {
+        preferencesButton.addEventListener('click', () => {
+            preferencesModal.style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        });
+    }
+    
+    // Close modal
+    const closeModal = () => {
+        if (preferencesModal) {
+            preferencesModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    };
+    
+    if (closeModalButton) {
+        closeModalButton.addEventListener('click', closeModal);
+    }
+    
+    // Close modal when clicking outside
+    if (preferencesModal) {
+        preferencesModal.addEventListener('click', (e) => {
+            if (e.target === preferencesModal) {
+                closeModal();
+            }
+        });
+    }
+    
+    // Close modal on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && preferencesModal.style.display === 'block') {
+            closeModal();
+        }
+    });
+    
+    // Save preferences
+    if (savePreferencesButton) {
+        savePreferencesButton.addEventListener('click', () => {
+            saveUserPreferences();
+            closeModal();
+            showMessage('Preferences saved! They will be applied to your next learning path.');
+        });
+    }
+    
+    // Reset preferences
+    if (resetPreferencesButton) {
+        resetPreferencesButton.addEventListener('click', () => {
+            resetToDefaultPreferences();
+            showMessage('Preferences reset to defaults!');
+        });
+    }
+    
+    // Load saved preferences on init
+    loadSavedPreferences();
+}
+
+// Save user preferences to localStorage
+function saveUserPreferences() {
+    const preferences = LearningPathUI.collectUserPreferences();
+    localStorage.setItem('aetherlearn_preferences', JSON.stringify(preferences));
+}
+
+// Load saved preferences from localStorage
+function loadSavedPreferences() {
+    try {
+        const saved = localStorage.getItem('aetherlearn_preferences');
+        if (saved) {
+            const preferences = JSON.parse(saved);
+            applyPreferencesToUI(preferences);
+        }
+    } catch (error) {
+        console.warn('Could not load saved preferences:', error);
+    }
+}
+
+// Apply preferences to UI elements
+function applyPreferencesToUI(preferences) {
+    // Apply difficulty level
+    if (preferences.difficulty) {
+        const difficultySelect = document.getElementById('difficultySelect');
+        if (difficultySelect) {
+            difficultySelect.value = preferences.difficulty;
+        }
+    }
+    
+    // Apply time commitment
+    if (preferences.time_commitment) {
+        const timeSelect = document.getElementById('timeCommitmentSelect');
+        if (timeSelect) {
+            timeSelect.value = preferences.time_commitment;
+        }
+    }
+    
+    // Apply content formats
+    if (preferences.content_formats) {
+        const formatCheckboxes = document.querySelectorAll('.content-format-grid input[type="checkbox"]');
+        formatCheckboxes.forEach(checkbox => {
+            checkbox.checked = preferences.content_formats.includes(checkbox.value);
+        });
+    }
+    
+    // Apply learning styles
+    if (preferences.learning_styles) {
+        const styleCheckboxes = document.querySelectorAll('.learning-style-grid input[type="checkbox"]');
+        styleCheckboxes.forEach(checkbox => {
+            checkbox.checked = preferences.learning_styles.includes(checkbox.value);
+        });
+    }
+    
+    // Apply quick preferences
+    if (preferences.visual_learner !== undefined) {
+        const visualCheckbox = document.getElementById('visualLearner');
+        if (visualCheckbox) visualCheckbox.checked = preferences.visual_learner;
+    }
+    
+    if (preferences.practical_focus !== undefined) {
+        const practicalCheckbox = document.getElementById('practicalFocus');
+        if (practicalCheckbox) practicalCheckbox.checked = preferences.practical_focus;
+    }
+    
+    if (preferences.include_exercises !== undefined) {
+        const exercisesCheckbox = document.getElementById('includeExercises');
+        if (exercisesCheckbox) exercisesCheckbox.checked = preferences.include_exercises;
+    }
+}
+
+// Reset preferences to defaults
+function resetToDefaultPreferences() {
+    const defaultPreferences = {
+        difficulty: 'intermediate',
+        time_commitment: '10-20 hours',
+        content_formats: ['video', 'article', 'interactive', 'course'],
+        learning_styles: ['visual'],
+        visual_learner: true,
+        practical_focus: false,
+        include_exercises: true
+    };
+    
+    applyPreferencesToUI(defaultPreferences);
+    localStorage.removeItem('aetherlearn_preferences');
 }
 
 // Initialize search suggestions using Vertex AI
@@ -441,11 +604,28 @@ function showLoginPrompt(action) {
     });
 }
 
-// Show message toast
-function showMessage(message) {
+// Enhanced message toast with icons and types
+function showMessage(message, type = 'success') {
     const toast = document.createElement('div');
-    toast.className = 'toast-message';
-    toast.textContent = message;
+    toast.className = `toast-message ${type}`;
+    
+    // Add appropriate icon based on type
+    let icon = 'fas fa-check-circle';
+    switch (type) {
+        case 'error':
+            icon = 'fas fa-exclamation-circle';
+            break;
+        case 'warning':
+            icon = 'fas fa-exclamation-triangle';
+            break;
+        case 'info':
+            icon = 'fas fa-info-circle';
+            break;
+        default:
+            icon = 'fas fa-check-circle';
+    }
+    
+    toast.innerHTML = `<i class="${icon}"></i><span>${message}</span>`;
     
     document.body.appendChild(toast);
     
@@ -454,23 +634,34 @@ function showMessage(message) {
         toast.classList.add('show');
     }, 10);
     
-    // Remove after 3 seconds
+    // Remove after duration based on message length
+    const duration = Math.max(3000, message.length * 50);
     setTimeout(() => {
         toast.classList.remove('show');
         setTimeout(() => {
-            toast.remove();
+            if (toast.parentNode) {
+                toast.remove();
+            }
         }, 300);
-    }, 3000);
+    }, duration);
+    
+    // Allow clicking to dismiss
+    toast.addEventListener('click', () => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.remove();
+            }
+        }, 300);
+    });
 }
 
 function showErrorMessage(message) {
     const errorDiv = document.createElement('div');
     errorDiv.className = 'error-message';
-    errorDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
+    errorDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i><span>${message}</span>`;
     
-    // Append to the search container or body
-    const container = document.getElementById('searchProcessContainer') || document.body;
-    container.appendChild(errorDiv);
+    document.body.appendChild(errorDiv);
     
     // Add animation
     setTimeout(() => {
@@ -481,9 +672,21 @@ function showErrorMessage(message) {
     setTimeout(() => {
         errorDiv.classList.remove('show');
         setTimeout(() => {
-            errorDiv.remove();
+            if (errorDiv.parentNode) {
+                errorDiv.remove();
+            }
         }, 300);
     }, 5000);
+    
+    // Allow clicking to dismiss
+    errorDiv.addEventListener('click', () => {
+        errorDiv.classList.remove('show');
+        setTimeout(() => {
+            if (errorDiv.parentNode) {
+                errorDiv.remove();
+            }
+        }, 300);
+    });
 }
 
 // Initialize when the DOM is loaded

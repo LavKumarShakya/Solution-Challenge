@@ -3,18 +3,13 @@ import asyncio
 from datetime import datetime
 from typing import List, Dict, Any
 from dotenv import load_dotenv
-from google.cloud import aiplatform
-try:
-    from google.cloud.aiplatform.gapic.schema import predict
-except ImportError:
-    print("Warning: google.cloud.aiplatform.gapic.schema.predict could not be imported")
-try:
-    from vertexai.preview import VertexAISearch
-    from vertexai.preview.generative_models import GenerativeModel
-except ImportError:
-    print("Warning: vertexai packages could not be imported. Please install the Vertex AI SDK")
 import json
 import logging
+
+# Google Cloud imports
+from google.cloud import discoveryengine_v1
+import vertexai
+from vertexai.generative_models import GenerativeModel, GenerationConfig
 
 load_dotenv()
 
@@ -27,23 +22,26 @@ class VertexAIClient:
         # Initialize GCP AI Platform
         self.project_id = os.getenv("VERTEX_AI_PROJECT_ID")
         self.location = os.getenv("VERTEX_AI_LOCATION", "us-central1")
-        self.model_id = os.getenv("VERTEX_AI_MODEL", "gemini-1.5-pro")
+        self.model_id = os.getenv("VERTEX_AI_MODEL", "gemini-2.0-flash")
         self.data_store_id = os.getenv("VERTEX_AI_DATASTORE_ID")
         
         # Set up credentials
         try:
-            aiplatform.init(
-                project=self.project_id,
-                location=self.location,
-            )
+            # Initialize Vertex AI
+            vertexai.init(project=self.project_id, location=self.location)
             
-            # Initialize the model
+            # Initialize the generative model
             self.model = GenerativeModel(self.model_id)
+            
+            # Initialize Discovery Engine client for search
+            self.search_client = discoveryengine_v1.SearchServiceClient()
+            
             logger.info(f"Successfully initialized Vertex AI with project {self.project_id} and model {self.model_id}")
         except Exception as e:
             logger.error(f"Error initializing Vertex AI: {e}")
             raise
-              # Initialize usage tracking
+            
+        # Initialize usage tracking
         self.usage_tracking = []
         
     async def discover_content(self, query: str, preferences: Dict[str, Any] = None, max_results: int = 20) -> List[Dict[str, Any]]:
@@ -84,68 +82,99 @@ class VertexAIClient:
             return []
 
     def _execute_search(self, query: str, max_results: int) -> Any:
-        """Execute the search query using Vertex AI Search"""
+        """Execute the search query using Vertex AI Search (Discovery Engine)"""
         try:
-            # Create the search client
-            search_client = VertexAISearch(
+            # Build the serving config path
+            serving_config = self.search_client.serving_config_path(
                 project=self.project_id,
                 location=self.location,
-                data_store_id=self.data_store_id,
+                data_store=self.data_store_id,
+                serving_config="default_config",
             )
             
-            # Build search parameters
-            search_params = {
-                "query": query, 
-                "page_size": max_results * 2  # Request more to allow for filtering
-            }
+            # Build search request
+            request = discoveryengine_v1.SearchRequest(
+                serving_config=serving_config,
+                query=query,
+                page_size=max_results,
+                # Add content search spec for better results
+                content_search_spec=discoveryengine_v1.SearchRequest.ContentSearchSpec(
+                    snippet_spec=discoveryengine_v1.SearchRequest.ContentSearchSpec.SnippetSpec(
+                        return_snippet=True,
+                        max_snippet_count=3,
+                    ),
+                    summary_spec=discoveryengine_v1.SearchRequest.ContentSearchSpec.SummarySpec(
+                        summary_result_count=5,
+                        include_citations=True,
+                    ),
+                ),
+            )
             
-            # Add educational content filter if possible
-            if hasattr(search_client, "filter_options"):
-                search_params["filter"] = "contentCategory:educational"
-                
             # Execute the search
             logger.info(f"Executing Vertex AI Search with query: {query}")
-            response = search_client.search(**search_params)
+            response = self.search_client.search(request=request)
             
             return response
             
         except Exception as e:
             logger.error(f"Error executing search: {str(e)}")
-            # Return empty results in case of error
-            return []
+            # Return None to indicate error
+            return None
     
     def _process_search_results(self, search_results: Any) -> List[Dict[str, Any]]:
         """Process and standardize the search results with basic metadata"""
         processed_results = []
         
         # Check if we have valid search results
-        if not search_results or not hasattr(search_results, "results"):
-            logger.warning("No valid search results returned")
+        if not search_results:
+            logger.warning("No search results returned")
             return processed_results
             
-        for result in search_results.results:
-            try:
-                # Extract metadata from the search result
-                document = result.document
-                metadata = document.derived_struct_data if hasattr(document, "derived_struct_data") else {}
-                
-                # Create a standardized content item
-                content_item = {
-                    "title": document.title if hasattr(document, "title") else "Unknown Title",
-                    "url": document.uri if hasattr(document, "uri") else "",
-                    "description": document.snippets[0].snippet if hasattr(document, "snippets") and document.snippets else "",
-                    "source": self._extract_domain(document.uri) if hasattr(document, "uri") else "Unknown Source",
-                    "resource_type": self._determine_resource_type(document),
-                    "estimated_time_minutes": metadata.get("estimated_time_minutes", 20),
-                    "difficulty": metadata.get("difficulty", "intermediate"),
-                    "quality_score": result.relevance_score if hasattr(result, "relevance_score") else 0.5,
-                    "metadata": metadata
-                }
-                
-                processed_results.append(content_item)
-            except Exception as e:
-                logger.error(f"Error processing search result: {str(e)}")
-                continue
+        try:
+            # Iterate through search results
+            for result in search_results:
+                try:
+                    # Extract document information
+                    document = result.document
+                    
+                    # Get document data
+                    doc_data = document.struct_data if hasattr(document, "struct_data") else {}
+                    
+                    # Extract title, URI, and snippet
+                    title = doc_data.get("title", "Unknown Title")
+                    uri = doc_data.get("link", "") or doc_data.get("uri", "")
+                    
+                    # Get description from snippet or document content
+                    description = ""
+                    if hasattr(result, "document") and hasattr(result.document, "derived_struct_data"):
+                        snippets = result.document.derived_struct_data.get("snippets", [])
+                        if snippets:
+                            description = snippets[0].get("snippet", "")
+                    
+                    if not description and doc_data.get("snippet"):
+                        description = doc_data.get("snippet", "")
+                    
+                    # Create a standardized content item
+                    content_item = {
+                        "title": title,
+                        "url": uri,
+                        "description": description,
+                        "source": self._extract_domain(uri) if uri else "Unknown Source",
+                        "resource_type": self._determine_resource_type_from_url(uri),
+                        "estimated_time_minutes": 20,  # Default value
+                        "difficulty": "intermediate",  # Default value
+                        "quality_score": 0.8,  # Default good quality score
+                        "metadata": doc_data
+                    }
+                    
+                    processed_results.append(content_item)
+                    
+                except Exception as e:
+                    logger.error(f"Error processing individual search result: {str(e)}")
+                    continue
+                    
+        except Exception as e:
+            logger.error(f"Error iterating through search results: {str(e)}")
             
         return processed_results
         
@@ -257,33 +286,43 @@ class VertexAIClient:
         except:
             return "Unknown Source"
     
+    def _determine_resource_type_from_url(self, url: str) -> str:
+        """Determine the resource type based on the URL"""
+        # Default resource type
+        resource_type = "article"
+        
+        if not url:
+            return resource_type
+            
+        url_lower = url.lower()
+        
+        # Check for video content
+        if "youtube.com" in url_lower or "vimeo.com" in url_lower or "coursera.org/lecture" in url_lower:
+            resource_type = "video"
+        # Check for interactive content
+        elif "github.com" in url_lower or "codepen.io" in url_lower or "jsfiddle.net" in url_lower or "replit.com" in url_lower:
+            resource_type = "interactive"
+        # Check for course content
+        elif "coursera.org/learn" in url_lower or "udemy.com/course" in url_lower or "edx.org/course" in url_lower or "khanacademy.org" in url_lower:
+            resource_type = "course"
+        # Check for documentation
+        elif "docs." in url_lower or ".io/docs" in url_lower or ".org/docs" in url_lower or "documentation" in url_lower:
+            resource_type = "documentation"
+        # Check for academic content
+        elif ".edu" in url_lower or "arxiv.org" in url_lower or "researchgate.net" in url_lower or "academia.edu" in url_lower:
+            resource_type = "academic"
+            
+        return resource_type
+
     def _determine_resource_type(self, document: Any) -> str:
-        """Determine the resource type based on the document metadata"""
+        """Determine the resource type based on the document metadata (legacy method)"""
         # Default resource type
         resource_type = "article"
         
         if not hasattr(document, "uri"):
             return resource_type
             
-        url = document.uri.lower()
-        
-        # Check for video content
-        if "youtube.com" in url or "vimeo.com" in url or "coursera.org/lecture" in url:
-            resource_type = "video"
-        # Check for interactive content
-        elif "github.com" in url or "codepen.io" in url or "jsfiddle.net" in url or "replit.com" in url:
-            resource_type = "interactive"
-        # Check for course content
-        elif "coursera.org/learn" in url or "udemy.com/course" in url or "edx.org/course" in url or "khanacademy.org" in url:
-            resource_type = "course"
-        # Check for documentation
-        elif "docs." in url or ".io/docs" in url or ".org/docs" in url or "documentation" in url:
-            resource_type = "documentation"
-        # Check for academic content
-        elif ".edu" in url or "arxiv.org" in url or "researchgate.net" in url or "academia.edu" in url:
-            resource_type = "academic"
-            
-        return resource_type
+        return self._determine_resource_type_from_url(document.uri)
 
     def _estimate_content_time(self, content_item: Dict[str, Any]) -> int:
         """Estimate the time needed to consume the content in minutes"""
@@ -617,10 +656,18 @@ class VertexAIClient:
             prompt_preview = prompt[:100] + "..." if len(prompt) > 100 else prompt
             logger.debug(f"Sending prompt to Vertex AI: {prompt_preview}")
             
+            # Create GenerationConfig object from dict
+            config = GenerationConfig(
+                temperature=generation_config.get("temperature", 0.2),
+                max_output_tokens=generation_config.get("max_output_tokens", 4096),
+                top_p=generation_config.get("top_p", 0.95),
+                top_k=generation_config.get("top_k", 40)
+            )
+            
             # Execute the model with the provided configuration
             response = self.model.generate_content(
                 prompt,
-                generation_config=generation_config
+                generation_config=config
             )
             
             # Extract and return the text
