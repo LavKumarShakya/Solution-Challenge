@@ -77,46 +77,6 @@
   border-color: var(--accent-primary);
 }
 
-/* Profile Avatar Container with Settings Icon */
-.profile-avatar-container {
-  position: relative;
-  display: inline-block;
-}
-
-.settings-icon-btn {
-  position: absolute;
-  bottom: 5px;
-  right: 5px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: var(--accent-secondary);
-  border: 3px solid var(--bg-secondary);
-  color: var(--text-primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  z-index: 3;
-}
-
-.settings-icon-btn:hover {
-  background: var(--accent-primary);
-  transform: scale(1.1) rotate(90deg);
-  box-shadow: 0 4px 15px rgba(64, 224, 208, 0.4);
-}
-
-.settings-icon-btn:active {
-  transform: scale(0.95) rotate(180deg);
-}
-
-.settings-icon-btn i {
-  transition: all 0.3s ease;
-}
-
 .profile-info h1 {
   font-size: 2.8rem;
   background: var(--gradient-primary);
