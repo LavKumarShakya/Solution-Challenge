@@ -23,6 +23,7 @@ const closeResultButton = document.getElementById("closeResultBtn");
 const processingStep = document.getElementById("processingStep");
 const resultStep = document.getElementById("resultStep");
 const dashboardLogoutBtn = document.getElementById("dashboard-logout-btn");
+const profileSettingsBtn = document.getElementById("profile-settings-btn");
 
 // Event listeners for study plan modal
 if (studyPlanButton) {
@@ -33,6 +34,11 @@ if (closeStudyPlanButton) {
 }
 if (closeResultButton) {
   closeResultButton.addEventListener("click", closeStudyPlanModal);
+}
+
+// Event listener for profile settings
+if (profileSettingsBtn) {
+  profileSettingsBtn.addEventListener("click", openProfileSettings);
 }
 
 // Functions for study plan modal
@@ -190,6 +196,7 @@ function handleLogout() {
     });
 }
 
+<<<<<<< Updated upstream
 /**
  * Load and display user preferences from Firebase
  */
@@ -311,4 +318,21 @@ function formatGoalName(goal) {
   };
   
   return goalMap[goal] || goal.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+=======
+// Open profile settings function
+function openProfileSettings() {
+  console.log("Profile settings clicked");
+  // You can implement a settings modal or redirect to a settings page
+  // For now, let's show an alert
+  alert("Profile settings feature coming soon!");
+  
+  // Alternatively, you could redirect to a settings page:
+  // window.location.href = "../html/profile-settings.html";
+  
+  // Or open a modal (if you have one):
+  // const settingsModal = document.getElementById("profileSettingsModal");
+  // if (settingsModal) {
+  //   settingsModal.style.display = "flex";
+  // }
+>>>>>>> Stashed changes
 }
