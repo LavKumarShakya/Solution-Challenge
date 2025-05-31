@@ -29,19 +29,27 @@
         <div class="container">
           <div class="hero-content">
             <div class="profile-header">
-              <img
-                id="user-photo"
-                src=""
-                alt="Profile Picture"
-                class="profile-avatar"
-              />              <div class="profile-info">
+              <div class="profile-avatar-container">
+                <img
+                  id="user-photo"
+                  src=""
+                  alt="Profile Picture"
+                  class="profile-avatar"
+                />
+                <button class="profile-settings-btn" title="Profile Settings">
+                  <i class="fas fa-cog"></i>
+                </button>
+              </div>
+              <div class="profile-info">
                 <h1 class="gradient-text"><span id="user-name"></span></h1>
                 <p class="hero-subtitle">Welcome to AetherLearn!</p>
                 <p id="user-email" class="user-email"></p>
                 <div class="user-interests">
                   <span class="setup-prompt">
                     <i class="fas fa-cog"></i>
-                    <a href="../html/preferences-overlay.html">Complete your learning preferences setup</a>
+                    <a href="../html/preferences-overlay.html"
+                      >Complete your learning preferences setup</a
+                    >
                   </span>
                 </div>
               </div>

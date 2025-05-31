@@ -6,7 +6,7 @@ import {
 import {
   getFirestore,
   doc,
-  getDoc
+  getDoc,
 } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-firestore.js";
 
 // Initialize Firestore
@@ -23,6 +23,7 @@ const closeResultButton = document.getElementById("closeResultBtn");
 const processingStep = document.getElementById("processingStep");
 const resultStep = document.getElementById("resultStep");
 const dashboardLogoutBtn = document.getElementById("dashboard-logout-btn");
+const profileSettingsBtn = document.querySelector(".profile-settings-btn");
 
 // Event listeners for study plan modal
 if (studyPlanButton) {
@@ -33,6 +34,11 @@ if (closeStudyPlanButton) {
 }
 if (closeResultButton) {
   closeResultButton.addEventListener("click", closeStudyPlanModal);
+}
+
+// Event listener for profile settings button
+if (profileSettingsBtn) {
+  profileSettingsBtn.addEventListener("click", openProfileSettings);
 }
 
 // Functions for study plan modal
@@ -195,9 +201,9 @@ function handleLogout() {
  */
 async function loadUserPreferences(userId) {
   try {
-    const preferencesRef = doc(db, 'users', userId, 'preferences', 'current');
+    const preferencesRef = doc(db, "users", userId, "preferences", "current");
     const preferencesDoc = await getDoc(preferencesRef);
-    
+
     if (preferencesDoc.exists()) {
       const preferences = preferencesDoc.data();
       updateDashboardWithPreferences(preferences);
@@ -206,7 +212,7 @@ async function loadUserPreferences(userId) {
       updateDashboardWithDefaultContent();
     }
   } catch (error) {
-    console.error('Error loading user preferences:', error);
+    console.error("Error loading user preferences:", error);
     updateDashboardWithDefaultContent();
   }
 }
@@ -215,40 +221,55 @@ async function loadUserPreferences(userId) {
  * Update dashboard hero section with user preferences
  */
 function updateDashboardWithPreferences(preferences) {
-  const heroSubtitle = document.querySelector('.hero-subtitle');
-  const userInterests = document.querySelector('.user-interests');
-  
+  const heroSubtitle = document.querySelector(".hero-subtitle");
+  const userInterests = document.querySelector(".user-interests");
+
   // Update learning style display
-  if (heroSubtitle && preferences.learningStyle && preferences.learningStyle.length > 0) {
-    const learningStyles = preferences.learningStyle.map(style => {
-      switch(style) {
-        case 'visual': return 'Visual Learner';
-        case 'auditory': return 'Auditory Learner';
-        case 'kinesthetic': return 'Kinesthetic Learner';
-        case 'reading-writing': return 'Reading/Writing Learner';
-        default: return style;
+  if (
+    heroSubtitle &&
+    preferences.learningStyle &&
+    preferences.learningStyle.length > 0
+  ) {
+    const learningStyles = preferences.learningStyle.map((style) => {
+      switch (style) {
+        case "visual":
+          return "Visual Learner";
+        case "auditory":
+          return "Auditory Learner";
+        case "kinesthetic":
+          return "Kinesthetic Learner";
+        case "reading-writing":
+          return "Reading/Writing Learner";
+        default:
+          return style;
       }
     });
-    heroSubtitle.textContent = learningStyles.join(' • ');
+    heroSubtitle.textContent = learningStyles.join(" • ");
   }
-  
+
   // Update interests display
-  if (userInterests && preferences.interests && preferences.interests.length > 0) {
-    userInterests.innerHTML = '';
-    
+  if (
+    userInterests &&
+    preferences.interests &&
+    preferences.interests.length > 0
+  ) {
+    userInterests.innerHTML = "";
+
     // Create interest tags
-    preferences.interests.forEach(interest => {
-      const tag = document.createElement('span');
-      tag.className = 'interest-tag';
+    preferences.interests.forEach((interest) => {
+      const tag = document.createElement("span");
+      tag.className = "interest-tag";
       tag.textContent = formatInterestName(interest);
       userInterests.appendChild(tag);
     });
-    
+
     // Add learning goals if available
     if (preferences.goals && preferences.goals.primary) {
-      const goalTag = document.createElement('span');
-      goalTag.className = 'goal-tag';
-      goalTag.innerHTML = `<i class="fas fa-target"></i> ${formatGoalName(preferences.goals.primary)}`;
+      const goalTag = document.createElement("span");
+      goalTag.className = "goal-tag";
+      goalTag.innerHTML = `<i class="fas fa-target"></i> ${formatGoalName(
+        preferences.goals.primary
+      )}`;
       userInterests.appendChild(goalTag);
     }
   }
@@ -258,13 +279,13 @@ function updateDashboardWithPreferences(preferences) {
  * Update dashboard with default content when no preferences are available
  */
 function updateDashboardWithDefaultContent() {
-  const heroSubtitle = document.querySelector('.hero-subtitle');
-  const userInterests = document.querySelector('.user-interests');
-  
+  const heroSubtitle = document.querySelector(".hero-subtitle");
+  const userInterests = document.querySelector(".user-interests");
+
   if (heroSubtitle) {
-    heroSubtitle.textContent = 'Welcome to AetherLearn!';
+    heroSubtitle.textContent = "Welcome to AetherLearn!";
   }
-  
+
   if (userInterests) {
     userInterests.innerHTML = `
       <span class="setup-prompt">
@@ -280,23 +301,26 @@ function updateDashboardWithDefaultContent() {
  */
 function formatInterestName(interest) {
   const interestMap = {
-    'web-development': 'Web Development',
-    'mobile-development': 'Mobile Development',
-    'data-science': 'Data Science',
-    'ai-ml': 'AI & Machine Learning',
-    'cybersecurity': 'Cybersecurity',
-    'cloud-computing': 'Cloud Computing',
-    'devops': 'DevOps',
-    'game-development': 'Game Development',
-    'mathematics': 'Mathematics',
-    'physics': 'Physics',
-    'chemistry': 'Chemistry',
-    'biology': 'Biology',
-    'business': 'Business',
-    'design': 'Design'
+    "web-development": "Web Development",
+    "mobile-development": "Mobile Development",
+    "data-science": "Data Science",
+    "ai-ml": "AI & Machine Learning",
+    cybersecurity: "Cybersecurity",
+    "cloud-computing": "Cloud Computing",
+    devops: "DevOps",
+    "game-development": "Game Development",
+    mathematics: "Mathematics",
+    physics: "Physics",
+    chemistry: "Chemistry",
+    biology: "Biology",
+    business: "Business",
+    design: "Design",
   };
-  
-  return interestMap[interest] || interest.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+
+  return (
+    interestMap[interest] ||
+    interest.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())
+  );
 }
 
 /**
@@ -304,11 +328,22 @@ function formatInterestName(interest) {
  */
 function formatGoalName(goal) {
   const goalMap = {
-    'career-change': 'Career Change',
-    'skill-enhancement': 'Skill Enhancement',
-    'academic': 'Academic',
-    'hobby': 'Personal Interest'
+    "career-change": "Career Change",
+    "skill-enhancement": "Skill Enhancement",
+    academic: "Academic",
+    hobby: "Personal Interest",
   };
-  
-  return goalMap[goal] || goal.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+
+  return (
+    goalMap[goal] ||
+    goal.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())
+  );
+}
+
+/**
+ * Open the profile settings overlay
+ */
+function openProfileSettings() {
+  // You can redirect to settings page or open a modal
+  window.location.href = "../html/settings.html";
 }
