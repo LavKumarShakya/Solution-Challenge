@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks
+from fastapi.responses import FileResponse
 from typing import Optional, List
 import uuid
 from datetime import datetime
@@ -13,11 +14,13 @@ from models.learning_path import (
 from app.routers.auth import get_current_active_user
 from models.user import User
 from utils.search_manager import SearchManager
-from utils.vertex_ai import VertexAIClient
+from utils.enhanced_vertex_ai import EnhancedVertexAIClient
+from utils.pdf_generator import PDFGenerator
 
 router = APIRouter()
 search_manager = SearchManager()
-vertex_ai = VertexAIClient()
+vertex_ai = EnhancedVertexAIClient()
+pdf_generator = PDFGenerator()
 
 @router.post("/search", status_code=status.HTTP_202_ACCEPTED)
 async def create_learning_path(
@@ -138,7 +141,8 @@ async def customize_learning_path(
     
     # Insert status into database
     await db.search_status.insert_one(status_doc)
-      # Start the customization process in the background
+    
+    # Start the customization process in the background
     background_tasks.add_task(
         search_manager.customize_learning_path_with_status,
         search_id=search_id,
@@ -156,3 +160,48 @@ async def get_user_learning_paths(current_user: User = Depends(get_current_activ
     """
     paths = await db.learning_paths.find({"user_id": str(current_user.id)}).to_list(100)
     return [LearningPath(**path) for path in paths]
+
+@router.get("/{learning_path_id}/export/pdf")
+async def export_learning_path_to_pdf(
+    learning_path_id: str,
+    current_user: Optional[User] = Depends(get_current_active_user)
+):
+    """
+    Export a learning path to PDF format.
+    """
+    # Get the learning path
+    path = await db.learning_paths.find_one({"_id": learning_path_id})
+    if not path:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Learning path with ID {learning_path_id} not found"
+        )
+    
+    # Check permissions
+    if not path["is_public"] and (not current_user or str(path["user_id"]) != str(current_user.id)):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You don't have permission to access this learning path"
+        )
+    
+    try:
+        # Generate PDF
+        pdf_path = await pdf_generator.generate_learning_path_pdf(
+            learning_path=path,
+            query=path.get("query", ""),
+            preferences=path.get("preferences", {})
+        )
+        
+        # Return file response
+        filename = f"{path.get('title', 'learning_path').replace(' ', '_')}.pdf"
+        return FileResponse(
+            path=pdf_path,
+            filename=filename,
+            media_type="application/pdf"
+        )
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to generate PDF: {str(e)}"
+        )

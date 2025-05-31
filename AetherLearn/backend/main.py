@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
-from app.routers import learning_path, auth
+from app.routers import learning_path, auth, saved_courses
 from app.database import init_db
 
 app = FastAPI(
@@ -22,6 +22,7 @@ app.add_middleware(
 # Include routers
 app.include_router(auth.router, tags=["Authentication"], prefix="/api/auth")
 app.include_router(learning_path.router, tags=["Learning Path"], prefix="/api/learning-path")
+app.include_router(saved_courses.router, tags=["Saved Courses"])
 
 @app.on_event("startup")
 async def startup_db_client():

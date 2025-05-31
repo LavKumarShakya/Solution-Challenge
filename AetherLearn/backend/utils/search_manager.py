@@ -4,14 +4,14 @@ import os
 import logging
 from app.database import db
 from models.learning_path import SearchStatusUpdate
-from utils.vertex_ai import VertexAIClient
+from utils.enhanced_vertex_ai import EnhancedVertexAIClient
 
 # Configure logging
 logger = logging.getLogger(__name__)
 
 class SearchManager:
     def __init__(self):
-        self.vertex_ai = VertexAIClient()
+        self.vertex_ai = EnhancedVertexAIClient()
         # Initialize cache for similar queries
         self.query_cache = {}
         # Set cache expiry time (24 hours)

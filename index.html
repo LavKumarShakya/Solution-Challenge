@@ -279,6 +279,280 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <!-- Individual Resources Section -->
+                    <div class="individual-resources-container">
+                        <div class="resources-header">
+                            <h3><i class="fas fa-layer-group"></i> Individual Learning Resources</h3>
+                            <p>Explore and select from all the resources found for your learning journey</p>
+                        </div>
+                        
+                        <div class="resources-filters">
+                            <div class="filter-tabs">
+                                <button class="filter-tab active" data-filter="all">
+                                    <i class="fas fa-th-large"></i> All Resources
+                                </button>
+                                <button class="filter-tab" data-filter="video">
+                                    <i class="fas fa-play-circle"></i> Videos
+                                </button>
+                                <button class="filter-tab" data-filter="article">
+                                    <i class="fas fa-file-alt"></i> Articles
+                                </button>
+                                <button class="filter-tab" data-filter="interactive">
+                                    <i class="fas fa-laptop-code"></i> Interactive
+                                </button>
+                                <button class="filter-tab" data-filter="course">
+                                    <i class="fas fa-graduation-cap"></i> Courses
+                                </button>
+                            </div>
+                            
+                            <div class="sort-options">
+                                <select class="sort-select" id="resourceSort">
+                                    <option value="relevance">Sort by Relevance</option>
+                                    <option value="rating">Sort by Rating</option>
+                                    <option value="duration">Sort by Duration</option>
+                                    <option value="difficulty">Sort by Difficulty</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="resources-grid" id="individualResourcesGrid">
+                            <!-- Sample resource items - these will be populated dynamically via JavaScript -->
+                            <div class="individual-resource-card" data-type="video">
+                                <div class="resource-card-header">
+                                    <div class="resource-type-badge video">
+                                        <i class="fas fa-play-circle"></i>
+                                        <span>Video</span>
+                                    </div>
+                                    <div class="resource-actions">
+                                        <button class="resource-action-btn bookmark" title="Bookmark">
+                                            <i class="far fa-bookmark"></i>
+                                        </button>
+                                        <button class="resource-action-btn share" title="Share">
+                                            <i class="fas fa-share"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="resource-content">
+                                    <h4 class="resource-title">Introduction to Machine Learning Fundamentals</h4>
+                                    <p class="resource-description">A comprehensive overview of machine learning concepts, algorithms, and practical applications for beginners.</p>
+                                    
+                                    <div class="resource-metadata">
+                                        <div class="metadata-row">
+                                            <span class="metadata-item">
+                                                <i class="fas fa-clock"></i>
+                                                <span>45 minutes</span>
+                                            </span>
+                                            <span class="metadata-item">
+                                                <i class="fas fa-signal"></i>
+                                                <span>Beginner</span>
+                                            </span>
+                                            <span class="metadata-item quality-rating">
+                                                <i class="fas fa-star"></i>
+                                                <span>4.8</span>
+                                            </span>
+                                        </div>
+                                        <div class="metadata-row">
+                                            <span class="metadata-item source">
+                                                <i class="fas fa-external-link-alt"></i>
+                                                <span>Khan Academy</span>
+                                            </span>
+                                            <span class="metadata-item language">
+                                                <i class="fas fa-globe"></i>
+                                                <span>English</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="learning-styles">
+                                        <span class="learning-style-badge visual">
+                                            <i class="fas fa-eye"></i> Visual
+                                        </span>
+                                        <span class="learning-style-badge auditory">
+                                            <i class="fas fa-headphones"></i> Auditory
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <div class="resource-card-footer">
+                                    <button class="resource-action-btn primary">
+                                        <i class="fas fa-external-link-alt"></i>
+                                        Access Resource
+                                    </button>
+                                    <button class="resource-action-btn secondary add-to-course" title="Add to Custom Course">
+                                        <i class="fas fa-plus"></i>
+                                        Add to Course
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="individual-resource-card" data-type="article">
+                                <div class="resource-card-header">
+                                    <div class="resource-type-badge article">
+                                        <i class="fas fa-file-alt"></i>
+                                        <span>Article</span>
+                                    </div>
+                                    <div class="resource-actions">
+                                        <button class="resource-action-btn bookmark" title="Bookmark">
+                                            <i class="far fa-bookmark"></i>
+                                        </button>
+                                        <button class="resource-action-btn share" title="Share">
+                                            <i class="fas fa-share"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="resource-content">
+                                    <h4 class="resource-title">Understanding ML Algorithms: A Comprehensive Guide</h4>
+                                    <p class="resource-description">Deep dive into various machine learning algorithms, their applications, and when to use each type.</p>
+                                    
+                                    <div class="resource-metadata">
+                                        <div class="metadata-row">
+                                            <span class="metadata-item">
+                                                <i class="fas fa-clock"></i>
+                                                <span>20 minutes</span>
+                                            </span>
+                                            <span class="metadata-item">
+                                                <i class="fas fa-signal"></i>
+                                                <span>Intermediate</span>
+                                            </span>
+                                            <span class="metadata-item quality-rating">
+                                                <i class="fas fa-star"></i>
+                                                <span>4.6</span>
+                                            </span>
+                                        </div>
+                                        <div class="metadata-row">
+                                            <span class="metadata-item source">
+                                                <i class="fas fa-external-link-alt"></i>
+                                                <span>Medium</span>
+                                            </span>
+                                            <span class="metadata-item language">
+                                                <i class="fas fa-globe"></i>
+                                                <span>English</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="learning-styles">
+                                        <span class="learning-style-badge reading">
+                                            <i class="fas fa-book-open"></i> Reading
+                                        </span>
+                                        <span class="learning-style-badge visual">
+                                            <i class="fas fa-eye"></i> Visual
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <div class="resource-card-footer">
+                                    <button class="resource-action-btn primary">
+                                        <i class="fas fa-external-link-alt"></i>
+                                        Access Resource
+                                    </button>
+                                    <button class="resource-action-btn secondary add-to-course" title="Add to Custom Course">
+                                        <i class="fas fa-plus"></i>
+                                        Add to Course
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="individual-resource-card" data-type="interactive">
+                                <div class="resource-card-header">
+                                    <div class="resource-type-badge interactive">
+                                        <i class="fas fa-laptop-code"></i>
+                                        <span>Interactive</span>
+                                    </div>
+                                    <div class="resource-actions">
+                                        <button class="resource-action-btn bookmark" title="Bookmark">
+                                            <i class="far fa-bookmark"></i>
+                                        </button>
+                                        <button class="resource-action-btn share" title="Share">
+                                            <i class="fas fa-share"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="resource-content">
+                                    <h4 class="resource-title">Build Your First ML Model - Interactive Tutorial</h4>
+                                    <p class="resource-description">Hands-on coding experience building a machine learning model with Python and scikit-learn.</p>
+                                    
+                                    <div class="resource-metadata">
+                                        <div class="metadata-row">
+                                            <span class="metadata-item">
+                                                <i class="fas fa-clock"></i>
+                                                <span>90 minutes</span>
+                                            </span>
+                                            <span class="metadata-item">
+                                                <i class="fas fa-signal"></i>
+                                                <span>Intermediate</span>
+                                            </span>
+                                            <span class="metadata-item quality-rating">
+                                                <i class="fas fa-star"></i>
+                                                <span>4.9</span>
+                                            </span>
+                                        </div>
+                                        <div class="metadata-row">
+                                            <span class="metadata-item source">
+                                                <i class="fas fa-external-link-alt"></i>
+                                                <span>Codecademy</span>
+                                            </span>
+                                            <span class="metadata-item language">
+                                                <i class="fas fa-globe"></i>
+                                                <span>English</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="learning-styles">
+                                        <span class="learning-style-badge kinesthetic">
+                                            <i class="fas fa-hands"></i> Hands-on
+                                        </span>
+                                        <span class="learning-style-badge visual">
+                                            <i class="fas fa-eye"></i> Visual
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <div class="resource-card-footer">
+                                    <button class="resource-action-btn primary">
+                                        <i class="fas fa-external-link-alt"></i>
+                                        Access Resource
+                                    </button>
+                                    <button class="resource-action-btn secondary add-to-course" title="Add to Custom Course">
+                                        <i class="fas fa-plus"></i>
+                                        Add to Course
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="resources-pagination">
+                            <button class="pagination-btn" id="loadMoreResources">
+                                <i class="fas fa-plus-circle"></i>
+                                Load More Resources
+                            </button>
+                        </div>
+                        
+                        <div class="selected-resources-summary" id="selectedResourcesSummary" style="display: none;">
+                            <div class="summary-header">
+                                <h4><i class="fas fa-bookmark"></i> Selected Resources (<span id="selectedCount">0</span>)</h4>
+                                <div class="summary-actions">
+                                    <button class="summary-action-btn" id="createCustomCourse">
+                                        <i class="fas fa-graduation-cap"></i>
+                                        Create Custom Course
+                                    </button>
+                                    <button class="summary-action-btn secondary" id="clearSelection">
+                                        <i class="fas fa-times"></i>
+                                        Clear Selection
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="selected-resources-list" id="selectedResourcesList">
+                                <!-- Selected resources will be displayed here -->
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="results-actions">
                         <button class="action-button primary"><i class="fas fa-save"></i> Save Path</button>
                         <button class="action-button secondary"><i class="fas fa-share"></i> Share</button>
@@ -876,6 +1150,8 @@
     <script src="AetherLearn/js/navbar.js"></script>
     <script src="AetherLearn/js/learning_path.js"></script>
     <script src="AetherLearn/js/learning_path_search.js"></script>
+    <script src="AetherLearn/js/individual_resources.js"></script>
+    <script src="AetherLearn/js/resource_integration.js"></script>
     <script src="AetherLearn/js/script.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>

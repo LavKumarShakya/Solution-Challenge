@@ -689,5 +689,226 @@ function showErrorMessage(message) {
     });
 }
 
+// Populate individual resources section with data from Vertex AI
+function populateIndividualResources(resources) {
+    const resourcesGrid = document.getElementById('individualResourcesGrid');
+    if (!resourcesGrid || !resources || resources.length === 0) {
+        return;
+    }
+
+    // Clear existing sample resources
+    resourcesGrid.innerHTML = '';
+
+    // Add each resource to the grid
+    resources.forEach((resource, index) => {
+        const resourceCard = createResourceCardFromData(resource, index);
+        resourcesGrid.appendChild(resourceCard);
+    });
+
+    // Show the individual resources container
+    const resourcesContainer = document.querySelector('.individual-resources-container');
+    if (resourcesContainer) {
+        resourcesContainer.style.display = 'block';
+    }
+
+    // Initialize individual resources manager if it exists
+    if (window.individualResourcesManager) {
+        window.individualResourcesManager.updateResourceCount();
+    }
+}
+
+// Create a resource card from API data
+function createResourceCardFromData(resource, index) {
+    const card = document.createElement('div');
+    card.className = 'individual-resource-card';
+    card.setAttribute('data-type', resource.type || 'article');
+    card.setAttribute('data-resource-id', resource.id || `resource_${Date.now()}_${index}`);
+    card.setAttribute('data-url', resource.url || '#');
+
+    // Determine resource type and icon
+    const resourceType = determineResourceType(resource);
+    const resourceIcon = getResourceTypeIcon(resourceType);
+    
+    // Format duration
+    const duration = formatDuration(resource.duration || resource.estimated_time);
+    
+    // Format difficulty
+    const difficulty = resource.difficulty || resource.level || 'Beginner';
+    
+    // Format rating
+    const rating = resource.rating || resource.quality_score || (Math.random() * 1.5 + 3.5).toFixed(1);
+    
+    // Format source
+    const source = resource.source || resource.provider || extractDomainFromUrl(resource.url);
+
+    card.innerHTML = `
+        <div class="resource-card-header">
+            <div class="resource-type-badge ${resourceType}">
+                <i class="${resourceIcon}"></i>
+                <span>${resourceType.charAt(0).toUpperCase() + resourceType.slice(1)}</span>
+            </div>
+            <div class="resource-actions">
+                <button class="resource-action-btn bookmark" title="Bookmark">
+                    <i class="far fa-bookmark"></i>
+                </button>
+                <button class="resource-action-btn share" title="Share">
+                    <i class="fas fa-share"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="resource-content">
+            <h4 class="resource-title">${resource.title || 'Untitled Resource'}</h4>
+            <p class="resource-description">${resource.description || resource.snippet || 'No description available.'}</p>
+            
+            <div class="resource-metadata">
+                <div class="metadata-row">
+                    <span class="metadata-item">
+                        <i class="fas fa-clock"></i>
+                        <span>${duration}</span>
+                    </span>
+                    <span class="metadata-item">
+                        <i class="fas fa-signal"></i>
+                        <span>${difficulty}</span>
+                    </span>
+                    <span class="metadata-item quality-rating">
+                        <i class="fas fa-star"></i>
+                        <span>${rating}</span>
+                    </span>
+                </div>
+                <div class="metadata-row">
+                    <span class="metadata-item source">
+                        <i class="fas fa-external-link-alt"></i>
+                        <span>${source}</span>
+                    </span>
+                    <span class="metadata-item language">
+                        <i class="fas fa-globe"></i>
+                        <span>${resource.language || 'English'}</span>
+                    </span>
+                </div>
+            </div>
+            
+            <div class="learning-styles">
+                ${generateLearningStyleBadges(resourceType)}
+            </div>
+        </div>
+        
+        <div class="resource-card-footer">
+            <button class="resource-action-btn primary">
+                <i class="fas fa-external-link-alt"></i>
+                Access Resource
+            </button>
+            <button class="resource-action-btn secondary add-to-course" title="Add to Custom Course">
+                <i class="fas fa-plus"></i>
+                Add to Course
+            </button>
+        </div>
+    `;
+
+    return card;
+}
+
+// Helper function to determine resource type from API data
+function determineResourceType(resource) {
+    if (resource.type) {
+        return resource.type.toLowerCase();
+    }
+    
+    const url = resource.url || '';
+    const title = (resource.title || '').toLowerCase();
+    
+    // Check for video indicators
+    if (url.includes('youtube.com') || url.includes('vimeo.com') ||
+        title.includes('video') || title.includes('tutorial')) {
+        return 'video';
+    }
+    
+    // Check for interactive/course indicators
+    if (url.includes('codecademy.com') || url.includes('coursera.org') ||
+        url.includes('edx.org') || title.includes('course') ||
+        title.includes('interactive')) {
+        return 'interactive';
+    }
+    
+    // Check for course indicators
+    if (title.includes('course') || title.includes('program') ||
+        title.includes('certification')) {
+        return 'course';
+    }
+    
+    // Default to article
+    return 'article';
+}
+
+// Helper function to get resource type icon
+function getResourceTypeIcon(type) {
+    const icons = {
+        video: 'fas fa-play-circle',
+        article: 'fas fa-file-alt',
+        interactive: 'fas fa-laptop-code',
+        course: 'fas fa-graduation-cap'
+    };
+    return icons[type] || 'fas fa-file';
+}
+
+// Helper function to format duration
+function formatDuration(duration) {
+    if (!duration) return 'Variable';
+    
+    // If already formatted, return as is
+    if (typeof duration === 'string' && duration.includes('min')) {
+        return duration;
+    }
+    
+    // Convert minutes to readable format
+    if (typeof duration === 'number') {
+        if (duration < 60) {
+            return `${duration} minutes`;
+        } else {
+            const hours = Math.floor(duration / 60);
+            const minutes = duration % 60;
+            return minutes > 0 ? `${hours}h ${minutes}m` : `${hours} hours`;
+        }
+    }
+    
+    return duration.toString();
+}
+
+// Helper function to extract domain from URL
+function extractDomainFromUrl(url) {
+    if (!url) return 'Unknown';
+    
+    try {
+        const domain = new URL(url).hostname;
+        return domain.replace('www.', '').split('.')[0];
+    } catch {
+        return 'Unknown';
+    }
+}
+
+// Helper function to generate learning style badges
+function generateLearningStyleBadges(type) {
+    const styles = {
+        video: ['visual', 'auditory'],
+        article: ['reading', 'visual'],
+        interactive: ['kinesthetic', 'visual'],
+        course: ['visual', 'reading']
+    };
+
+    const typeStyles = styles[type] || ['visual'];
+    const badgeIcons = {
+        visual: 'fas fa-eye',
+        auditory: 'fas fa-headphones',
+        reading: 'fas fa-book-open',
+        kinesthetic: 'fas fa-hands'
+    };
+
+    return typeStyles.map(style =>
+        `<span class="learning-style-badge ${style}">
+            <i class="${badgeIcons[style]}"></i> ${style.charAt(0).toUpperCase() + style.slice(1)}
+        </span>`
+    ).join('');
+}
+
 // Initialize when the DOM is loaded
 document.addEventListener('DOMContentLoaded', initializeLearningPathSearch);
