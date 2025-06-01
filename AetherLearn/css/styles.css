@@ -177,20 +177,37 @@ h1:hover, h2:hover, h3:hover {
 
 /* Search Suggestions */
 .search-suggestions {
-  position: relative;
+  position: absolute;
   top: 100%;
   left: 0;
   right: 0;
-  background: var(--bg-tertiary);
+  background: rgba(28, 42, 58, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 0 0 var(--hero-radius-lg) var(--hero-radius-lg);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
   margin-top: 0.5rem;
   overflow: hidden;
-  z-index: 10;
+  z-index: 1000;
   max-height: 200px;
   overflow-y: auto;
-  
+  display: none;
+}
 
+.search-suggestions.active {
+  display: block;
+}
+
+/* Hide buttons when search suggestions are active */
+.hero-content.suggestions-active .hero-search-button,
+.hero-content.suggestions-active .hero-preferences-button,
+.hero-content.suggestions-active .ai-assistant-btn,
+.hero-content.suggestions-active button,
+.hero-content.suggestions-active a[class*="btn"] {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 0.2s ease;
 }
 
 .search-suggestions::-webkit-scrollbar {
@@ -218,7 +235,32 @@ h1:hover, h2:hover, h3:hover {
   transition: all 0.3s ease;
   cursor: default;
   user-select: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.suggestion-item {
+  padding: 1rem 1.5rem;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  user-select: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  backdrop-filter: blur(2px);
+}
+
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.suggestion-item:hover {
+  background: rgba(64, 224, 208, 0.15);
+  backdrop-filter: blur(4px);
+  color: var(--text-primary);
+  transform: translateX(5px);
+  box-shadow: 0 2px 8px rgba(64, 224, 208, 0.1);
 }
 
 .search-suggestion-item:last-child {
@@ -3633,7 +3675,7 @@ footer:hover .footer-bottom::before {
        display: flex;
        align-items: center;
        justify-content: center;
-       gap: 0.5rem;
+       gap: 0.8rem;
    }
    
    .resources-header h3 i {
@@ -3643,7 +3685,9 @@ footer:hover .footer-bottom::before {
    .resources-header p {
        color: var(--text-secondary);
        font-size: 1rem;
-       margin: 0;
+       margin: 0 auto;
+       max-width: 600px;
+       line-height: 1.5;
    }
    
    /* Resource Filters */
@@ -3653,13 +3697,15 @@ footer:hover .footer-bottom::before {
        align-items: center;
        margin-bottom: 2rem;
        gap: 1rem;
-       flex-wrap: wrap;
+       flex-wrap: nowrap; 
    }
    
    .filter-tabs {
        display: flex;
        gap: 0.5rem;
-       flex-wrap: wrap;
+       flex-wrap: nowrap; 
+       flex: 1;
+       justify-content: flex-start;
    }
    
    .filter-tab {
@@ -3695,7 +3741,9 @@ footer:hover .footer-bottom::before {
    }
    
    .sort-options {
-       min-width: 200px;
+       min-width: 180px;
+       flex-shrink: 0;
+       margin-left: auto; 
    }
    
    .sort-select {
@@ -3849,6 +3897,7 @@ footer:hover .footer-bottom::before {
        gap: 1rem;
        margin-bottom: 0.5rem;
        flex-wrap: wrap;
+       justify-content: flex-start;
    }
    
    .metadata-item {
@@ -3882,6 +3931,7 @@ footer:hover .footer-bottom::before {
        flex-wrap: wrap;
        gap: 0.5rem;
        margin-bottom: 1rem;
+       justify-content: flex-start;
    }
    
    .learning-style-badge {
@@ -3951,11 +4001,18 @@ footer:hover .footer-bottom::before {
    
    .resource-action-btn.secondary {
        height: auto;
-       padding: 0.8rem;
+       padding: 0.8rem 1rem;
        border-radius: var(--hero-radius-md);
        background: rgba(255, 255, 255, 0.1);
        border: 1px solid rgba(255, 255, 255, 0.2);
-       min-width: 40px;
+       min-width: 120px;
+       font-size: 0.85rem;
+       font-weight: 500;
+       white-space: nowrap;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       gap: 0.4rem;
    }
    
    .resource-action-btn.secondary:hover {
@@ -3972,6 +4029,9 @@ footer:hover .footer-bottom::before {
    .resources-pagination {
        text-align: center;
        margin-bottom: 2rem;
+       display: flex;
+       justify-content: center;
+       align-items: center;
    }
    
    .pagination-btn {
@@ -4148,16 +4208,26 @@ footer:hover .footer-bottom::before {
    @media (max-width: 1024px) {
        .resources-grid {
            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+           justify-items: center;
        }
        
        .resources-filters {
-           flex-direction: column;
-           align-items: stretch;
+           flex-direction: row;
+           flex-wrap: wrap; 
+           justify-content: center;
+           align-items: center;
            gap: 1rem;
        }
        
        .filter-tabs {
            justify-content: center;
+           flex: 1;
+           min-width: 280px; 
+       }
+       
+       .sort-options {
+           min-width: 180px; 
+           max-width: 220px; 
        }
    }
    
@@ -4172,19 +4242,44 @@ footer:hover .footer-bottom::before {
            gap: 1rem;
        }
        
-       .filter-tabs {
+       .resources-filters {
            flex-direction: column;
-           align-items: stretch;
+           align-items: center;
+           gap: 1.5rem;
+           justify-content: center;
+       }
+       
+       .filter-tabs {
+           width: 100%;
+           justify-content: center;
+       }
+       
+       .sort-options {
+           width: 100%;
+           max-width: 300px;
+       }
+       
+       .filter-tabs {
+           display: grid;
+           grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+           gap: 0.5rem;
+           width: 100%;
        }
        
        .filter-tab {
            justify-content: center;
+           text-align: center;
        }
        
        .metadata-row {
            flex-direction: column;
-           align-items: flex-start;
+           align-items: center;
            gap: 0.5rem;
+           text-align: center;
+       }
+       
+       .metadata-row:first-child {
+           align-items: center;
        }
        
        .resource-card-footer {
@@ -4220,6 +4315,15 @@ footer:hover .footer-bottom::before {
        
        .learning-styles {
            justify-content: center;
+       }
+       
+       .resource-card-footer {
+           align-items: center;
+       }
+       
+       .resource-action-btn.secondary {
+           min-width: 100px;
+           font-size: 0.8rem;
        }
    }
    

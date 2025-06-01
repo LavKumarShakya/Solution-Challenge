@@ -220,6 +220,9 @@ function initializeSearchSuggestions(inputElement) {
             if (!query) {
                 suggestionsContainer.innerHTML = '';
                 suggestionsContainer.style.display = 'none';
+                suggestionsContainer.classList.remove('active');
+                const heroContent = document.querySelector('.hero-content');
+                if (heroContent) heroContent.classList.remove('suggestions-active');
                 return;
             }
             
@@ -241,6 +244,9 @@ function initializeSearchSuggestions(inputElement) {
         document.addEventListener('click', (e) => {
             if (!inputElement.contains(e.target) && !suggestionsContainer.contains(e.target)) {
                 suggestionsContainer.style.display = 'none';
+                suggestionsContainer.classList.remove('active');
+                const heroContent = document.querySelector('.hero-content');
+                if (heroContent) heroContent.classList.remove('suggestions-active');
             }
         });
     }
@@ -264,9 +270,12 @@ async function getSuggestions(query) {
 // Render search suggestions
 function renderSuggestions(container, suggestions, inputElement) {
     container.innerHTML = '';
+    const heroContent = document.querySelector('.hero-content');
     
     if (suggestions.length === 0) {
         container.style.display = 'none';
+        container.classList.remove('active');
+        if (heroContent) heroContent.classList.remove('suggestions-active');
         return;
     }
     
@@ -278,15 +287,22 @@ function renderSuggestions(container, suggestions, inputElement) {
         item.addEventListener('click', () => {
             inputElement.value = suggestion;
             container.style.display = 'none';
+            container.classList.remove('active');
+            if (heroContent) heroContent.classList.remove('suggestions-active');
             
             // Auto-trigger search when suggestion is clicked
-            document.querySelector('.hero-search-button').click();
+            const searchButton = document.querySelector('.hero-search-button');
+            if (searchButton) {
+                searchButton.click();
+            }
         });
         
         container.appendChild(item);
     });
     
     container.style.display = 'block';
+    container.classList.add('active');
+    if (heroContent) heroContent.classList.add('suggestions-active');
 }
 
 // Main search function triggered when the user searches
