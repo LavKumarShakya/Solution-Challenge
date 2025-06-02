@@ -6,7 +6,7 @@ google-cloud-aiplatform>=1.38.0  # Latest Vertex AI SDK
 google-generativeai>=0.3.0  # Google Generative AI library
 vertexai>=0.5.0  # Updated Vertex AI Python SDK
 google-cloud-discoveryengine>=0.12.0  # For Vertex AI Search
-pydantic==2.4.2
+pydantic>=2.5.0
 aiohttp==3.8.6
 python-multipart==0.0.6
 passlib==1.7.4

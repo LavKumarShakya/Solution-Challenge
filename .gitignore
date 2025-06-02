@@ -4,3 +4,4 @@ AetherLearn/.env
 
 AetherLearn/backend/.env
 credentials/service-account.json
+/mcp-servers

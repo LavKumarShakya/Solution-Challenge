@@ -14,12 +14,12 @@ from models.learning_path import (
 from app.routers.auth import get_current_active_user
 from models.user import User
 from utils.search_manager import SearchManager
-from utils.enhanced_vertex_ai import EnhancedVertexAIClient
+from utils.vertex_ai import VertexAIClient
 from utils.pdf_generator import PDFGenerator
 
 router = APIRouter()
 search_manager = SearchManager()
-vertex_ai = EnhancedVertexAIClient()
+vertex_ai = VertexAIClient()
 pdf_generator = PDFGenerator()
 
 @router.post("/search", status_code=status.HTTP_202_ACCEPTED)
