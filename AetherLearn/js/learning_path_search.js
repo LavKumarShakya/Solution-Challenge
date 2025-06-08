@@ -305,8 +305,19 @@ function renderSuggestions(container, suggestions, inputElement) {
     if (heroContent) heroContent.classList.add('suggestions-active');
 }
 
+// Global flag to prevent multiple simultaneous searches
+let isSearchInProgress = false;
+
 // Main search function triggered when the user searches
 async function startSearchProcess(query) {
+    // Prevent multiple simultaneous searches
+    if (isSearchInProgress) {
+        console.log('Search already in progress, ignoring duplicate request');
+        return;
+    }
+    
+    isSearchInProgress = true;
+    
     try {
         // Show the search process container
         const searchProcessContainer = document.getElementById('searchProcessContainer');
@@ -343,6 +354,8 @@ async function startSearchProcess(query) {
         console.error('Error starting search process:', error);
         // Show error message to user
         showErrorMessage('Failed to start learning path generation. Please try again.');
+        // Reset the flag on error
+        isSearchInProgress = false;
     }
 }
 
@@ -409,14 +422,20 @@ async function pollSearchStatus(searchId) {
             if (status.status === 'COMPLETED') {
                 clearInterval(statusCheckInterval);
                 await showLearningPathResults(status.learning_path_id);
+                // Reset search flag
+                isSearchInProgress = false;
             } else if (status.status === 'FAILED') {
                 clearInterval(statusCheckInterval);
                 showErrorMessage(status.message || 'Failed to generate learning path');
+                // Reset search flag
+                isSearchInProgress = false;
             }
         } catch (error) {
             console.error('Error checking search status:', error);
             clearInterval(statusCheckInterval);
             showErrorMessage('Failed to get search status. Please try again.');
+            // Reset search flag on error
+            isSearchInProgress = false;
         }
     }, 2000); // Poll every 2 seconds
 }

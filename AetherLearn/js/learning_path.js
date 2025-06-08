@@ -4,8 +4,8 @@
  * Updated for the Vertex AI Search implementation
  */
 
-// API URL Configuration
-const API_BASE_URL = 'http://localhost:8000/api';
+// API URL Configuration (only declare if not already defined)
+window.API_BASE_URL = window.API_BASE_URL || 'http://localhost:8000/api';
 
 // Learning Path API Functions
 window.LearningPathAPI = class LearningPathAPI {
@@ -17,12 +17,19 @@ window.LearningPathAPI = class LearningPathAPI {
      */
     static async initiateSearch(query, preferences = {}) {
         try {
-            const response = await fetch(`${API_BASE_URL}/learning-path/search`, {
+            const headers = {
+                'Content-Type': 'application/json'
+            };
+            
+            // Only add Authorization header if we have a token
+            const token = this.getToken();
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+            
+            const response = await fetch(`${window.API_BASE_URL}/learning-path/search`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${this.getToken()}`
-                },
+                headers: headers,
                 body: JSON.stringify({
                     query,
                     preferences
@@ -30,8 +37,18 @@ window.LearningPathAPI = class LearningPathAPI {
             });
             
             if (!response.ok) {
-                const errorData = await response.json().catch(() => ({}));
-                throw new Error(errorData.detail || `Error: ${response.status} ${response.statusText}`);
+                let errorMessage = `Error: ${response.status} ${response.statusText}`;
+                try {
+                    const errorData = await response.json();
+                    console.error('API Error Response:', errorData);
+                    errorMessage = errorData.detail || errorData.message || errorMessage;
+                    if (Array.isArray(errorData.detail)) {
+                        errorMessage = errorData.detail.map(err => `${err.loc?.join('.')} - ${err.msg}`).join(', ');
+                    }
+                } catch (e) {
+                    console.error('Failed to parse error response:', e);
+                }
+                throw new Error(errorMessage);
             }
             
             return await response.json();
@@ -48,10 +65,16 @@ window.LearningPathAPI = class LearningPathAPI {
      */
     static async getSearchStatus(searchId) {
         try {
-            const response = await fetch(`${API_BASE_URL}/learning-path/status/${searchId}`, {
-                headers: {
-                    'Authorization': `Bearer ${this.getToken()}`
-                }
+            const headers = {};
+            
+            // Only add Authorization header if we have a token
+            const token = this.getToken();
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+            
+            const response = await fetch(`${window.API_BASE_URL}/learning-path/status/${searchId}`, {
+                headers: headers
             });
             
             if (!response.ok) {
@@ -72,7 +95,7 @@ window.LearningPathAPI = class LearningPathAPI {
      */
     static async getLearningPath(learningPathId) {
         try {
-            const response = await fetch(`${API_BASE_URL}/learning-path/${learningPathId}`, {
+            const response = await fetch(`${window.API_BASE_URL}/learning-path/${learningPathId}`, {
                 headers: {
                     'Authorization': `Bearer ${this.getToken()}`
                 }
@@ -97,7 +120,7 @@ window.LearningPathAPI = class LearningPathAPI {
      */
     static async customizeLearningPath(learningPathId, preferences) {
         try {
-            const response = await fetch(`${API_BASE_URL}/learning-path/customize`, {
+            const response = await fetch(`${window.API_BASE_URL}/learning-path/customize`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -126,7 +149,7 @@ window.LearningPathAPI = class LearningPathAPI {
      */
     static async getUserLearningPaths() {
         try {
-            const response = await fetch(`${API_BASE_URL}/learning-path/user/paths`, {
+            const response = await fetch(`${window.API_BASE_URL}/learning-path/user/paths`, {
                 headers: {
                     'Authorization': `Bearer ${this.getToken()}`
                 }
@@ -154,11 +177,21 @@ window.LearningPathAPI = class LearningPathAPI {
 
 // Search Process UI Functions
 window.LearningPathUI = class LearningPathUI {
+    static isSearchInProgress = false;
+    
     /**
      * Start the search process
      * @param {string} query - The search query
      */
     static async startSearchProcess(query) {
+        // Prevent multiple simultaneous searches
+        if (this.isSearchInProgress) {
+            console.log('Search already in progress, ignoring duplicate request');
+            return;
+        }
+        
+        this.isSearchInProgress = true;
+        
         try {
             // Show the search process container
             document.getElementById('searchProcessContainer').style.display = 'block';
@@ -180,6 +213,8 @@ window.LearningPathUI = class LearningPathUI {
         } catch (error) {
             console.error('Error starting search process:', error);
             this.showErrorMessage('Failed to start search process. Please try again.');
+            // Reset flag on error
+            this.isSearchInProgress = false;
         }
     }
     
@@ -259,16 +294,23 @@ window.LearningPathUI = class LearningPathUI {
                         } else if (status.status === 'FAILED') {
                             this.showErrorMessage(status.message || 'Search process failed. Please try again.');
                         }
+                        
+                        // Reset search flag
+                        this.isSearchInProgress = false;
                     }
                 } catch (error) {
                     console.error('Error checking search status:', error);
                     clearInterval(statusCheckInterval);
                     this.showErrorMessage('Error checking search status. Please try again.');
+                    // Reset search flag on error
+                    this.isSearchInProgress = false;
                 }
             }, 3000); // Check every 3 seconds
         } catch (error) {
             console.error('Error setting up status polling:', error);
             this.showErrorMessage('Error monitoring search progress. Please try again.');
+            // Reset search flag on error
+            this.isSearchInProgress = false;
         }
     }
       /**
@@ -383,7 +425,7 @@ window.LearningPathUI = class LearningPathUI {
      * @param {string} learningPathId - The learning path ID
      */    static async showLearningPathResults(learningPathId) {
         try {
-            // Get the learning path data 
+            // Get the learning path data
             const learningPath = await LearningPathAPI.getLearningPath(learningPathId);
             
             // Hide the processing stages
@@ -394,52 +436,62 @@ window.LearningPathUI = class LearningPathUI {
             const resultsStage = document.getElementById('learningPathResultsStage');
             resultsStage.style.display = 'block';
             
+            // Clear any existing content to prevent duplicates
+            resultsStage.innerHTML = '';
+            
             // Show a success message
             const successMsg = document.createElement('div');
             successMsg.className = 'success-message';
-            successMsg.innerHTML = `<i class="fas fa-check-circle"></i> Your learning path has been created with Vertex AI!`;
-            
-            // If there's an existing success message, remove it
-            const existingMsg = resultsStage.querySelector('.success-message');
-            if (existingMsg) {
-                existingMsg.remove();
-            }
+            successMsg.innerHTML = `<i class="fas fa-check-circle"></i> Your personalized learning path has been created by Vertex AI!`;
             
             // Insert the success message at the top of the results stage
-            resultsStage.insertBefore(successMsg, resultsStage.firstChild);
+            resultsStage.appendChild(successMsg);
+            
+            // Create container for learning path content
+            const pathContainer = document.createElement('div');
+            pathContainer.className = 'learning-path-container';
+            resultsStage.appendChild(pathContainer);
             
             // Render the learning path
-            this.renderLearningPath(learningPath);
+            this.renderLearningPath(learningPath, pathContainer);
         } catch (error) {
             console.error('Error showing learning path results:', error);
             this.showErrorMessage('Failed to load learning path results. Please try again.');
         }
     }
       /**
-     * Render a learning path generated by Vertex AI Search and Generation
-     * @param {Object} learningPath - The learning path object
-     */
-    static renderLearningPath(learningPath) {
-        // Update the result query
-        document.getElementById('resultQueryText').textContent = learningPath.query;
-        
-        // Update result stats
-        document.getElementById('totalResourcesCount').textContent = this.countResources(learningPath);
-        document.getElementById('estimatedTime').textContent = learningPath.estimated_hours;
-        document.getElementById('difficultyLevel').textContent = learningPath.difficulty;
-        
-        // Add AI generation info
-        const resultHeader = document.querySelector('.learning-path-header');
-        if (resultHeader) {
-            const aiInfoBadge = document.createElement('div');
-            aiInfoBadge.className = 'ai-generation-badge';
-            aiInfoBadge.innerHTML = `<i class="fas fa-robot"></i> Generated by Vertex AI`;
-            resultHeader.appendChild(aiInfoBadge);
-        }
-        
-        // Render the modules
-        const modulesContainer = document.querySelector('.modules-container');
-        if (modulesContainer) {
+       * Render a learning path generated by Vertex AI Search and Generation
+       * @param {Object} learningPath - The learning path object
+       * @param {Element} container - The container element to render into (optional)
+       */
+      static renderLearningPath(learningPath, container = null) {
+          // Create learning path header
+          const headerHTML = `
+              <div class="learning-path-header">
+                  <h2>Your Personalized Learning Path</h2>
+                  <div class="ai-generation-badge">
+                      <i class="fas fa-robot"></i> Generated by Vertex AI
+                  </div>
+                  <div class="learning-path-stats">
+                      <span><strong>Query:</strong> ${learningPath.query}</span><br>
+                      <span><strong>${this.countResources(learningPath)} resources</strong></span><br>
+                      <span><strong>Estimated time:</strong> ${learningPath.estimated_hours} hours</span><br>
+                      <span><strong>Difficulty:</strong> ${learningPath.difficulty}</span>
+                  </div>
+              </div>
+          `;
+          
+          // Use provided container or find existing one
+          const targetContainer = container || document.querySelector('.learning-path-container');
+          if (targetContainer) {
+              targetContainer.innerHTML = headerHTML;
+              
+              // Create modules container
+              const modulesContainer = document.createElement('div');
+              modulesContainer.className = 'modules-container';
+              targetContainer.appendChild(modulesContainer);
+              
+              // Render the modules
             let modulesHTML = '';
             
             learningPath.modules.forEach(module => {

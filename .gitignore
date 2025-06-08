@@ -1,7 +1,6 @@
 AetherLearn/docs
 AetherLearn/.env
-
-
 AetherLearn/backend/.env
-credentials/service-account.json
 /mcp-servers
+credentials/service-account.json
+credentials/service-account.json

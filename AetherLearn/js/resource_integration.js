@@ -116,9 +116,6 @@ window.showLearningPathResults = async function(learningPathId) {
     }
 };
 
-txt
-
-
 
 })();
 
@@ -186,9 +183,6 @@ return Array.from({ length: count }, (_, index) => ({
     language: 'English'
 }));
 
-txt
-
-
 
 }
 
@@ -230,9 +224,6 @@ const originalLoadAdditionalResources = window.individualResourcesManager.loadAd
         };
     }
 }, 1000);
-
-txt
-
 
 
 });

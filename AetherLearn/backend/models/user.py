@@ -1,13 +1,26 @@
-from pydantic import BaseModel, EmailStr, Field, field_validator
-from typing import Optional, List
+from pydantic import BaseModel, EmailStr, Field, field_validator, ConfigDict
+from pydantic_core import core_schema
+from typing import Optional, List, Any
 from datetime import datetime
 from bson import ObjectId
 
 # Custom ObjectId field for MongoDB compatibility
 class PyObjectId(ObjectId):
     @classmethod
-    def __get_validators__(cls):
-        yield cls.validate
+    def __get_pydantic_core_schema__(cls, source_type: Any, handler) -> core_schema.CoreSchema:
+        return core_schema.json_or_python_schema(
+            json_schema=core_schema.str_schema(),
+            python_schema=core_schema.union_schema([
+                core_schema.is_instance_schema(ObjectId),
+                core_schema.chain_schema([
+                    core_schema.str_schema(),
+                    core_schema.no_info_plain_validator_function(cls.validate),
+                ])
+            ]),
+            serialization=core_schema.plain_serializer_function_ser_schema(
+                lambda x: str(x)
+            ),
+        )
 
     @classmethod
     def validate(cls, v):
@@ -15,19 +28,14 @@ class PyObjectId(ObjectId):
             raise ValueError("Invalid ObjectId")
         return ObjectId(v)
 
-    @classmethod
-    def __modify_schema__(cls, field_schema):
-        field_schema.update(type="string")
-
 
 # User Models
 class UserBase(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+    
     email: EmailStr
     name: str
     is_active: bool = True
-
-    class Config:
-        populate_by_name = True
 
 
 class UserCreate(UserBase):
@@ -42,21 +50,20 @@ class UserCreate(UserBase):
 
 
 class UserInDB(UserBase):
+    model_config = ConfigDict(
+        arbitrary_types_allowed=True,
+        populate_by_name=True
+    )
+    
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     hashed_password: str
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
-    
-    class Config:
-        json_encoders = {ObjectId: str}
-        arbitrary_types_allowed = True
 
 
 class User(UserBase):
+    model_config = ConfigDict(populate_by_name=True)
+    
     id: str = Field(alias="_id")
     created_at: datetime
     updated_at: datetime
-
-    class Config:
-        json_encoders = {ObjectId: str}
-        populate_by_name = True

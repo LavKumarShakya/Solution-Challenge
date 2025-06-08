@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, ConfigDict
 from typing import Optional, List, Dict, Any
 from datetime import datetime
 from bson import ObjectId
@@ -16,12 +16,15 @@ class PyObjectId(ObjectId):
         return ObjectId(v)
 
     @classmethod
-    def __modify_schema__(cls, field_schema):
-        field_schema.update(type="string")
+    def __get_pydantic_core_schema__(cls, source_type, handler):
+        from pydantic_core import core_schema
+        return core_schema.str_schema()
 
 
 # Learning Path Models
 class ResourceBase(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+    
     title: str
     url: str
     resource_type: str  # video, article, interactive, etc.
@@ -29,9 +32,6 @@ class ResourceBase(BaseModel):
     estimated_time_minutes: int
     difficulty: str  # beginner, intermediate, advanced
     description: str
-    
-    class Config:
-        populate_by_name = True
 
 
 class Resource(ResourceBase):
@@ -62,11 +62,10 @@ class Module(ModuleBase):
 
 
 class LearningPathCreate(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+    
     query: str
     preferences: Dict[str, Any] = {}
-    
-    class Config:
-        populate_by_name = True
 
 
 class LearningPathCustomize(BaseModel):

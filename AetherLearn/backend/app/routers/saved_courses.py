@@ -15,7 +15,7 @@ from models.saved_course import (
     ResourceProgress, CourseAnalytics
 )
 from utils.pdf_generator import PDFGenerator
-from utils.enhanced_vertex_ai import EnhancedVertexAIClient
+from utils.vertex_ai import VertexAIClient
 
 # Configure logging
 logger = logging.getLogger(__name__)
