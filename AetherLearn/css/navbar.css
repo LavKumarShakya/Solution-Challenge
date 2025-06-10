@@ -143,7 +143,7 @@ nav {
   background: transparent;
   border: 2px solid var(--input-border);
   color: var(--text-primary);
-  margin-left: 2rem; /* Increased margin */
+  margin-left: 1rem; /* Less margin since button is wider */
   text-decoration: none;
   border-radius: 8px;
   font-weight: 600;
@@ -194,6 +194,7 @@ nav {
   display: flex;
   align-items: center;
   margin: 0 0.5rem;
+  margin-left: 5.5rem; /* Same spacing as sign-in button */
 }
 
 .nav-profile-photo {
@@ -216,23 +217,6 @@ nav {
   box-shadow: 0 0 10px rgba(64, 224, 208, 0.5);
 }
 
-/* Logout Button */
-.logout-btn {
-  display: flex;
-  align-items: center;
-  padding: 0.5rem 1rem;
-  color: var(--text-primary);
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  margin-left: 0.5rem;
-  gap: 0.5rem;
-}
-
-.logout-btn:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-}
 
 /* Responsive Styles */
 @media (max-width: 1024px) {

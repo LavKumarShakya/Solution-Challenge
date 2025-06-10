@@ -40,7 +40,6 @@ async function loadFirebase() {
 // Import needed Firebase modules without initialization
 import {
   onAuthStateChanged,
-  signOut,
 } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-auth.js";
 
 // Function to handle authentication state changes
@@ -49,17 +48,15 @@ function setupAuthStateListener() {
     console.error("Auth not initialized");
     return;
   }
-  const logoutBtn = document.getElementById("logout-btn");
   const signInBtn = document.getElementById("sign-in-btn");
   const profileLink = document.getElementById("profile-link");
   const navUserPhoto = document.getElementById("nav-user-photo");
 
-  if (logoutBtn && signInBtn && profileLink) {
+  if (signInBtn && profileLink) {
     // Check user authentication status
     onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed in
-        logoutBtn.style.display = "flex";
         signInBtn.style.display = "none";
         profileLink.style.display = "flex";
 
@@ -75,28 +72,9 @@ function setupAuthStateListener() {
         }
       } else {
         // User is signed out
-        logoutBtn.style.display = "none";
         signInBtn.style.display = "flex";
         profileLink.style.display = "none";
       }
-    });
-
-    // Add logout functionality
-    logoutBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      signOut(auth)
-        .then(() => {
-          // Sign-out successful, redirect to login page
-          const isIndexPage =
-            window.location.pathname.endsWith("index.html") ||
-            window.location.pathname.endsWith("/");
-          window.location.href = isIndexPage
-            ? "AetherLearn/html/login.html"
-            : "../html/login.html";
-        })
-        .catch((error) => {
-          console.error("Error signing out:", error);
-        });
     });
   }
 }
@@ -163,10 +141,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     await loadFirebase();
 
     // Handle authentication UI after Firebase is loaded
-    const logoutBtn = document.getElementById("logout-btn");
     const signInBtn = document.getElementById("sign-in-btn");
 
-    if (logoutBtn && signInBtn && auth) {
+    if (signInBtn && auth) {
       // If auth is loaded, setup listeners
       setupAuthStateListener();
     }

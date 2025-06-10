@@ -1,4 +1,25 @@
 /* Settings Page Styles */
+
+/* Preference Actions Styling */
+.preference-actions {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: rgba(var(--accent-primary-rgb), 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(var(--accent-primary-rgb), 0.1);
+    text-align: center;
+}
+
+.preference-actions .btn-secondary {
+    margin-bottom: 0.5rem;
+}
+
+.preference-description {
+    margin: 0.5rem 0 0 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
 .settings-main {
   padding-top: var(--header-height);
   min-height: 100vh;

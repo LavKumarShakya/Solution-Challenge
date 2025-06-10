@@ -16,8 +16,8 @@ const db = getFirestore();
 
 // DOM Elements
 const preferencesForm = document.getElementById('preferences-form');
-const submitBtn = document.getElementById('submit-preferences');
-const skipBtn = document.getElementById('skip-setup');
+const submitBtn = document.querySelector('.submit-button');
+const skipBtn = document.getElementById('skip-btn');
 const loadingOverlay = document.getElementById('loading-overlay');
 
 // State management
@@ -64,13 +64,71 @@ async function checkExistingPreferences(userId) {
         const preferencesDoc = await getDoc(preferencesRef);
         
         if (preferencesDoc.exists() && preferencesDoc.data().completed) {
-            // User already has completed preferences, redirect to dashboard
-            window.location.href = '../html/dashboard.html';
+            // User already has completed preferences, load them for editing
+            const existingPrefs = preferencesDoc.data();
+            loadExistingPreferences(existingPrefs);
+            
+            // Update header text to indicate editing
+            const headerTitle = document.querySelector('.preferences-header h1');
+            if (headerTitle) {
+                headerTitle.textContent = "Update Your Learning Preferences";
+            }
+            
+            const headerDesc = document.querySelector('.preferences-header p');
+            if (headerDesc) {
+                headerDesc.textContent = "Update your preferences to get better personalized recommendations!";
+            }
         }
     } catch (error) {
         console.error('Error checking existing preferences:', error);
         // Continue with preferences setup on error
     }
+}
+
+// Load existing preferences into the form
+function loadExistingPreferences(prefs) {
+    // Load primary goal
+    if (prefs.primaryGoal) {
+        const goalInput = document.querySelector(`input[name="primary-goal"][value="${prefs.primaryGoal}"]`);
+        if (goalInput) goalInput.checked = true;
+    }
+    
+    // Load learning styles
+    if (prefs.learningStyle && Array.isArray(prefs.learningStyle)) {
+        prefs.learningStyle.forEach(style => {
+            const styleInput = document.querySelector(`input[name="learning-style"][value="${style}"]`);
+            if (styleInput) styleInput.checked = true;
+        });
+    }
+    
+    // Load interests
+    if (prefs.interests && Array.isArray(prefs.interests)) {
+        prefs.interests.forEach(interest => {
+            const interestInput = document.querySelector(`input[name="interests"][value="${interest}"]`);
+            if (interestInput) interestInput.checked = true;
+        });
+    }
+    
+    // Load time commitment
+    if (prefs.timeCommitment) {
+        const timeInput = document.querySelector(`input[name="time-commitment"][value="${prefs.timeCommitment}"]`);
+        if (timeInput) timeInput.checked = true;
+    }
+    
+    // Load experience level
+    if (prefs.experienceLevel) {
+        const expInput = document.querySelector(`input[name="experience-level"][value="${prefs.experienceLevel}"]`);
+        if (expInput) expInput.checked = true;
+    }
+    
+    // Update the preferences object
+    preferences = {
+        primaryGoal: prefs.primaryGoal || '',
+        learningStyle: prefs.learningStyle || [],
+        interests: prefs.interests || [],
+        timeCommitment: prefs.timeCommitment || '',
+        experienceLevel: prefs.experienceLevel || ''
+    };
 }
 
 // Set up event listeners
@@ -85,14 +143,14 @@ function setupEventListeners() {
         skipBtn.addEventListener('click', skipSetup);
     }
 
-    // Goal selection
-    const goalInputs = document.querySelectorAll('input[name="goals"]');
+    // Primary goal selection
+    const goalInputs = document.querySelectorAll('input[name="primary-goal"]');
     goalInputs.forEach(input => {
-        input.addEventListener('change', updateGoals);
+        input.addEventListener('change', updatePrimaryGoal);
     });
 
     // Learning style selection
-    const learningStyleInputs = document.querySelectorAll('input[name="learningStyle"]');
+    const learningStyleInputs = document.querySelectorAll('input[name="learning-style"]');
     learningStyleInputs.forEach(input => {
         input.addEventListener('change', updateLearningStyle);
     });
@@ -104,26 +162,26 @@ function setupEventListeners() {
     });
 
     // Time commitment selection
-    const timeInputs = document.querySelectorAll('input[name="timeCommitment"]');
+    const timeInputs = document.querySelectorAll('input[name="time-commitment"]');
     timeInputs.forEach(input => {
         input.addEventListener('change', updateTimeCommitment);
     });
 
     // Experience level selection
-    const experienceInputs = document.querySelectorAll('input[name^="experience"]');
+    const experienceInputs = document.querySelectorAll('input[name="experience-level"]');
     experienceInputs.forEach(input => {
         input.addEventListener('change', updateExperienceLevel);
     });
 }
 
 // Update preferences based on form changes
-function updateGoals() {
-    const checkedGoals = document.querySelectorAll('input[name="goals"]:checked');
-    preferences.goals = Array.from(checkedGoals).map(input => input.value);
+function updatePrimaryGoal() {
+    const checkedGoal = document.querySelector('input[name="primary-goal"]:checked');
+    preferences.primaryGoal = checkedGoal ? checkedGoal.value : '';
 }
 
 function updateLearningStyle() {
-    const checkedStyles = document.querySelectorAll('input[name="learningStyle"]:checked');
+    const checkedStyles = document.querySelectorAll('input[name="learning-style"]:checked');
     preferences.learningStyle = Array.from(checkedStyles).map(input => input.value);
 }
 
@@ -133,18 +191,13 @@ function updateInterests() {
 }
 
 function updateTimeCommitment() {
-    const checkedTime = document.querySelector('input[name="timeCommitment"]:checked');
+    const checkedTime = document.querySelector('input[name="time-commitment"]:checked');
     preferences.timeCommitment = checkedTime ? checkedTime.value : '';
 }
 
 function updateExperienceLevel() {
-    const experienceInputs = document.querySelectorAll('input[name^="experience"]:checked');
-    preferences.experienceLevel = {};
-    
-    experienceInputs.forEach(input => {
-        const subject = input.name.replace('experience-', '');
-        preferences.experienceLevel[subject] = input.value;
-    });
+    const checkedExperience = document.querySelector('input[name="experience-level"]:checked');
+    preferences.experienceLevel = checkedExperience ? checkedExperience.value : '';
 }
 
 // Handle form submission
@@ -152,7 +205,7 @@ async function handleFormSubmit(event) {
     event.preventDefault();
     
     // Update all preferences from current form state
-    updateGoals();
+    updatePrimaryGoal();
     updateLearningStyle();
     updateInterests();
     updateTimeCommitment();
@@ -171,8 +224,8 @@ function validatePreferences() {
     let isValid = true;
     let missingFields = [];
 
-    if (preferences.goals.length === 0) {
-        missingFields.push('Learning Goals');
+    if (!preferences.primaryGoal) {
+        missingFields.push('Primary Learning Goal');
         isValid = false;
     }
 
@@ -182,7 +235,7 @@ function validatePreferences() {
     }
 
     if (preferences.interests.length === 0) {
-        missingFields.push('Interests');
+        missingFields.push('Interests (Select at least 1)');
         isValid = false;
     }
 
@@ -191,7 +244,7 @@ function validatePreferences() {
         isValid = false;
     }
 
-    if (Object.keys(preferences.experienceLevel).length === 0) {
+    if (!preferences.experienceLevel) {
         missingFields.push('Experience Level');
         isValid = false;
     }
@@ -251,11 +304,11 @@ async function skipSetup() {
     try {
         // Save minimal preferences indicating setup was skipped
         const skippedPreferencesData = {
-            goals: [],
+            primaryGoal: '',
             learningStyle: [],
             interests: [],
             timeCommitment: '',
-            experienceLevel: {},
+            experienceLevel: '',
             completed: false,
             skipped: true,
             createdAt: serverTimestamp(),

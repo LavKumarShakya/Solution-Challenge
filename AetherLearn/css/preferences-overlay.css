@@ -152,16 +152,23 @@
     margin-bottom: 1rem;
 }
 
-.goals-grid, .time-grid {
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+/* Main learning sections - 2x2 grid */
+.goals-grid, .learning-styles-grid, .time-grid {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 800px;
+    margin: 0 auto;
+    gap: 1.5rem;
 }
 
-.learning-styles-grid, .experience-grid {
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+.experience-grid {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 600px;
+    margin: 0 auto;
+    gap: 1.5rem;
 }
 
 .option-card {
-    background: rgba(var(--card-bg-rgb), 0.8);
+    background: var(--bg-secondary);
     border: 2px solid rgba(255, 255, 255, 0.1);
     border-radius: 16px;
     padding: 1.5rem;
@@ -172,9 +179,8 @@
 }
 
 .option-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(var(--accent-primary-rgb), 0.2);
-    border-color: rgba(var(--accent-primary-rgb), 0.3);
+    border-color: rgba(64, 224, 208, 0.5);
+    box-shadow: 0 0 15px rgba(64, 224, 208, 0.3);
 }
 
 .option-card input[type="radio"],
@@ -184,10 +190,45 @@
     pointer-events: none;
 }
 
+.option-card input:checked {
+    /* Full card gets highlighted when selected */
+}
+
 .option-card input:checked + .card-content {
+    position: relative;
+    z-index: 2;
+}
+
+.option-card input:checked {
+    /* Apply the selected state to the entire card */
+}
+
+.option-card input:checked ~ * {
+    position: relative;
+    z-index: 2;
+}
+
+/* Selected state for entire card */
+.option-card:has(input:checked) {
     background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 20px rgba(65, 105, 225, 0.4);
+}
+
+.option-card:has(input:checked) .card-content {
     color: white;
-    transform: scale(1.02);
+}
+
+.option-card:has(input:checked) .card-content i {
+    color: white;
+}
+
+.option-card:has(input:checked) .card-content h4 {
+    color: white;
+}
+
+.option-card:has(input:checked) .card-content p {
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .card-content {
@@ -195,6 +236,8 @@
     transition: all 0.3s ease;
     border-radius: 12px;
     padding: 1rem;
+    position: relative;
+    z-index: 1;
 }
 
 .card-content i {
@@ -239,29 +282,35 @@
 }
 
 .interest-tags {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: 0.8rem;
     justify-content: center;
+    max-width: 1000px;
+    margin: 0 auto;
+    align-items: stretch;
 }
 
 .interest-tag {
-    background: rgba(var(--card-bg-rgb), 0.8);
+    background: var(--bg-secondary);
     border: 2px solid rgba(255, 255, 255, 0.1);
-    border-radius: 25px;
-    padding: 0.7rem 1.2rem;
+    border-radius: 16px;
+    padding: 1rem 1.2rem;
     cursor: pointer;
     transition: all 0.3s ease;
     position: relative;
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 0.9rem;
     font-weight: 500;
+    height: 80px;
+    text-align: center;
 }
 
 .interest-tag:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(var(--accent-primary-rgb), 0.2);
-    border-color: rgba(var(--accent-primary-rgb), 0.3);
+    border-color: rgba(64, 224, 208, 0.5);
+    box-shadow: 0 0 15px rgba(64, 224, 208, 0.3);
 }
 
 .interest-tag input {
@@ -270,8 +319,18 @@
     pointer-events: none;
 }
 
-.interest-tag input:checked + span {
+/* Selected state for entire interest tag */
+.interest-tag:has(input:checked) {
     background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 15px rgba(65, 105, 225, 0.4);
+}
+
+.interest-tag:has(input:checked) span {
+    color: white;
+}
+
+.interest-tag:has(input:checked) i {
     color: white;
 }
 
@@ -281,10 +340,8 @@
     gap: 0.5rem;
     color: var(--text-primary);
     transition: all 0.3s ease;
-}
-
-.interest-tag input:checked + span {
-    color: white;
+    position: relative;
+    z-index: 1;
 }
 
 .interest-tag i {
@@ -397,12 +454,19 @@
         font-size: 1.2rem;
     }
     
-    .goals-grid, .time-grid {
+    .goals-grid, .learning-styles-grid, .time-grid {
         grid-template-columns: 1fr 1fr;
+        max-width: 600px;
     }
     
-    .learning-styles-grid, .experience-grid {
+    .experience-grid {
         grid-template-columns: 1fr 1fr;
+        max-width: 400px;
+    }
+    
+    .interest-tags {
+        grid-template-columns: repeat(3, 1fr);
+        max-width: 700px;
     }
     
     .option-card {
@@ -441,11 +505,31 @@
 }
 
 @media (max-width: 480px) {
-    .goals-grid, .time-grid, .learning-styles-grid, .experience-grid {
+    .goals-grid, .learning-styles-grid, .time-grid {
         grid-template-columns: 1fr;
+        max-width: 100%;
+    }
+    
+    .experience-grid {
+        grid-template-columns: 1fr;
+        max-width: 100%;
     }
     
     .interest-tags {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 100%;
+        gap: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .goals-grid, .time-grid, .learning-styles-grid, .experience-grid {
+        grid-template-columns: 1fr;
+        max-width: 100%;
+    }
+    
+    .interest-tags {
+        grid-template-columns: 1fr;
         justify-content: center;
     }
 }

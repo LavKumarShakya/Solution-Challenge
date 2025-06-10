@@ -199,6 +199,12 @@ function setupEventListeners() {
     saveBtn.addEventListener("click", saveAllSettings);
   }
 
+  // Change preferences button
+  const changePreferencesBtn = document.getElementById("change-preferences-btn");
+  if (changePreferencesBtn) {
+    changePreferencesBtn.addEventListener("click", openPreferences);
+  }
+
   // Push notifications permission
   const pushNotificationsToggle = document.getElementById("push-notifications");
   if (pushNotificationsToggle) {
@@ -691,4 +697,9 @@ function loadDropdownValues() {
       }
     });
   }
+}
+
+// Open preferences overlay
+function openPreferences() {
+  window.location.href = "./preferences-overlay.html";
 }
