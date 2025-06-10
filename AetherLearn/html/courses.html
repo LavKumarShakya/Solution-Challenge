@@ -1,89 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="AetherLearn - Course Catalog" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AetherLearn - Course Catalog">
     <title>Courses - AetherLearn</title>
-
+    
     <!-- Core Styles -->
-    <link rel="stylesheet" href="../css/styles.css" />
-    <link rel="stylesheet" href="../css/navbar.css" />
-
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    
     <!-- Page Specific Styles -->
-    <link rel="stylesheet" href="../css/courses.css" />
-
+    <link rel="stylesheet" href="../css/courses.css">
+    
     <!-- External Resources -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-  </head>
-  <body>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body>
+
     <!-- Navbar Placeholder -->
     <div id="navbar-placeholder"></div>
 
     <main class="course-discovery">
-      <div class="course-container">
-        <!-- Course Header -->
-        <section class="course-header">
-          <h1>Discover Free Online Courses</h1>
-          <p>
-            Unleash your potential with AI-powered learning paths tailored just
-            for you.
-          </p>
-          <p>
-            Learn from curated courses across various topics and skill levels
-          </p>
+        <div class="course-container">
+            <!-- Course Header -->
+            <section class="course-header">
+                <h1>Discover Free Online Courses</h1>
+                <p>Unleash your potential with AI-powered learning paths tailored just for you.</p>
+                <p>Learn from curated courses across various topics and skill levels</p>
+            
+            <div class="course-filters">
+                <div class="filter-group">
+                    <label for="category">Category</label>
+                    <select id="category">
+                        <option value="all">All Categories</option>
+                        <option value="technology">Technology</option>
+                        <option value="design">Design</option>
+                        <option value="business">Business</option>
+                        <option value="science">Science</option>
+                        <option value="arts">Arts</option>
+                    </select>
+                </div>
 
-          <div class="course-filters">
-            <div class="filter-group">
-              <label for="category">Category</label>
-              <select id="category">
-                <option value="all">All Categories</option>
-                <option value="technology">Technology</option>
-                <option value="design">Design</option>
-                <option value="business">Business</option>
-                <option value="science">Science</option>
-                <option value="arts">Arts</option>
-              </select>
-            </div>
+                <div class="filter-group">
+                    <label for="level">Skill Level</label>
+                    <select id="level">
+                        <option value="all">All Levels</option>
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                    </select>
+                </div>
 
-            <div class="filter-group">
-              <label for="level">Skill Level</label>
-              <select id="level">
-                <option value="all">All Levels</option>
-                <option value="beginner">Beginner</option>
-                <option value="intermediate">Intermediate</option>
-                <option value="advanced">Advanced</option>
-              </select>
-            </div>
+                <div class="filter-group">
+                    <label for="duration">Duration</label>
+                    <select id="duration">
+                        <option value="all">Any Duration</option>
+                        <option value="short">0-2 Hours</option>
+                        <option value="medium">2-10 Hours</option>
+                        <option value="long">10+ Hours</option>
+                    </select>
+                </div>
 
-            <div class="filter-group">
-              <label for="duration">Duration</label>
-              <select id="duration">
-                <option value="all">Any Duration</option>
-                <option value="short">0-2 Hours</option>
-                <option value="medium">2-10 Hours</option>
-                <option value="long">10+ Hours</option>
-              </select>
+                <div class="filter-group">
+                    <label for="sort">Sort By</label>
+                    <select id="sort">
+                        <option value="popular">Most Popular</option>
+                        <option value="newest">Newest</option>
+                        <option value="rating">Highest Rated</option>
+                    </select>
+                </div>
             </div>
-
-            <div class="filter-group">
-              <label for="sort">Sort By</label>
-              <select id="sort">
-                <option value="popular">Most Popular</option>
-                <option value="newest">Newest</option>
-                <option value="rating">Highest Rated</option>
-              </select>
-            </div>
-          </div>
         </section>
 
         <!-- Course Grid -->
         <section class="course-grid" data-aos="fade-up">
-
             <!-- Course Card -->
             <div class="course-card" data-aos="fade-up" data-aos-delay="50">
                 <div class="course-thumbnail">
@@ -105,16 +97,7 @@
                     </div>
                     <button type="button" class="cta-button" onclick="showComingSoonToast(event)">View Course</button>
                 </div>
-                <span class="students"
-                  ><i class="fas fa-user-graduate"></i> 15k students</span
-                >
-              </div>
-              <a href="course-details.html?id=web-dev-101" class="cta-button"
-                >View Course</a
-              >
             </div>
-          </div>
-
 
             <!-- Course Card -->
             <div class="course-card" data-aos="fade-up" data-aos-delay="100">
@@ -137,16 +120,7 @@
                     </div>
                     <button type="button" class="cta-button" onclick="showComingSoonToast(event)">View Course</button>
                 </div>
-                <span class="students"
-                  ><i class="fas fa-user-graduate"></i> 12k students</span
-                >
-              </div>
-              <a href="course-details.html?id=uiux-101" class="cta-button"
-                >View Course</a
-              >
             </div>
-          </div>
-
 
             <!-- Machine Learning Course Card -->
             <div class="course-card" data-aos="fade-up" data-aos-delay="150">
@@ -169,31 +143,22 @@
                     </div>
                     <button type="button" class="cta-button" onclick="showComingSoonToast(event)">View Course</button>
                 </div>
-                <span class="students"
-                  ><i class="fas fa-user-graduate"></i> 10k students</span
-                >
-              </div>
-              <a href="course-details.html?id=ml-ai-101" class="cta-button"
-                >View Course</a
-              >
             </div>
-          </div>
         </section>
 
         <!-- Pagination -->
         <div class="pagination">
-          <button class="pagination-btn active">1</button>
-          <button class="pagination-btn">2</button>
-          <button class="pagination-btn">3</button>
-          <span>...</span>
-          <button class="pagination-btn">10</button>
+            <button class="pagination-btn active">1</button>
+            <button class="pagination-btn">2</button>
+            <button class="pagination-btn">3</button>
+            <span>...</span>
+            <button class="pagination-btn">10</button>
         </div>
 
         <!-- Featured Learning Paths -->
         <section class="featured-paths" data-aos="fade-up">
-          <h2>Featured Learning Paths</h2>
-          <p>Structured learning paths to help you achieve your career goals</p>
-
+            <h2>Featured Learning Paths</h2>
+            <p>Structured learning paths to help you achieve your career goals</p>
 
             <div class="paths-grid">
                 <div class="path-card" data-aos="fade-up" data-aos-delay="50">
@@ -247,53 +212,49 @@
                     </div>
                 </div>
             </div>
-          </div>
         </section>
-      </div>
+        </div>
     </main>
 
     <!-- Footer -->
     <footer>
-      <div class="footer-content">
-        <div class="footer-section">
-          <h3>AetherLearn</h3>
-          <p>
-            Transforming education through AI-powered personalized learning
-            paths and free resources.
-          </p>
-          <div class="social-icons">
-            <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
-            <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
-            <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-            <a href="#" title="Discord"><i class="fab fa-discord"></i></a>
-          </div>
-        </div>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>AetherLearn</h3>
+                <p>Transforming education through AI-powered personalized learning paths and free resources.</p>
+                <div class="social-icons">
+                    <a href="https://github.com/LavKumarShakya/Solution-Challenge" title="GitHub" target="_blank"><i class="fab fa-github"></i></a>
+                    <a title="Twitter" onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;"><i class="fab fa-twitter"></i></a>
+                    <a title="LinkedIn" onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;"><i class="fab fa-linkedin"></i></a>
+                    <a title="Discord" onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;"><i class="fab fa-discord"></i></a>
+                </div>
+            </div>
 
-        <div class="footer-section">
-          <h3>Quick Links</h3>
-          <a href="courses.html">Courses</a>
-          <a href="ai-assistant.html">AI Assistant</a>
-          <a href="community.html">Community</a>
-          <a href="about.html">About Us</a>
-        </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <a href="courses.html">Courses</a>
+                <a href="ai-assistant.html">AI Assistant</a>
+                <a href="community.html">Community</a>
+                <a href="https://github.com/LavKumarShakya/Solution-Challenge" target="_blank">About Us</a>
+            </div>
 
-        <div class="footer-section">
-          <h3>Resources</h3>
-          <a href="blog.html">Blog</a>
-          <a href="faq.html">FAQs</a>
-          <a href="support.html">Support</a>
-          <a href="privacy.html">Privacy Policy</a>
-        </div>
+            <div class="footer-section">
+                <h3>Resources</h3>
+                <a href="blog.html">Blog</a>
+                <a href="faq.html">FAQs</a>
+                <a href="support.html">Support</a>
+                <a href="privacy.html">Privacy Policy</a>
+            </div>
 
-        <div class="footer-section">
-          <h3>Contact Us</h3>
-          <a href="mailto:support@aetherlearn.com">support@aetherlearn.com</a>
-          <a href="tel:+1234567890">+1 (234) 567-890</a>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <a href="mailto:support@aetherlearn.com">support@aetherlearn.com</a>
+                <a href="tel:+1234567890">+1 (234) 567-890</a>
+            </div>
         </div>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2025 AetherLearn. All rights reserved.</p>
-      </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 AetherLearn. All rights reserved.</p>
+        </div>
     </footer>
 
     <!-- Scripts -->
@@ -301,7 +262,6 @@
     <script src="../js/script.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-
         AOS.init({
             duration: 600,
             easing: 'ease-out',
@@ -349,5 +309,5 @@
             });
         }
     </script>
-  </body>
+</body>
 </html>
