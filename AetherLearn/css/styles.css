@@ -2270,22 +2270,36 @@ footer:hover .footer-bottom::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(5px);
+  background-color: rgba(11, 18, 26, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   z-index: 1000;
   overflow: auto;
 }
 
 .modal-content {
   position: relative;
-  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(30, 30, 30, 0.95) 100%);
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
   margin: 5% auto;
   width: 95%;
   max-width: 800px;
-  border-radius: var(--hero-radius-md);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  border-radius: var(--hero-radius-lg);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(64, 224, 208, 0.2);
   animation: modal-appear 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-  border: 1px solid rgba(64, 224, 208, 0.2);
+  border: 1px solid rgba(64, 224, 208, 0.3);
+  overflow: hidden;
+}
+
+.modal-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at top right, rgba(64, 224, 208, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 1;
 }
 
 @keyframes modal-appear {
@@ -2300,78 +2314,162 @@ footer:hover .footer-bottom::before {
 }
 
 .modal-header {
-  padding: 25px 30px;
-  border-bottom: 1px solid rgba(64, 224, 208, 0.2);
-  background: linear-gradient(90deg, rgba(64, 224, 208, 0.1) 0%, rgba(64, 224, 208, 0.05) 100%);
+  padding: 30px;
+  border-bottom: 1px solid rgba(64, 224, 208, 0.3);
+  background: linear-gradient(135deg, rgba(64, 224, 208, 0.15) 0%, rgba(65, 105, 225, 0.1) 100%);
+  position: relative;
+  z-index: 2;
 }
 
 .modal-header-content {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  position: relative;
+  z-index: 2;
 }
 
 .modal-header h2 {
-  color: var(--text-primary);
   margin: 0;
-  font-size: 1.8rem;
-  font-weight: 600;
+  font-size: 2rem;
+  font-weight: 700;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  transition: all 0.3s ease;
+}
+
+.modal-header h2 i {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-size: 1.8rem;
 }
 
 .modal-subtitle {
   color: var(--text-secondary);
-  margin: 5px 0 0 0;
-  font-size: 0.95rem;
-  opacity: 0.8;
+  margin: 8px 0 0 0;
+  font-size: 1rem;
+  opacity: 0.9;
+  line-height: 1.5;
 }
 
 .close-modal {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: var(--text-muted);
-  font-size: 1.2rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(64, 224, 208, 0.3);
+  color: var(--accent-secondary);
+  font-size: 1.3rem;
   cursor: pointer;
-  padding: 8px;
+  padding: 10px;
   border-radius: 50%;
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.close-modal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--gradient-primary);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 50%;
+}
+
+.close-modal:hover::before {
+  opacity: 1;
 }
 
 .close-modal:hover {
   color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.2);
-  transform: rotate(90deg);
+  transform: rotate(90deg) scale(1.1);
+  border-color: var(--accent-primary);
+  box-shadow: 0 5px 20px rgba(64, 224, 208, 0.3);
+}
+
+.close-modal i {
+  position: relative;
+  z-index: 1;
 }
 
 .modal-body {
   padding: 30px;
   max-height: 75vh;
   overflow-y: auto;
+  position: relative;
+  z-index: 2;
 }
 
 /* Enhanced Preference Sections */
 .preference-section {
-  margin-bottom: 30px;
-  padding: 20px;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: var(--hero-radius-md);
-  border: 1px solid rgba(64, 224, 208, 0.1);
+  margin-bottom: 25px;
+  padding: 24px;
+  background: rgba(20, 30, 43, 0.6);
+  border-radius: var(--hero-radius-lg);
+  border: 1px solid rgba(64, 224, 208, 0.25);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.preference-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at top left, rgba(64, 224, 208, 0.05) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.preference-section:hover::before {
+  opacity: 1;
+}
+
+.preference-section:hover {
+  border-color: rgba(64, 224, 208, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
 }
 
 .preference-section h3 {
-  color: var(--accent-primary);
   margin: 0 0 20px 0;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.preference-section h3 i {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-size: 1.2rem;
 }
 
 /* Quick Preferences Toggle Switches */
@@ -2600,46 +2698,86 @@ footer:hover .footer-bottom::before {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 30px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(64, 224, 208, 0.2);
+  margin-top: 35px;
+  padding-top: 25px;
+  border-top: 1px solid rgba(64, 224, 208, 0.3);
+  position: relative;
+  z-index: 2;
 }
 
 .form-button {
-  padding: 12px 24px;
+  padding: 14px 28px;
   border: none;
-  border-radius: var(--hero-radius-sm);
+  border-radius: 25px;
   cursor: pointer;
   font-weight: 600;
   display: flex;
   align-items: center;
-  gap: 8px;
-  transition: all 0.3s ease;
-  font-size: 0.95rem;
+  gap: 10px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 1rem;
   position: relative;
   overflow: hidden;
+  min-width: 140px;
+  justify-content: center;
+}
+
+.form-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  transition: all 0.5s ease;
+  z-index: 0;
 }
 
 .form-button.primary {
-  background: linear-gradient(45deg, var(--accent-primary), var(--accent-hover));
-  color: white;
-  box-shadow: 0 4px 15px rgba(64, 224, 208, 0.3);
+  background: var(--gradient-primary);
+  color: var(--text-primary);
+  box-shadow: 0 5px 20px rgba(64, 224, 208, 0.3);
+  border: 2px solid transparent;
+}
+
+.form-button.primary::before {
+  background: linear-gradient(45deg, var(--accent-secondary), var(--accent-hover));
+}
+
+.form-button.primary:hover::before {
+  left: 0;
 }
 
 .form-button.primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(64, 224, 208, 0.4);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(64, 224, 208, 0.5);
 }
 
 .form-button.secondary {
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--text-secondary);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--accent-secondary);
+  border: 2px solid rgba(64, 224, 208, 0.3);
+}
+
+.form-button.secondary::before {
+  background: rgba(64, 224, 208, 0.1);
+}
+
+.form-button.secondary:hover::before {
+  left: 0;
 }
 
 .form-button.secondary:hover {
-  background: rgba(255, 255, 255, 0.2);
   color: var(--text-primary);
+  border-color: var(--accent-secondary);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(64, 224, 208, 0.2);
+}
+
+.form-button i,
+.form-button span {
+  position: relative;
+  z-index: 1;
 }
 
 @keyframes checkmark-appear {
@@ -3478,28 +3616,60 @@ footer:hover .footer-bottom::before {
             opacity: 0;
         }
         
-        /* Customize Button Styles */
+        /* Enhanced Customize Button Styles */
         .hero-preferences-button {
             margin-left: 10px;
-            padding: 12px 20px;
-            background-color: var(--bg-secondary);
+            padding: 12px 24px;
+            background: var(--bg-secondary);
             border: 2px solid var(--accent-primary);
             color: var(--accent-primary);
-            border-radius: var(--hero-radius-md);
+            border-radius: 25px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 600;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .hero-preferences-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(65, 105, 225, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 0;
+        }
+        
+        .hero-preferences-button:hover::before {
+            opacity: 1;
         }
         
         .hero-preferences-button:hover {
-            background-color: var(--accent-primary);
-            color: var(--text-primary);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(64, 224, 208, 0.3);
+            color: var(--accent-secondary);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(65, 105, 225, 0.2);
+            border-color: var(--accent-secondary);
+            background: rgba(65, 105, 225, 0.05);
         }
         
-        .hero-preferences-button i {
-            margin-right: 6px;
+        .hero-preferences-button i,
+        .hero-preferences-button span {
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease;
+        }
+        
+        .hero-preferences-button:hover i {
+            transform: rotate(15deg) scale(1.05);
         }
         
         /* Responsive adjustments for buttons */
@@ -4258,6 +4428,43 @@ footer:hover .footer-bottom::before {
            width: 100%;
            max-width: 300px;
        }
+   
+   /* CTA Group Layout Enhancement */
+   .cta-group {
+       display: flex;
+       gap: 12px;
+       justify-content: center;
+       align-items: center;
+       flex-wrap: wrap;
+   }
+   
+   /* Additional Responsive adjustments for enhanced buttons */
+   @media (max-width: 768px) {
+       .cta-group {
+           flex-direction: column;
+           gap: 12px;
+           width: 100%;
+       }
+       
+       .hero-preferences-button,
+       .hero-search-button {
+           margin-left: 0;
+           width: 100%;
+           max-width: 300px;
+       }
+   }
+   
+   @media (max-width: 480px) {
+       .hero-preferences-button,
+       .hero-search-button {
+           font-size: 0.95rem;
+           padding: 12px 20px;
+       }
+       
+       .hero-preferences-button i {
+           font-size: 0.9rem;
+       }
+   }
        
        .filter-tabs {
            display: grid;
