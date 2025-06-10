@@ -95,7 +95,7 @@
                         </div>
                         <span class="students"><i class="fas fa-user-graduate"></i> 15k students</span>
                     </div>
-                    <a href="course-details.html?id=web-dev-101" class="cta-button">View Course</a>
+                    <button type="button" class="cta-button" onclick="showComingSoonToast(event)">View Course</button>
                 </div>
             </div>
 
@@ -118,7 +118,7 @@
                         </div>
                         <span class="students"><i class="fas fa-user-graduate"></i> 12k students</span>
                     </div>
-                    <a href="course-details.html?id=uiux-101" class="cta-button">View Course</a>
+                    <button type="button" class="cta-button" onclick="showComingSoonToast(event)">View Course</button>
                 </div>
             </div>
 
@@ -141,7 +141,7 @@
                         </div>
                         <span class="students"><i class="fas fa-user-graduate"></i> 10k students</span>
                     </div>
-                    <a href="course-details.html?id=ml-ai-101" class="cta-button">View Course</a>
+                    <button type="button" class="cta-button" onclick="showComingSoonToast(event)">View Course</button>
                 </div>
             </div>
         </section>
@@ -168,13 +168,13 @@
                     <div class="path-content">
                         <i class="fas fa-laptop-code"></i>
                         <h3>Full Stack Developer</h3>
-                        <p>Master both frontend and backend development</p>
+                        <p>Master frontend and backend development</p>
                         <ul class="path-features">
                             <li>20+ Courses</li>
                             <li>100+ Hours</li>
                             <li>Real Projects</li>
                         </ul>
-                        <a href="#" class="cta-button">Explore Path</a>
+                        <button type="button" class="cta-button" onclick="showComingSoonToast(event)">Explore Path</button>
                     </div>
                 </div>
 
@@ -191,7 +191,7 @@
                             <li>80+ Hours</li>
                             <li>Portfolio Building</li>
                         </ul>
-                        <a href="#" class="cta-button">Explore Path</a>
+                        <button type="button" class="cta-button" onclick="showComingSoonToast(event)">Explore Path</button>
                     </div>
                 </div>
 
@@ -208,7 +208,7 @@
                             <li>90+ Hours</li>
                             <li>Hands-on Projects</li>
                         </ul>
-                        <a href="#" class="cta-button">Explore Path</a>
+                        <button type="button" class="cta-button" onclick="showComingSoonToast(event)">Explore Path</button>
                     </div>
                 </div>
             </div>
@@ -223,10 +223,10 @@
                 <h3>AetherLearn</h3>
                 <p>Transforming education through AI-powered personalized learning paths and free resources.</p>
                 <div class="social-icons">
-                    <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
-                    <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
-                    <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                    <a href="#" title="Discord"><i class="fab fa-discord"></i></a>
+                    <a href="https://github.com/LavKumarShakya/Solution-Challenge" title="GitHub" target="_blank"><i class="fab fa-github"></i></a>
+                    <a title="Twitter" onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;"><i class="fab fa-twitter"></i></a>
+                    <a title="LinkedIn" onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;"><i class="fab fa-linkedin"></i></a>
+                    <a title="Discord" onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;"><i class="fab fa-discord"></i></a>
                 </div>
             </div>
 
@@ -235,7 +235,7 @@
                 <a href="courses.html">Courses</a>
                 <a href="ai-assistant.html">AI Assistant</a>
                 <a href="community.html">Community</a>
-                <a href="about.html">About Us</a>
+                <a href="https://github.com/LavKumarShakya/Solution-Challenge" target="_blank">About Us</a>
             </div>
 
             <div class="footer-section">
@@ -253,7 +253,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 AetherLearn. All rights reserved.</p>
+            <p>&copy; 2025 AetherLearn. All rights reserved.</p>
         </div>
     </footer>
 
@@ -271,6 +271,43 @@
             mirror: true,
             anchorPlacement: 'top-bottom'
         });
+
+        // Function to show coming soon toast
+        function showComingSoonToast(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            
+            const toast = document.createElement('div');
+            toast.className = 'toast-message info show';
+            
+            toast.innerHTML = `
+                <i class="fas fa-clock"></i>
+                <span>Coming Soon!</span>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            // Auto-remove after 4 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, 4000);
+            
+            // Allow clicking to dismiss
+            toast.addEventListener('click', () => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            });
+        }
     </script>
 </body>
 </html>

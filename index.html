@@ -746,55 +746,6 @@
             </div>
         </div>
 
-        <!-- Learning Paths Section -->
-        <section class="learning-paths" data-aos="fade-up">
-            <h2>Explore Our Diverse Learning Paths</h2>
-            <p>Discover curated paths that align with your goals and interests</p>
-            
-            <div class="learning-paths-grid" data-aos="fade-up" data-aos-delay="50">
-                <div class="learning-path-card">
-                    <div class="path-content">
-                        <i class="fas fa-code"></i>
-                        <h3>Technology</h3>
-                        <p>Master web development, mobile apps, AI, and more through hands-on projects</p>
-                        <ul class="path-features">
-                            <li>Real-world projects</li>
-                            <li>Industry-standard tools</li>
-                            <li>Expert-curated content</li>
-                        </ul>
-                        <a href="AetherLearn/html/courses.html?category=technology" class="cta-button">Explore Technology</a>
-                    </div>
-                </div>
-
-                <div class="learning-path-card">
-                    <div class="path-content">
-                        <i class="fas fa-palette"></i>
-                        <h3>Digital Arts</h3>
-                        <p>Learn digital painting, 3D modeling, animation, and graphic design</p>
-                        <ul class="path-features">
-                            <li>Creative projects</li>
-                            <li>Professional tools</li>
-                            <li>Portfolio building</li>
-                        </ul>
-                        <a href="AetherLearn/html/courses.html?category=digital-arts" class="cta-button">Explore Digital Arts</a>
-                    </div>
-                </div>
-
-                <div class="learning-path-card">
-                    <div class="path-content">
-                        <i class="fas fa-gamepad"></i>
-                        <h3>Game Design</h3>
-                        <p>Create games from scratch using popular engines and programming</p>
-                        <ul class="path-features">
-                            <li>Game development basics</li>
-                            <li>Popular game engines</li>
-                            <li>Interactive projects</li>
-                        </ul>
-                        <a href="AetherLearn/html/courses.html?category=game-design" class="cta-button">Explore Game Design</a>
-                    </div>
-                </div>
-            </div>
-
         <!-- AI Tools Section -->
         <section class="learning-paths" data-aos="fade-up">
             <h2>AI-Powered Learning Tools</h2>
@@ -803,48 +754,46 @@
             <div class="learning-paths-grid" data-aos="fade-up" data-aos-delay="50">
                 <div class="learning-path-card">
                     <div class="path-content">
-                        <i class="fas fa-brain"></i>
-                        <h3>Gemini AI Tutor</h3>
+                        <i class="fas fa-robot"></i>
+                        <h3>Gemini AI Assistant</h3>
                         <p>Get personalized tutoring and instant answers to your questions using advanced AI</p>
                         <ul class="path-features">
                             <li>24/7 Learning Support</li>
                             <li>Detailed Explanations</li>
                             <li>Multi-subject Expertise</li>
                         </ul>
-                        <a href="AetherLearn/html/ai-assistant.html" class="cta-button">Start Learning</a>
+                        <button type="button" class="cta-button" onclick="window.location.href='AetherLearn/html/ai-assistant.html'">Start Learning</button>
                     </div>
                 </div>
 
                 <div class="learning-path-card">
                     <div class="path-content">
-                        <i class="fas fa-graduation-cap"></i>
-                        <h3>Study Path Generator</h3>
+                        <i class="fas fa-route"></i>
+                        <h3>Learning Path Generator</h3>
                         <p>Create customized learning paths tailored to your goals and current skill level</p>
                         <ul class="path-features">
                             <li>Personalized Curriculum</li>
                             <li>Progress Tracking</li>
                             <li>Adaptive Learning</li>
                         </ul>
-                        <a href="AetherLearn/html/courses.html" class="cta-button">Generate Path</a>
+                        <button type="button" class="cta-button" onclick="window.location.href = window.location.href.split('#')[0];">Generate Path</button>
                     </div>
                 </div>
 
                 <div class="learning-path-card">
                     <div class="path-content">
-                        <i class="fas fa-robot"></i>
-                        <h3>AI Project Assistant</h3>
+                        <i class="fas fa-user-graduate"></i>
+                        <h3>AI Project Mentor</h3>
                         <p>Get guided assistance for your coding projects and real-time problem-solving</p>
                         <ul class="path-features">
                             <li>Code Analysis</li>
                             <li>Debug Support</li>
                             <li>Best Practices Guide</li>
                         </ul>
-                        <a href="AetherLearn/html/ai-assistant.html?mode=project" class="cta-button">Start Project</a>
+                        <button type="button" class="cta-button" onclick="showComingSoonToast(event)">Start Project</button>
                     </div>
                 </div>
             </div>
-        </section>
-
         </section>
 
         <!-- Feature Highlights Section -->
@@ -861,7 +810,7 @@
 
                 <div class="feature-card">
                     <i class="fas fa-users"></i>
-                    <h3>Collaborative Community</h3>
+                    <h3>Community Features</h3>
                     <p>Learn together with peers, share resources, and grow with community support</p>
                 </div>
 
@@ -875,6 +824,66 @@
                     <i class="fas fa-graduation-cap"></i>
                     <h3>Personalized Learning</h3>
                     <p>Get custom learning paths tailored to your goals and learning style</p>
+                </div>
+            </div>
+
+            <!-- Call to Action merged into Features Section -->
+            <div class="cta-content" data-aos="fade-up" data-aos-delay="100" style="margin-top: 60px; text-align: center;">
+                <h2>Ready to Transform Your Future?</h2>
+                <p>Join thousands of learners and start your personalized learning journey today</p>
+                <div class="cta-buttons">
+                    <a href="AetherLearn/html/login.html" class="cta-button">Get Started Free</a>
+                    <a href="AetherLearn/html/courses.html" class="cta-button secondary">Explore Courses</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Learning Paths Section -->
+        <section class="learning-paths" data-aos="fade-up">
+            <h2>Explore Our Diverse Learning Paths</h2>
+            <p>Discover curated paths that align with your goals and interests</p>
+            
+            <div class="learning-paths-grid" data-aos="fade-up" data-aos-delay="50">
+                <div class="learning-path-card">
+                    <div class="path-content">
+                        <i class="fas fa-code"></i>
+                        <h3>Technology</h3>
+                        <p>Master web development, mobile apps, AI, and more through hands-on projects</p>
+                        <ul class="path-features">
+                            <li>Real-world projects</li>
+                            <li>Industry-standard tools</li>
+                            <li>Expert-curated content</li>
+                        </ul>
+                        <button type="button" class="cta-button" onclick="showComingSoonToast(event)">Explore Technology</button>
+                    </div>
+                </div>
+
+                <div class="learning-path-card">
+                    <div class="path-content">
+                        <i class="fas fa-palette"></i>
+                        <h3>Digital Arts</h3>
+                        <p>Learn digital painting, 3D modeling, animation, and graphic design</p>
+                        <ul class="path-features">
+                            <li>Creative projects</li>
+                            <li>Professional tools</li>
+                            <li>Portfolio building</li>
+                        </ul>
+                        <button type="button" class="cta-button" onclick="showComingSoonToast(event)">Explore Digital Arts</button>
+                    </div>
+                </div>
+
+                <div class="learning-path-card">
+                    <div class="path-content">
+                        <i class="fas fa-gamepad"></i>
+                        <h3>Game Design</h3>
+                        <p>Create games from scratch using popular engines and programming</p>
+                        <ul class="path-features">
+                            <li>Game development basics</li>
+                            <li>Popular game engines</li>
+                            <li>Interactive projects</li>
+                        </ul>
+                        <button type="button" class="cta-button" onclick="showComingSoonToast(event)">Explore Game Design</button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -932,7 +941,7 @@
                             </div>
                             <span class="students"><i class="fas fa-user-graduate"></i> 15k students</span>
                         </div>
-                        <a href="AetherLearn/html/course-details.html?id=web-dev-101" class="cta-button">View Course</a>
+                        <button type="button" class="cta-button" onclick="showComingSoonToast(event)">View Course</button>
                     </div>
                 </div>
 
@@ -954,7 +963,7 @@
                             </div>
                             <span class="students"><i class="fas fa-user-graduate"></i> 12k students</span>
                         </div>
-                        <a href="AetherLearn/html/course-details.html?id=uiux-101" class="cta-button">View Course</a>
+                        <button type="button" class="cta-button" onclick="showComingSoonToast(event)">View Course</button>
                     </div>
                 </div>
 
@@ -976,13 +985,13 @@
                             </div>
                             <span class="students"><i class="fas fa-user-graduate"></i> 10k students</span>
                         </div>
-                        <a href="AetherLearn/html/course-details.html?id=ml-ai-101" class="cta-button">View Course</a>
+                        <button type="button" class="cta-button" onclick="showComingSoonToast(event)">View Course</button>
                     </div>
                 </div>
             </div>
 
             <div class="view-all-courses">
-                <a href="AetherLearn/html/courses.html" class="cta-button secondary">View All Courses</a>
+                <button type="button" class="cta-button secondary" onclick="window.location.href='AetherLearn/html/courses.html'">View All Courses</button>
             </div>
         </section>
 
@@ -1094,17 +1103,6 @@
             </div>
         </section>
 
-        <!-- Call to Action Section -->
-        <section class="cta">
-            <div class="cta-content">
-                <h2>Ready to Transform Your Future?</h2>
-                <p>Join thousands of learners and start your personalized learning journey today</p>
-                <div class="cta-buttons">
-                    <a href="AetherLearn/html/login.html" class="cta-button">Get Started Free</a>
-                    <a href="AetherLearn/html/courses.html" class="cta-button secondary">Explore Courses</a>
-                </div>
-            </div>
-        </section>
     </main>
 
     <!-- Footer -->
@@ -1114,33 +1112,33 @@
                 <h3>AetherLearn</h3>
                 <p>Transforming education through AI-powered personalized learning paths and free resources.</p>
                 <div class="social-icons">
-                    <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
-                    <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
-                    <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                    <a href="#" title="Discord"><i class="fab fa-discord"></i></a>
+                    <a href="https://github.com/LavKumarShakya/Solution-Challenge" title="GitHub" target="_blank"><i class="fab fa-github"></i></a>
+                    <a title="Twitter" onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;"><i class="fab fa-twitter"></i></a>
+                    <a title="LinkedIn" onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;"><i class="fab fa-linkedin"></i></a>
+                    <a title="Discord" onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;"><i class="fab fa-discord"></i></a>
                 </div>
             </div>
 
             <div class="footer-section">
                 <h3>Quick Links</h3>
-                <a href="courses.html">Courses</a>
-                <a href="ai-assistant.html">AI Assistant</a>
-                <a href="community.html">Community</a>
-                <a href="about.html">About Us</a>
+                <a href="AetherLearn/html/courses.html">Courses</a>
+                <a href="AetherLearn/html/ai-assistant.html">AI Assistant</a>
+                <a href="AetherLearn/html/community.html">Community</a>
+                <a href="https://github.com/LavKumarShakya/Solution-Challenge" target="_blank">About Us</a>
             </div>
 
             <div class="footer-section">
                 <h3>Resources</h3>
-                <a href="blog.html">Blog</a>
-                <a href="faq.html">FAQs</a>
-                <a href="support.html">Support</a>
-                <a href="privacy.html">Privacy Policy</a>
+                <a onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;">Blog</a>
+                <a onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;">FAQs</a>
+                <a onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;">Support</a>
+                <a onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;">Privacy Policy</a>
             </div>
 
             <div class="footer-section">
                 <h3>Contact Us</h3>
-                <a href="mailto:support@aetherlearn.com">support@aetherlearn.com</a>
-                <a href="tel:+1234567890">+1 (234) 567-890</a>
+                <a onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;">support@aetherlearn.com</a>
+                <a onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;">+1 (234) 567-890</a>
             </div>
         </div>
         <div class="footer-bottom">
@@ -1248,6 +1246,95 @@
                     }, 3000);
                 });
             }
+            
+            // Function to show coming soon toast using existing system
+            window.showComingSoonToast = function(event) {
+                if (event) {
+                    event.preventDefault();
+                }
+                
+                const toast = document.createElement('div');
+                toast.className = 'toast-message info show';
+                
+                toast.innerHTML = `
+                    <i class="fas fa-clock"></i>
+                    <span>Coming Soon!</span>
+                `;
+                
+                document.body.appendChild(toast);
+                
+                // Auto-remove after 4 seconds
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => {
+                        if (toast.parentNode) {
+                            toast.parentNode.removeChild(toast);
+                        }
+                    }, 300);
+                }, 4000);
+                
+                // Allow clicking to dismiss
+                toast.addEventListener('click', () => {
+                    toast.classList.remove('show');
+                    setTimeout(() => {
+                        if (toast.parentNode) {
+                            toast.parentNode.removeChild(toast);
+                        }
+                    }, 300);
+                });
+            };
+            
+            // Function to show currently unavailable toast
+            window.showCurrentlyUnavailableToast = function(event) {
+                if (event) {
+                    event.preventDefault();
+                }
+                
+                const toast = document.createElement('div');
+                toast.className = 'toast-message warning show';
+                
+                toast.innerHTML = `
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>Currently unavailable</span>
+                `;
+                
+                document.body.appendChild(toast);
+                
+                // Auto-remove after 4 seconds
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => {
+                        if (toast.parentNode) {
+                            toast.parentNode.removeChild(toast);
+                        }
+                    }, 300);
+                }, 4000);
+                
+                // Allow clicking to dismiss
+                toast.addEventListener('click', () => {
+                    toast.classList.remove('show');
+                    setTimeout(() => {
+                        if (toast.parentNode) {
+                            toast.parentNode.removeChild(toast);
+                        }
+                    }, 300);
+                });
+            };
+            
+            // Function to scroll to hero section safely
+            window.scrollToHero = function(event) {
+                if (event) {
+                    event.preventDefault();
+                }
+                
+                const heroSection = document.querySelector('.hero');
+                if (heroSection) {
+                    heroSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            };
             
             // Quick search options in hero section
             const searchOptions = document.querySelectorAll('.search-options .option input');

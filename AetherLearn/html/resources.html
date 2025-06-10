@@ -65,7 +65,7 @@
                         <span><i class="fas fa-check"></i> Step-by-step guidance</span>
                         <span><i class="fas fa-check"></i> Best practices coaching</span>
                     </div>
-                    <a href="#" class="cta-button">Coming Soon</a>
+                    <a class="cta-button" onclick="showComingSoonToast(event)" style="cursor: pointer;">Coming Soon</a>
                 </div>
 
                 <div class="tool-card">
@@ -229,6 +229,43 @@
             mirror: false,
             anchorPlacement: 'top-bottom'
         });
+
+        // Function to show coming soon toast
+        function showComingSoonToast(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            
+            const toast = document.createElement('div');
+            toast.className = 'toast-message info show';
+            
+            toast.innerHTML = `
+                <i class="fas fa-clock"></i>
+                <span>Coming Soon!</span>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            // Auto-remove after 4 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, 4000);
+            
+            // Allow clicking to dismiss
+            toast.addEventListener('click', () => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            });
+        }
     </script>
 </body>
 </html>
