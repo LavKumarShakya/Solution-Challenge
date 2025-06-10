@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcard Generator - AetherLearn</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/ai-tools.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar-container"></nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Header Section -->
+            <section class="tool-header">
+                <div class="tool-header-content">
+                    <div class="tool-icon">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <div class="tool-info">
+                        <h1>Flashcard Generator</h1>
+                        <p>Transform your content into interactive study flashcards powered by AI</p>
+                    </div>
+                </div>
+                <div class="tool-stats">
+                    <div class="stat">
+                        <span class="stat-number" id="total-flashcards">0</span>
+                        <span class="stat-label">Cards Created</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number" id="study-sessions">0</span>
+                        <span class="stat-label">Study Sessions</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Input Section -->
+            <section class="tool-input-section" id="input-section">
+                <div class="input-container">
+                    <div class="input-header">
+                        <h2>Create Flashcards</h2>
+                        <p>Provide content or a topic to generate study flashcards</p>
+                    </div>
+
+                    <form id="flashcard-form" class="input-form">
+                        <!-- Content Input -->
+                        <div class="input-group">
+                            <label for="content-input">Content or Topic *</label>
+                            <textarea 
+                                id="content-input" 
+                                name="content" 
+                                placeholder="Enter your study content, paste text, or describe a topic you want to learn about...&#10;&#10;Examples:&#10;• Paste notes from a textbook chapter&#10;• Type 'JavaScript functions and closures'&#10;• Copy content from a web article"
+                                rows="8"
+                                required
+                                maxlength="10000"
+                            ></textarea>
+                            <div class="input-helper">
+                                <span class="character-count">0 / 10,000 characters</span>
+                            </div>
+                        </div>
+
+                        <!-- Settings Panel -->
+                        <div class="settings-panel">
+                            <h3>Generation Settings</h3>
+                            
+                            <div class="settings-grid">
+                                <div class="setting-group">
+                                    <label for="num-cards">Number of Cards</label>
+                                    <select id="num-cards" name="num_cards">
+                                        <option value="5">5 cards</option>
+                                        <option value="8">8 cards</option>
+                                        <option value="10" selected>10 cards</option>
+                                        <option value="12">12 cards</option>
+                                        <option value="15">15 cards</option>
+                                        <option value="20">20 cards</option>
+                                    </select>
+                                </div>
+
+                                <div class="setting-group">
+                                    <label for="difficulty">Difficulty Level</label>
+                                    <select id="difficulty" name="difficulty">
+                                        <option value="beginner">Beginner</option>
+                                        <option value="intermediate" selected>Intermediate</option>
+                                        <option value="advanced">Advanced</option>
+                                    </select>
+                                </div>
+
+                                <div class="setting-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="save-flashcards" name="save" checked>
+                                        <span class="checkmark"></span>
+                                        Save to my account
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="form-actions">
+                            <button type="button" id="clear-form" class="btn btn-secondary">
+                                <i class="fas fa-eraser"></i>
+                                Clear
+                            </button>
+                            <button type="submit" id="generate-btn" class="btn btn-primary">
+                                <i class="fas fa-magic"></i>
+                                Generate Flashcards
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Loading Section -->
+            <section class="loading-section" id="loading-section" style="display: none;">
+                <div class="loading-container">
+                    <div class="loading-spinner"></div>
+                    <h3>Creating your flashcards...</h3>
+                    <p>AI is analyzing your content and generating study cards</p>
+                    <div class="loading-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                        <span class="progress-text" id="progress-text">Processing content...</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Flashcards Display Section -->
+            <section class="flashcards-section" id="flashcards-section" style="display: none;">
+                <div class="flashcards-header">
+                    <div class="flashcards-info">
+                        <h2 id="flashcards-title">Your Flashcards</h2>
+                        <p id="flashcards-description">Click cards to flip and test your knowledge</p>
+                    </div>
+                    <div class="flashcards-controls">
+                        <button id="study-mode-btn" class="btn btn-secondary">
+                            <i class="fas fa-play"></i>
+                            Study Mode
+                        </button>
+                        <button id="shuffle-btn" class="btn btn-secondary">
+                            <i class="fas fa-random"></i>
+                            Shuffle
+                        </button>
+                        <button id="new-flashcards-btn" class="btn btn-primary">
+                            <i class="fas fa-plus"></i>
+                            New Set
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Study Progress -->
+                <div class="study-progress" id="study-progress">
+                    <div class="progress-stats">
+                        <span class="current-card">Card <span id="current-card-num">1</span> of <span id="total-cards">10</span></span>
+                        <span class="study-score">Score: <span id="study-score">0</span>%</span>
+                    </div>
+                </div>
+
+                <!-- Flashcards Container -->
+                <div class="flashcards-container" id="flashcards-container">
+                    <!-- Flashcards will be dynamically inserted here -->
+                </div>
+
+                <!-- Study Controls -->
+                <div class="study-controls" id="study-controls" style="display: none;">
+                    <button id="prev-card" class="btn btn-secondary">
+                        <i class="fas fa-chevron-left"></i>
+                        Previous
+                    </button>
+                    <div class="study-actions">
+                        <button id="know-it" class="btn btn-success">
+                            <i class="fas fa-check"></i>
+                            I Know This
+                        </button>
+                        <button id="need-practice" class="btn btn-warning">
+                            <i class="fas fa-star-half-alt"></i>
+                            Need Practice
+                        </button>
+                        <button id="dont-know" class="btn btn-danger">
+                            <i class="fas fa-times"></i>
+                            Don't Know
+                        </button>
+                    </div>
+                    <button id="next-card" class="btn btn-secondary">
+                        Next
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Saved Flashcards Section -->
+            <section class="saved-flashcards-section" id="saved-flashcards-section">
+                <div class="section-header">
+                    <h2>My Saved Flashcard Sets</h2>
+                    <button id="load-saved-btn" class="btn btn-secondary">
+                        <i class="fas fa-refresh"></i>
+                        Refresh
+                    </button>
+                </div>
+                <div class="saved-flashcards-grid" id="saved-flashcards-grid">
+                    <!-- Saved flashcard sets will be loaded here -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Error/Success Messages -->
+    <div id="message-container" class="message-container"></div>
+
+    <!-- Scripts -->
+    <script src="../js/navbar.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/ai-tools-common.js"></script>
+    <script src="../js/flashcard-generator.js"></script>
+</body>
+</html>

@@ -1,7 +1,10 @@
 // Configuration
 const CONFIG = {
-    GEMINI_API_KEY: 'AIzaSyCTXQs7wWnAsekXkYban3EJvuBPwm0qDRM'
+    GEMINI_API_KEY: 'AIzaSyCTXQs7wWnAsekXkYban3EJvuBPwm0qDRM',
+    API_BASE_URL: 'http://localhost:8000/api'
 };
+
+// Learning path functions will be available from learning_path.js script
 
 // Initialize page features
 document.addEventListener('DOMContentLoaded', () => {
@@ -18,6 +21,7 @@ function initializePage() {
     initializeSearch();
     initializeMobileMenu();
     initializePageTransitions();
+    initializeLearningPathSearch();
 
     // Initialize AI Assistant if we're on the AI assistant page
     if (currentPath.includes('ai-assistant')) {
@@ -790,97 +794,8 @@ function initializePageTransitions() {
     });
 }
 
-// Initialize search functionality
-document.addEventListener('DOMContentLoaded', () => {
-    const searchInput = document.getElementById('searchInput');
-    const suggestionsContainer = document.getElementById('searchSuggestions');
-
-    // Dummy suggestions
-    const dummySuggestions = [
-        "Machine Learning Fundamentals",
-        "Web Development with React",
-        "Python Programming",
-        "Mobile App Development",
-        "Artificial Intelligence",
-        "Cloud Computing AWS",
-        "Data Science with Python",
-        "Cybersecurity Basics",
-        "Blockchain Technology",
-        "DevOps & CI/CD",
-        "Game Development with Unity",
-        "Full-Stack Web Development"
-    ];
-
-    if (searchInput && suggestionsContainer) {
-        searchInput.addEventListener('input', (e) => {
-            const value = e.target.value.toLowerCase();
-            
-            if (value.length > 0) {
-                const filteredSuggestions = dummySuggestions.filter(suggestion =>
-                    suggestion.toLowerCase().includes(value)
-                );
-                
-                displaySuggestions(filteredSuggestions);
-                suggestionsContainer.style.display = 'block';
-            } else {
-                suggestionsContainer.style.display = 'none';
-            }
-        });
-
-        // Close suggestions when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
-                suggestionsContainer.style.display = 'none';
-            }
-        });
-    }
-
-    function displaySuggestions(suggestions) {
-        suggestionsContainer.innerHTML = suggestions
-            .map(suggestion => `
-                <div class="search-suggestion-item">
-                    <i class="fas fa-search"></i>
-                    ${suggestion}
-                </div>
-            `)
-            .join('');
-
-        // Don't add click handlers - suggestions are for display only
-        const suggestionItems = suggestionsContainer.querySelectorAll('.search-suggestion-item');
-        suggestionItems.forEach(item => {
-            item.addEventListener('click', () => {
-                searchInput.value = item.textContent.trim();
-                suggestionsContainer.style.display = 'none';
-            });
-        });
-    }
-
-    // Close search overlay
-    const searchOverlay = document.querySelector('.search-overlay');
-    const closeSearchBtn = document.querySelector('.close-search');
-
-    closeSearchBtn?.addEventListener('click', () => {
-        searchOverlay?.classList.remove('active');
-        document.body.style.overflow = '';
-    });
-
-
-    // Close on escape key
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && searchOverlay?.classList.contains('active')) {
-            searchOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-    });
-
-    // Close if clicked outside search content
-    searchOverlay?.addEventListener('click', (e) => {
-        if (e.target === searchOverlay) {
-            searchOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-    });
-});
+// Search functionality is now handled by learning_path_search.js
+// This section has been removed to avoid conflicts
 
 // Search Process Flow Implementation
 document.addEventListener('DOMContentLoaded', function() {

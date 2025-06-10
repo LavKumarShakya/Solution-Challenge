@@ -1,6 +1,8 @@
 
-AetherLearn/.env
 AetherLearn/docs
-.vscode/settings.json
+AetherLearn/.env
 AetherLearn/backend/.env
+/mcp-servers
 credentials/service-account.json
+.vscode/settings.json
+
