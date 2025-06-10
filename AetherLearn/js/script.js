@@ -327,10 +327,6 @@ class AIChat {
                 }
             });
 
-            // Prevent form from submitting normally
-            this.chatForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-            }, true);
         }
     }
 
