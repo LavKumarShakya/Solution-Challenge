@@ -117,6 +117,10 @@ class SearchStatusUpdate(BaseModel):
     progress: Optional[int] = None
     message: Optional[str] = None
     learning_path_id: Optional[str] = None
+    resources_found: Optional[int] = None
+    sources_scanned: Optional[int] = None
+    avg_quality: Optional[float] = None
+    latest_resources: Optional[List[Dict[str, Any]]] = None
     
     class Config:
         populate_by_name = True

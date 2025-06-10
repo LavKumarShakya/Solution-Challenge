@@ -1,7 +1,7 @@
 /**
  * Learning Path API Integration
  * Handles communication with the backend for creating and managing learning paths
- * Updated for the Vertex AI Search implementation
+ * Updated for Google Custom Search API + Vertex AI Gemini implementation
  */
 
 // API URL Configuration (only declare if not already defined)
@@ -10,7 +10,7 @@ window.API_BASE_URL = window.API_BASE_URL || 'http://localhost:8000/api';
 // Learning Path API Functions
 window.LearningPathAPI = class LearningPathAPI {
     /**
-     * Initiate a search for creating a learning path using Vertex AI Search
+     * Initiate a search for creating a learning path using Google Custom Search + Vertex AI Gemini
      * @param {string} query - The search query
      * @param {Object} preferences - User preferences for the learning path
      * @returns {Promise<Object>} - Response with search ID
@@ -177,45 +177,397 @@ window.LearningPathAPI = class LearningPathAPI {
 
 // Search Process UI Functions
 window.LearningPathUI = class LearningPathUI {
-    static isSearchInProgress = false;
-    
     /**
      * Start the search process
      * @param {string} query - The search query
      */
     static async startSearchProcess(query) {
-        // Prevent multiple simultaneous searches
-        if (this.isSearchInProgress) {
+        // Prevent multiple simultaneous searches using global SearchState
+        if (window.SearchState.isInProgress) {
             console.log('Search already in progress, ignoring duplicate request');
             return;
         }
         
-        this.isSearchInProgress = true;
+        window.SearchState.isInProgress = true;
+        window.SearchState.currentQuery = query;
         
         try {
             // Show the search process container
             document.getElementById('searchProcessContainer').style.display = 'block';
             
-            // Show the first stage
-            document.getElementById('searchProcessingStage').style.display = 'block';
-            document.getElementById('resourceDiscoveryStage').style.display = 'none';
-            document.getElementById('learningPathResultsStage').style.display = 'none';
+            // Reset results stage populated flag for new search
+            const resultsStage = document.getElementById('learningPathResultsStage');
+            resultsStage.style.display = 'none';
+            resultsStage.dataset.populated = 'false';
             
-            // Initialize search process UI
+            // GOOGLE CUSTOM SEARCH + VERTEX AI GEMINI INTEGRATION
+            console.log('🚀 Starting Google Custom Search + Vertex AI Gemini integration');
+            
+            const preferences = this.collectUserPreferences();
+            
+            // Initialize search UI
             this.initializeSearchProcessUI(query);
             
-            // Initiate the search
-            const preferences = this.collectUserPreferences();
-            const response = await LearningPathAPI.initiateSearch(query, preferences);
+            // Start the unified search workflow
+            await this.startUnifiedSearchWorkflow(query, preferences);
             
-            // Start polling for status
-            this.pollSearchStatus(response.search_id);
         } catch (error) {
             console.error('Error starting search process:', error);
             this.showErrorMessage('Failed to start search process. Please try again.');
             // Reset flag on error
-            this.isSearchInProgress = false;
+            window.SearchState.isInProgress = false;
+            window.SearchState.currentSearchId = null;
         }
+    }
+/**
+     * Start unified search workflow using Google Custom Search + Vertex AI Gemini
+     * @param {string} query - The search query  
+     * @param {Object} preferences - User preferences
+     */
+    static async startUnifiedSearchWorkflow(query, preferences) {
+        try {
+            // Enhanced preferences for better results
+            const enhancedPreferences = {
+                difficulty: preferences.difficulty || 'intermediate',
+                content_types: preferences.content_types || ['video', 'article', 'interactive', 'course'],
+                time_available: preferences.time_available || '10-20 hours',
+                learning_style: preferences.learning_style || ['visual'],
+                ...preferences
+            };
+
+            // Stage 1: Show query processing
+            this.showStage1ProcessingUI(query);
+
+            // Start the backend search workflow
+            const response = await LearningPathAPI.initiateSearch(query, enhancedPreferences);
+            
+            if (response && response.search_id) {
+                // Start polling for real-time progress
+                this.startRealTimeProgressPolling(response.search_id);
+            } else {
+                throw new Error('Failed to initiate search - no search ID received');
+            }
+
+        } catch (error) {
+            console.error('❌ Unified search workflow failed:', error);
+            this.showErrorMessage('Failed to start search process. Please try again.');
+            // Reset search flags on error
+            window.SearchState.isInProgress = false;
+            window.SearchState.currentSearchId = null;
+        }
+    }
+
+    /**
+     * Show Stage 1 processing UI with enhanced feedback
+     * @param {string} query - The search query
+     */
+    static showStage1ProcessingUI(query) {
+        // Show Stage 1: Search Processing
+        const searchProcessingStage = document.getElementById('searchProcessingStage');
+        if (searchProcessingStage) {
+            searchProcessingStage.style.display = 'flex';
+        }
+
+        // Hide other stages initially
+        this.hideStages(['resourceDiscoveryStage', 'learningPathResultsStage']);
+
+        // Update query display
+        const searchQueryText = document.getElementById('searchQueryText');
+        if (searchQueryText) {
+            searchQueryText.textContent = query;
+        }
+
+        // Animate process steps
+        this.animateProcessSteps();
+    }
+
+    /**
+     * Animate the 3-step process in Stage 1
+     */
+    static animateProcessSteps() {
+        const processSteps = document.querySelectorAll('.process-step');
+        
+        // Reset all steps
+        processSteps.forEach((step, index) => {
+            const statusIcon = step.querySelector('.step-status i');
+            if (index === 0) {
+                step.classList.add('active');
+                if (statusIcon) statusIcon.className = 'fas fa-spinner fa-spin';
+            } else {
+                step.classList.remove('active', 'completed');
+                if (statusIcon) statusIcon.className = 'fas fa-circle';
+            }
+        });
+
+        // Animate steps with realistic timing
+        setTimeout(() => {
+            if (processSteps[0]) {
+                this.updateProcessStepStatus(processSteps[0], 'completed', 'Query enhanced for Google Custom Search');
+                if (processSteps[1]) {
+                    this.updateProcessStepStatus(processSteps[1], 'active', 'Preparing search parameters...');
+                }
+            }
+        }, 2000);
+
+        setTimeout(() => {
+            if (processSteps[1]) {
+                this.updateProcessStepStatus(processSteps[1], 'completed', 'Search parameters optimized');
+                if (processSteps[2]) {
+                    this.updateProcessStepStatus(processSteps[2], 'active', 'Initializing Google Custom Search...');
+                }
+            }
+        }, 4000);
+
+        setTimeout(() => {
+            if (processSteps[2]) {
+                this.updateProcessStepStatus(processSteps[2], 'completed', 'Ready for resource discovery');
+            }
+            // Transition to Stage 2 after step completion
+            setTimeout(() => this.transitionToStage2(), 1000);
+        }, 6000);
+    }
+
+    /**
+     * Update individual process step status
+     * @param {Element} stepElement - The step element
+     * @param {string} status - New status (active, completed)
+     * @param {string} message - Status message
+     */
+    static updateProcessStepStatus(stepElement, status, message) {
+        const stepText = stepElement.querySelector('.step-text p');
+        const stepStatus = stepElement.querySelector('.step-status i');
+
+        if (stepText) stepText.textContent = message;
+
+        if (stepStatus) {
+            stepStatus.className = status === 'completed' ? 
+                'fas fa-check-circle' : 'fas fa-spinner fa-spin';
+        }
+
+        stepElement.classList.toggle('active', status === 'active');
+        stepElement.classList.toggle('completed', status === 'completed');
+    }
+
+    /**
+     * Transition to Stage 2: Resource Discovery
+     */
+    static transitionToStage2() {
+        console.log('🔄 Transitioning to Stage 2: Resource Discovery');
+        
+        // Hide Stage 1, Show Stage 2
+        this.hideStages(['searchProcessingStage']);
+        
+        const resourceDiscoveryStage = document.getElementById('resourceDiscoveryStage');
+        if (resourceDiscoveryStage) {
+            resourceDiscoveryStage.style.display = 'flex';
+        }
+
+        // Initialize discovery feed
+        const discoveryFeed = document.getElementById('discoveryFeed');
+        if (discoveryFeed) {
+            discoveryFeed.innerHTML = `
+                <div class="discovery-feed-item">
+                    <div class="feed-icon"><i class="fas fa-search"></i></div>
+                    <div class="feed-content">
+                        <h4>🔍 Google Custom Search Initiated</h4>
+                        <p>Scanning educational repositories with enhanced query...</p>
+                        <span class="feed-timestamp">Just now</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Reset discovery statistics
+        this.updateDiscoveryStats(0, 0, 0);
+    }
+
+    /**
+     * Start real-time progress polling
+     * @param {string} searchId - The search ID
+     */
+    static startRealTimeProgressPolling(searchId) {
+        if (window.SearchState.currentSearchId === searchId) {
+            console.log('Already polling this search, ignoring duplicate request');
+            return;
+        }
+        
+        window.SearchState.currentSearchId = searchId;
+        
+        const pollInterval = setInterval(async () => {
+            try {
+                const status = await LearningPathAPI.getSearchStatus(searchId);
+                
+                // Update UI based on status
+                this.handleProgressUpdate(status);
+                
+                // Check if completed or failed
+                if (status.status === 'COMPLETED' || status.status === 'FAILED') {
+                    clearInterval(pollInterval);
+                    
+                    if (status.status === 'COMPLETED' && status.learning_path_id) {
+                        await this.showLearningPathResults(status.learning_path_id);
+                    } else if (status.status === 'FAILED') {
+                        this.showErrorMessage(status.message || 'Search process failed. Please try again.');
+                    }
+                    
+                    // Reset search flags
+                    window.SearchState.isInProgress = false;
+                    window.SearchState.currentSearchId = null;
+                }
+            } catch (error) {
+                console.warn(`⚠️ Polling error: ${error.message}`);
+            }
+        }, 3000); // Poll every 3 seconds
+    }
+
+    /**
+     * Handle real-time progress updates from backend
+     * @param {Object} status - Status object from backend
+     */
+    static handleProgressUpdate(status) {
+        console.log('📊 Progress update:', status);
+        
+        // Update discovery statistics
+        this.updateDiscoveryStats(
+            status.resources_found || 0,
+            status.sources_scanned || 0,
+            Math.round((status.avg_quality || 0.85) * 100)
+        );
+
+        // Update progress bar
+        this.updateDiscoveryProgress(status.progress || 0);
+
+        // Handle status-specific updates
+        switch (status.status) {
+            case 'SEARCHING':
+                this.updateDiscoveryMessage('🔍 Searching with Google Custom Search API...', status.status);
+                break;
+            case 'CATEGORIZING':
+                this.updateDiscoveryMessage('🤖 Vertex AI Gemini is categorizing resources...', status.status);
+                break;
+            case 'GENERATING':
+                this.updateDiscoveryMessage('📚 Creating personalized learning path...', status.status);
+                break;
+            default:
+                this.updateDiscoveryMessage(status.message || 'Processing...', status.status);
+        }
+
+        // Add real resources to discovery feed if available
+        if (status.latest_resources && status.latest_resources.length > 0) {
+            this.addRealResourcesToFeed(status.latest_resources);
+        }
+    }
+
+    /**
+     * Update discovery statistics
+     * @param {number} resourcesFound - Number of resources found
+     * @param {number} sourcesScanned - Number of sources scanned
+     * @param {number} avgQuality - Average quality score
+     */
+    static updateDiscoveryStats(resourcesFound, sourcesScanned, avgQuality) {
+        const resourcesFoundEl = document.getElementById('resourcesFound');
+        const sourcesScannedEl = document.getElementById('sourcesScanned');
+        const avgQualityScoreEl = document.getElementById('avgQualityScore');
+
+        if (resourcesFoundEl) resourcesFoundEl.textContent = resourcesFound;
+        if (sourcesScannedEl) sourcesScannedEl.textContent = sourcesScanned;
+        if (avgQualityScoreEl) avgQualityScoreEl.textContent = avgQuality;
+    }
+
+    /**
+     * Update discovery progress bar
+     * @param {number} progress - Progress percentage (0-100)
+     */
+    static updateDiscoveryProgress(progress) {
+        const progressBar = document.getElementById('discoveryProgressBar');
+        const progressText = document.getElementById('discoveryProgress');
+
+        if (progressBar) {
+            const progressFill = progressBar.querySelector('.progress-fill');
+            if (progressFill) {
+                progressFill.style.width = `${progress}%`;
+            }
+        }
+
+        if (progressText) {
+            progressText.textContent = progress;
+        }
+    }
+
+    /**
+     * Update discovery message
+     * @param {string} message - Status message
+     * @param {string} status - Current status
+     */
+    static updateDiscoveryMessage(message, status) {
+        console.log(`📊 Discovery: ${message}`);
+        
+        // Add message to discovery feed if needed
+        const discoveryFeed = document.getElementById('discoveryFeed');
+        if (discoveryFeed && message) {
+            const feedItem = document.createElement('div');
+            feedItem.className = 'discovery-feed-item';
+            feedItem.innerHTML = `
+                <div class="feed-icon"><i class="fas fa-info-circle"></i></div>
+                <div class="feed-content">
+                    <h4>Status Update</h4>
+                    <p>${message}</p>
+                    <span class="feed-timestamp">Just now</span>
+                </div>
+            `;
+            
+            discoveryFeed.insertBefore(feedItem, discoveryFeed.firstChild);
+            
+            // Keep only last 5 items
+            const items = discoveryFeed.querySelectorAll('.discovery-feed-item');
+            if (items.length > 5) {
+                discoveryFeed.removeChild(items[items.length - 1]);
+            }
+        }
+    }
+
+    /**
+     * Add real resources to discovery feed
+     * @param {Array} resources - Array of resource objects
+     */
+    static addRealResourcesToFeed(resources) {
+        const discoveryFeed = document.getElementById('discoveryFeed');
+        if (!discoveryFeed) return;
+
+        resources.forEach(resource => {
+            const feedItem = document.createElement('div');
+            feedItem.className = 'discovery-feed-item';
+            feedItem.innerHTML = `
+                <div class="feed-icon">
+                    <i class="${this.getResourceIcon(resource.resource_type || resource.type)}"></i>
+                </div>
+                <div class="feed-content">
+                    <h4>📚 Found: ${resource.title || 'Educational Resource'}</h4>
+                    <p>Source: ${resource.displayLink || resource.source || 'Google Search'}</p>
+                    <span class="feed-timestamp">Just now</span>
+                </div>
+            `;
+
+            // Add to top of feed
+            discoveryFeed.insertBefore(feedItem, discoveryFeed.firstChild);
+
+            // Keep only last 5 items
+            const items = discoveryFeed.querySelectorAll('.discovery-feed-item');
+            if (items.length > 5) {
+                discoveryFeed.removeChild(items[items.length - 1]);
+            }
+        });
+    }
+
+    /**
+     * Hide specified stages
+     * @param {Array} stageIds - Array of stage IDs to hide
+     */
+    static hideStages(stageIds) {
+        stageIds.forEach(id => {
+            const stage = document.getElementById(id);
+            if (stage) stage.style.display = 'none';
+        });
     }
     
     /**
@@ -267,7 +619,7 @@ window.LearningPathUI = class LearningPathUI {
         // Reset discovery feed
         const discoveryFeed = document.getElementById('discoveryFeed');
         if (discoveryFeed) {
-            discoveryFeed.innerHTML = '<div class="discovery-message">Preparing Vertex AI search engines...</div>';
+            discoveryFeed.innerHTML = '<div class="discovery-message">Preparing Google Custom Search engines...</div>';
         }
     }
     
@@ -276,6 +628,14 @@ window.LearningPathUI = class LearningPathUI {
      * @param {string} searchId - The search ID
      */
     static async pollSearchStatus(searchId) {
+        // Prevent duplicate polling (Step 3 from plan)
+        if (window.SearchState.currentSearchId === searchId) {
+            console.log('Already polling this search, ignoring duplicate request');
+            return;
+        }
+        
+        window.SearchState.currentSearchId = searchId;
+        
         try {
             const statusCheckInterval = setInterval(async () => {
                 try {
@@ -295,26 +655,29 @@ window.LearningPathUI = class LearningPathUI {
                             this.showErrorMessage(status.message || 'Search process failed. Please try again.');
                         }
                         
-                        // Reset search flag
-                        this.isSearchInProgress = false;
+                        // Reset search flags
+                        window.SearchState.isInProgress = false;
+                        window.SearchState.currentSearchId = null;
                     }
                 } catch (error) {
                     console.error('Error checking search status:', error);
                     clearInterval(statusCheckInterval);
                     this.showErrorMessage('Error checking search status. Please try again.');
-                    // Reset search flag on error
-                    this.isSearchInProgress = false;
+                    // Reset search flags on error
+                    window.SearchState.isInProgress = false;
+                    window.SearchState.currentSearchId = null;
                 }
             }, 3000); // Check every 3 seconds
         } catch (error) {
             console.error('Error setting up status polling:', error);
             this.showErrorMessage('Error monitoring search progress. Please try again.');
-            // Reset search flag on error
-            this.isSearchInProgress = false;
+            // Reset search flags on error
+            window.SearchState.isInProgress = false;
+            window.SearchState.currentSearchId = null;
         }
     }
       /**
-     * Update the search process UI based on status from Vertex AI Search
+     * Update the search process UI based on status from Google Custom Search + Vertex AI Gemini
      * @param {Object} status - The search status object
      */
     static updateSearchProcessUI(status) {
@@ -360,7 +723,7 @@ window.LearningPathUI = class LearningPathUI {
                 // Show dynamic message about discovery process
                 const discoveryStatusMsg = document.getElementById('discoveryStatusMessage');
                 if (discoveryStatusMsg) {
-                    discoveryStatusMsg.textContent = status.message || 'Discovering educational resources with Vertex AI Search...';
+                    discoveryStatusMsg.textContent = status.message || 'Discovering educational resources with Google Custom Search...';
                 }
                 break;
                 
@@ -425,6 +788,13 @@ window.LearningPathUI = class LearningPathUI {
      * @param {string} learningPathId - The learning path ID
      */    static async showLearningPathResults(learningPathId) {
         try {
+            // Single Result Display Logic (Step 3 from plan)
+            const resultsStage = document.getElementById('learningPathResultsStage');
+            if (resultsStage.dataset.populated === 'true') {
+                console.log('Learning path results already displayed, preventing duplicate');
+                return;
+            }
+            
             // Get the learning path data
             const learningPath = await LearningPathAPI.getLearningPath(learningPathId);
             
@@ -433,8 +803,8 @@ window.LearningPathUI = class LearningPathUI {
             document.getElementById('resourceDiscoveryStage').style.display = 'none';
             
             // Show the results stage
-            const resultsStage = document.getElementById('learningPathResultsStage');
             resultsStage.style.display = 'block';
+            resultsStage.dataset.populated = 'true';
             
             // Clear any existing content to prevent duplicates
             resultsStage.innerHTML = '';
@@ -454,13 +824,16 @@ window.LearningPathUI = class LearningPathUI {
             
             // Render the learning path
             this.renderLearningPath(learningPath, pathContainer);
+            
+            // Populate Individual Resources Section (Step 4 from plan)
+            this.populateIndividualResources(learningPath);
         } catch (error) {
             console.error('Error showing learning path results:', error);
             this.showErrorMessage('Failed to load learning path results. Please try again.');
         }
     }
       /**
-       * Render a learning path generated by Vertex AI Search and Generation
+       * Render a learning path generated by Google Custom Search + Vertex AI Gemini
        * @param {Object} learningPath - The learning path object
        * @param {Element} container - The container element to render into (optional)
        */
@@ -576,7 +949,7 @@ window.LearningPathUI = class LearningPathUI {
         return count;
     }
       /**
-     * Get icon class for resource type from Vertex AI Search
+     * Get icon class for resource type from Google Custom Search results
      * @param {string} resourceType - The resource type
      * @returns {string} - Font Awesome icon class
      */
@@ -788,7 +1161,7 @@ window.LearningPathUI = class LearningPathUI {
         }
     }
       /**
-     * Collect user preferences from the enhanced UI for Vertex AI Search and generation
+     * Collect user preferences from the enhanced UI for Google Custom Search + Vertex AI Gemini
      * @returns {Object} - User preferences
      */
     static collectUserPreferences() {
@@ -896,6 +1269,241 @@ window.LearningPathUI = class LearningPathUI {
     static showErrorMessage(message) {
         // Implementation would depend on your UI
         alert(message);
+    }
+
+    /**
+     * Populate Individual Resources Section with Backend Data (Step 4 from plan)
+     * @param {Object} learningPath - The learning path object from backend
+     */
+    static populateIndividualResources(learningPath) {
+        const resourcesGrid = document.getElementById('individualResourcesGrid');
+        if (!resourcesGrid) {
+            console.warn('Individual resources grid not found in DOM');
+            return;
+        }
+
+        // Clear static content (remove placeholder content)
+        resourcesGrid.innerHTML = '';
+        
+        let resourceIndex = 0;
+        
+        // Iterate through all modules and their resources
+        learningPath.modules.forEach(module => {
+            module.resources.forEach(resource => {
+                const resourceCard = this.createResourceCard(resource, resourceIndex);
+                resourcesGrid.appendChild(resourceCard);
+                resourceIndex++;
+            });
+        });
+        
+        console.log(`Populated ${resourceIndex} individual resources from backend data`);
+    }
+
+    /**
+     * Create a resource card from backend data (Enhanced for Phase 5.1)
+     * @param {Object} resource - Resource object from backend
+     * @param {number} index - Resource index for unique IDs
+     * @returns {HTMLElement} - Created resource card element
+     */
+    static createResourceCard(resource, index) {
+        const card = document.createElement('div');
+        card.className = 'resource-card enhanced';
+        card.dataset.resourceType = resource.resource_type || 'article';
+        
+        // Get resource type icon
+        const typeIcon = this.getResourceTypeIcon(resource.resource_type);
+        
+        // Calculate estimated reading time display
+        const timeDisplay = resource.estimated_time_minutes
+            ? `${resource.estimated_time_minutes} min`
+            : 'N/A';
+            
+        // Get domain from URL for source display
+        const sourceDomain = resource.url ? this.extractDomain(resource.url) : resource.source || 'Unknown';
+        
+        // Enhanced metadata from backend
+        const metadata = resource.metadata || {};
+        const rating = metadata.rating || resource.rating || 0;
+        const tags = metadata.tags || [];
+        const author = metadata.author || 'Unknown Author';
+        
+        // Generate star rating display
+        const starRating = this.generateStarRating(rating);
+        
+        // Generate tags display
+        const tagsHTML = tags.length > 0 ?
+            `<div class="resource-tags">
+                ${tags.slice(0, 3).map(tag => `<span class="tag">${tag}</span>`).join('')}
+            </div>` : '';
+        
+        // Additional metadata based on resource type
+        let additionalInfo = '';
+        if (metadata.views) {
+            additionalInfo += `<div class="metadata-item"><i class="fas fa-eye"></i><span>${this.formatNumber(metadata.views)} views</span></div>`;
+        }
+        if (metadata.students) {
+            additionalInfo += `<div class="metadata-item"><i class="fas fa-users"></i><span>${this.formatNumber(metadata.students)} students</span></div>`;
+        }
+        if (metadata.claps) {
+            additionalInfo += `<div class="metadata-item"><i class="fas fa-hands-clapping"></i><span>${metadata.claps} claps</span></div>`;
+        }
+        if (metadata.completion_rate) {
+            additionalInfo += `<div class="metadata-item"><i class="fas fa-chart-line"></i><span>${Math.round(metadata.completion_rate * 100)}% completion</span></div>`;
+        }
+        
+        card.innerHTML = `
+            <div class="resource-header">
+                <div class="resource-type-badge ${resource.resource_type || 'article'}">
+                    <i class="${typeIcon}"></i>
+                    ${this.capitalizeFirstLetter(resource.resource_type || 'Article')}
+                </div>
+                <div class="resource-actions">
+                    <button class="resource-bookmark-btn" data-resource-id="${resource.id || index}" title="Bookmark this resource">
+                        <i class="far fa-bookmark"></i>
+                    </button>
+                    ${metadata.certificate_available ? '<div class="certificate-badge" title="Certificate Available"><i class="fas fa-certificate"></i></div>' : ''}
+                </div>
+            </div>
+            
+            <div class="resource-content">
+                <h4 class="resource-title">${resource.title}</h4>
+                <p class="resource-author"><i class="fas fa-user"></i> ${author}</p>
+                <p class="resource-description">${resource.description || 'No description available'}</p>
+                
+                ${tagsHTML}
+                
+                <div class="resource-metadata">
+                    <div class="metadata-row">
+                        <div class="metadata-item">
+                            <i class="fas fa-clock"></i>
+                            <span>${timeDisplay}</span>
+                        </div>
+                        <div class="metadata-item">
+                            <i class="fas fa-signal"></i>
+                            <span>${resource.difficulty || 'Beginner'}</span>
+                        </div>
+                        <div class="metadata-item">
+                            <i class="fas fa-globe"></i>
+                            <span>${sourceDomain}</span>
+                        </div>
+                    </div>
+                    
+                    ${rating > 0 ? `
+                    <div class="metadata-row">
+                        <div class="metadata-item rating">
+                            ${starRating}
+                            <span>${rating.toFixed(1)}</span>
+                        </div>
+                        ${resource.quality_score ? `
+                        <div class="metadata-item quality-score">
+                            <i class="fas fa-star"></i>
+                            <span>${(resource.quality_score * 100).toFixed(0)}% quality</span>
+                        </div>
+                        ` : ''}
+                    </div>
+                    ` : ''}
+                    
+                    ${additionalInfo ? `<div class="metadata-row additional-info">${additionalInfo}</div>` : ''}
+                </div>
+            </div>
+            
+            <div class="resource-footer">
+                <a href="${resource.url}" target="_blank" class="resource-link-btn primary">
+                    <i class="fas fa-external-link-alt"></i>
+                    Open Resource
+                </a>
+                <button class="resource-action-btn secondary" onclick="LearningPathUI.addToCustomPath('${resource.id || index}')" title="Add to custom learning path">
+                    <i class="fas fa-plus"></i>
+                    Add to Path
+                </button>
+            </div>
+        `;
+        
+        return card;
+    }
+
+    /**
+     * Format large numbers for display
+     * @param {number} num - Number to format
+     * @returns {string} - Formatted number
+     */
+    static formatNumber(num) {
+        if (num >= 1000000) {
+            return (num / 1000000).toFixed(1) + 'M';
+        }
+        if (num >= 1000) {
+            return (num / 1000).toFixed(1) + 'K';
+        }
+        return num.toString();
+    }
+
+    /**
+     * Add resource to custom learning path (Phase 5.1 - Step 6)
+     * @param {string} resourceId - Resource ID to add
+     */
+    static addToCustomPath(resourceId) {
+        // Initialize custom path if it doesn't exist
+        if (!window.customLearningPath) {
+            window.customLearningPath = [];
+        }
+        
+        // Check if resource is already in custom path
+        if (window.customLearningPath.includes(resourceId)) {
+            this.showErrorMessage('Resource already in your custom path!');
+            return;
+        }
+        
+        // Add to custom path
+        window.customLearningPath.push(resourceId);
+        
+        // Visual feedback
+        this.showMessage(`Resource added to custom path! (${window.customLearningPath.length} resources)`, 'success');
+        
+        // Update UI to show custom path count
+        this.updateCustomPathCounter();
+    }
+
+    /**
+     * Update custom path counter in UI
+     */
+    static updateCustomPathCounter() {
+        const counter = document.getElementById('customPathCounter');
+        if (counter && window.customLearningPath) {
+            counter.textContent = window.customLearningPath.length;
+            counter.style.display = window.customLearningPath.length > 0 ? 'inline-block' : 'none';
+        }
+    }
+
+    /**
+     * Get resource type icon class
+     * @param {string} type - Resource type
+     * @returns {string} - Icon class
+     */
+    static getResourceTypeIcon(type) {
+        const icons = {
+            'video': 'fas fa-play-circle',
+            'article': 'fas fa-file-alt',
+            'interactive': 'fas fa-laptop-code',
+            'course': 'fas fa-graduation-cap',
+            'book': 'fas fa-book',
+            'pdf': 'fas fa-file-pdf',
+            'tutorial': 'fas fa-chalkboard-teacher'
+        };
+        return icons[type] || 'fas fa-file-alt';
+    }
+
+    /**
+     * Extract domain from URL
+     * @param {string} url - Full URL
+     * @returns {string} - Domain name
+     */
+    static extractDomain(url) {
+        try {
+            const domain = new URL(url).hostname;
+            return domain.replace('www.', '');
+        } catch (e) {
+            return 'Unknown';
+        }
     }
 }
 

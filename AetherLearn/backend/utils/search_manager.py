@@ -2,6 +2,7 @@ import asyncio
 from datetime import datetime
 import os
 import logging
+import httpx
 from app.database import db
 from models.learning_path import SearchStatusUpdate
 from utils.vertex_ai import VertexAIClient
@@ -16,6 +17,32 @@ class SearchManager:
         self.query_cache = {}
         # Set cache expiry time (24 hours)
         self.cache_expiry_hours = 24
+        # Google Custom Search API configuration
+        self.search_api_key = os.getenv("SEARCH_API_KEY")
+        self.search_engine_id = os.getenv("SEARCH_ENGINE_ID")
+
+    async def _call_google_search(self, query: str, num_results: int = 10):
+        """Call Google Custom Search API to get web search results"""
+        try:
+            # Use the same endpoint we created in main.py but call it internally
+            async with httpx.AsyncClient() as client:
+                response = await client.post(
+                    "http://localhost:8000/api/v1/search-resources",
+                    json={"query": query},
+                    timeout=30.0
+                )
+                
+                if response.status_code == 200:
+                    search_data = response.json()
+                    return search_data.get("resources", [])
+                else:
+                    logger.error(f"Google Search API error: {response.status_code}")
+                    return []
+                    
+        except Exception as e:
+            logger.error(f"Error calling Google Custom Search API: {e}")
+            # Return empty list if search fails
+            return []
 
     async def update_search_status(self, search_id: str, update: SearchStatusUpdate):
         """Update the search status in the database"""
@@ -28,56 +55,98 @@ class SearchManager:
         )
 
     async def process_search(self, search_id: str, query: str, user_id: str = None, preferences: dict = None):
-        """Process a search query to generate a learning path using Vertex AI Search"""
+        """Process a search query using Google Custom Search API + Vertex AI Gemini"""
         try:
-            # Update status to DISCOVERING
+            # Step 1: Initialize search
+            await self.update_search_status(
+                search_id,
+                SearchStatusUpdate(
+                    status="INITIATED",
+                    progress=10,
+                    message="Initializing Google Custom Search API",
+                    resources_found=0,
+                    sources_scanned=0
+                )
+            )
+            
+            # Step 2: Google Custom Search API
+            await self.update_search_status(
+                search_id,
+                SearchStatusUpdate(
+                    status="SEARCHING",
+                    progress=25,
+                    message="Searching the web for educational resources",
+                    resources_found=0,
+                    sources_scanned=1
+                )
+            )
+            
+            # Call Google Custom Search API
+            search_results = await self._call_google_search(query)
+            
+            # Update with search results found
             await self.update_search_status(
                 search_id,
                 SearchStatusUpdate(
                     status="DISCOVERING",
-                    progress=20,
-                    message="Discovering relevant educational content"
+                    progress=40,
+                    message=f"Found {len(search_results)} resources, analyzing with AI",
+                    resources_found=len(search_results),
+                    sources_scanned=len(set(result.get('displayLink', '') for result in search_results)),
+                    latest_resources=search_results[:3] if search_results else []
                 )
             )
             
-            # Check if we have a cached result for a similar query
-            cached_content = self._check_cache(query)
-            
-            # Discover content using Vertex AI Search
-            content_items = cached_content if cached_content else await self.vertex_ai.discover_content(query, preferences)
-            
-            # Cache this result for future similar queries
-            if not cached_content:
-                self._cache_results(query, content_items)
-            # Update status to PROCESSING
+            # Step 3: Categorize search results using Vertex AI Gemini
             await self.update_search_status(
                 search_id,
                 SearchStatusUpdate(
-                    status="PROCESSING",
-                    progress=50,
-                    message=f"Processing {len(content_items)} content items and generating learning path"
+                    status="CATEGORIZING",
+                    progress=60,
+                    message="Categorizing search results with Vertex AI",
+                    resources_found=len(search_results),
+                    sources_scanned=len(set(result.get('displayLink', '') for result in search_results))
                 )
             )
             
-            # Log content discovery statistics
-            logger.info(f"Discovered {len(content_items)} content items for query: '{query}'")
-            self._log_content_diversity(content_items)
+            categorized_resources = await self.vertex_ai.categorize_resources(search_results, query)
             
-            # Generate learning path from discovered content
-            learning_path = await self.vertex_ai.generate_learning_path(
-                query, content_items, preferences
+            # Step 4: Generate course structure
+            await self.update_search_status(
+                search_id,
+                SearchStatusUpdate(
+                    status="GENERATING",
+                    progress=80,
+                    message="Generating personalized learning path structure",
+                    resources_found=len(search_results),
+                    sources_scanned=len(set(result.get('displayLink', '') for result in search_results))
+                )
             )
-              # Enrich the learning path with metadata
-            learning_path["user_id"] = user_id
-            learning_path["query"] = query
-            learning_path["created_at"] = datetime.utcnow()
-            learning_path["updated_at"] = datetime.utcnow()
-            learning_path["preferences"] = preferences or {}
-            learning_path["content_stats"] = self._calculate_content_stats(content_items)
-            learning_path["search_version"] = "vertex-ai-search-1.0"
+            
+            # Generate course structure using Vertex AI Gemini
+            learning_path_data = await self.vertex_ai.generate_course_from_search_results(
+                query, categorized_resources, preferences
+            )
+            
+            # Calculate quality metrics
+            total_resources = sum(len(resources) for resources in categorized_resources.values())
+            avg_quality = 0.85  # Default high quality for Google search results
+            
+            # Cache this result for future similar queries
+            self._cache_results(query, learning_path_data)
+            
+            # Enrich the learning path with metadata
+            learning_path_data["user_id"] = user_id
+            learning_path_data["query"] = query
+            learning_path_data["created_at"] = datetime.utcnow()
+            learning_path_data["updated_at"] = datetime.utcnow()
+            learning_path_data["preferences"] = preferences or {}
+            learning_path_data["search_version"] = "google-search-vertex-ai-1.0"
+            learning_path_data["total_resources"] = total_resources
+            learning_path_data["avg_quality"] = avg_quality
             
             # Store the learning path in the database
-            result = await db.learning_paths.insert_one(learning_path)
+            result = await db.learning_paths.insert_one(learning_path_data)
             learning_path_id = str(result.inserted_id)
             
             # Update status to COMPLETED

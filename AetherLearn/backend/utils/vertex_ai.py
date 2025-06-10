@@ -8,8 +8,7 @@ import logging
 import re
 from urllib.parse import urlparse
 
-# Google Cloud imports
-from google.cloud import discoveryengine_v1
+# Google Cloud imports - Gemini only (removed Discovery Engine)
 import vertexai
 from vertexai.generative_models import GenerativeModel, GenerationConfig
 
@@ -21,15 +20,14 @@ logger = logging.getLogger(__name__)
 
 class VertexAIClient:
     """
-    Enhanced Vertex AI Client for educational content discovery and learning path generation.
-    Integrates with Vertex AI Search (Discovery Engine) and Generative Models.
+    Vertex AI Client for learning path generation using Gemini AI.
+    Uses Google Custom Search results to create intelligent course structures.
     """
     def __init__(self):
         # Initialize GCP AI Platform
         self.project_id = os.getenv("VERTEX_AI_PROJECT_ID")
         self.location = os.getenv("VERTEX_AI_LOCATION", "global")
         self.model_id = os.getenv("VERTEX_AI_MODEL", "gemini-2.0-flash-001")
-        self.data_store_id = os.getenv("VERTEX_AI_DATASTORE_ID")
         
         # Enhanced Content Filtering and Ranking Configuration
         self.content_filters = {
@@ -108,8 +106,6 @@ class VertexAIClient:
             # Validate required environment variables
             if not self.project_id:
                 raise ValueError("VERTEX_AI_PROJECT_ID environment variable is required")
-            if not self.data_store_id:
-                raise ValueError("VERTEX_AI_DATASTORE_ID environment variable is required")
             
             # Initialize Vertex AI
             vertexai.init(project=self.project_id, location=self.location)
@@ -117,77 +113,312 @@ class VertexAIClient:
             # Initialize the generative model
             self.model = GenerativeModel(self.model_id)
             
-            # Initialize Discovery Engine client for search
-            try:
-                self.search_client = discoveryengine_v1.SearchServiceClient()
-                logger.info("Discovery Engine client initialized successfully")
-            except Exception as discovery_error:
-                logger.warning(f"Discovery Engine client initialization failed: {discovery_error}")
-                # Continue without Discovery Engine - will use fallback content
-                self.search_client = None
-            
-            logger.info(f"Successfully initialized Vertex AI with project {self.project_id} and model {self.model_id}")
+            logger.info(f"Successfully initialized Vertex AI Gemini with project {self.project_id} and model {self.model_id}")
         except Exception as e:
-            logger.error(f"Error initializing Vertex AI: {e}")
+            logger.error(f"Error initializing Vertex AI Gemini: {e}")
             raise
             
         # Initialize usage tracking and caching
         self.usage_tracking = []
         self.content_cache = {}
 
-    async def discover_content(self, query: str, preferences: Dict[str, Any] = None, max_results: int = 20) -> List[Dict[str, Any]]:
+    async def categorize_resources(self, search_results: List[Dict], query: str) -> Dict[str, List[Dict]]:
         """
-        Discover educational content using Vertex AI Search with enhanced filtering
+        Use Gemini to categorize Google Custom Search results by type and create course structure.
         
         Args:
-            query: The search query
-            preferences: User preferences for content filtering
-            max_results: Maximum number of results to return
+            search_results: List of search results from Google Custom Search API
+            query: The original search query
             
         Returns:
-            List of discovered content items with metadata
+            Dict with categorized resources by type
         """
         try:
-            # Log search request for usage monitoring
-            self._track_usage("search", {"query": query, "max_results": max_results})
+            # Create prompt for Gemini to categorize search results
+            categorization_prompt = f"""
+            You are an expert educational content curator. Analyze these search results for the query "{query}" and categorize them by type.
+
+            Search Results:
+            {json.dumps(search_results, indent=2)}
+
+            Please categorize these resources into the following types and return a JSON object:
+            - "videos": Video tutorials, YouTube content, video courses
+            - "articles": Blog posts, articles, written tutorials
+            - "courses": Structured online courses, MOOCs
+            - "documentation": Official documentation, reference materials
+            - "interactive": Hands-on tutorials, coding exercises, interactive content
+            - "academic": Academic papers, research materials
+
+            For each resource, also estimate:
+            - difficulty: "beginner", "intermediate", or "advanced"
+            - estimated_time_minutes: time to complete/read
+            - quality_score: 0.0 to 1.0 based on source credibility
+
+            Return only valid JSON format.
+            """
+
+            response = await self.model.generate_content_async(categorization_prompt)
             
-            # Check cache first if enabled
-            if self.content_filters["enable_content_caching"]:
-                cached_content = self._check_cache(query)
-                if cached_content:
-                    logger.info(f"Cache hit for query: {query}")
-                    return self._apply_preference_filtering(cached_content, preferences)
-            
-            # Run the search operation in a thread pool to avoid blocking
-            loop = asyncio.get_event_loop()
-            search_results = await loop.run_in_executor(None, self._execute_search, query, max_results)
-            
-            # Process and enhance the search results
-            processed_results = self._process_search_results(search_results)
-            
-            # Apply enhanced content filtering and ranking
-            filtered_results = self._apply_content_filtering(processed_results, preferences)
-            
-            # Apply credibility scoring
-            scored_results = self._apply_credibility_scoring(filtered_results)
-            
-            # Apply diversity algorithm to ensure varied content types
-            diverse_results = self._ensure_content_diversity(scored_results, preferences)
-            
-            # Apply final ranking based on all criteria
-            ranked_results = self._apply_final_ranking(diverse_results, preferences)
-            
-            # Cache the results if caching is enabled
-            if self.content_filters["enable_content_caching"]:
-                self._cache_results(query, ranked_results)
-            
-            logger.info(f"Discovered {len(ranked_results)} content items for query: {query}")
-            return ranked_results
-            
+            try:
+                categorized = json.loads(response.text)
+                logger.info(f"Successfully categorized {len(search_results)} search results")
+                return categorized
+            except json.JSONDecodeError:
+                logger.warning("Failed to parse Gemini categorization response as JSON")
+                # Fallback: basic categorization
+                return self._basic_categorization(search_results)
+                
         except Exception as e:
-            logger.error(f"Error in discover_content: {str(e)}")
-            # Return empty results in case of error
-            return []
+            logger.error(f"Error categorizing search results: {e}")
+            return self._basic_categorization(search_results)
+
+    def _basic_categorization(self, search_results: List[Dict]) -> Dict[str, List[Dict]]:
+        """
+        Fallback method for basic categorization when Gemini fails.
+        Enhanced for Google Custom Search API results.
+        """
+        categorized = {
+            "videos": [],
+            "articles": [],
+            "courses": [],
+            "documentation": [],
+            "interactive": [],
+            "academic": []
+        }
+        
+        for result in search_results:
+            # Handle both Google Custom Search format and our internal format
+            link = result.get('link', result.get('url', '')).lower()
+            title = result.get('title', '').lower()
+            display_link = result.get('displayLink', '')
+            snippet = result.get('snippet', result.get('description', ''))
+            
+            # Create standardized resource format
+            standardized_resource = {
+                "title": result.get('title', 'Untitled Resource'),
+                "link": result.get('link', result.get('url', '')),
+                "url": result.get('link', result.get('url', '')),  # Ensure both link and url are set
+                "snippet": snippet,
+                "description": snippet,
+                "displayLink": display_link,
+                "source": display_link,
+                "resource_type": self._determine_resource_type(link, title, snippet),
+                "difficulty": self._estimate_difficulty(title, snippet),
+                "estimated_time_minutes": self._estimate_time(link, title, snippet),
+                "quality_score": self._get_source_credibility(link)
+            }
+            
+            # Categorize based on determined type
+            resource_type = standardized_resource["resource_type"]
+            
+            if resource_type == "video" or 'youtube.com' in link or 'video' in title:
+                categorized["videos"].append(standardized_resource)
+            elif resource_type == "course" or any(domain in link for domain in ['coursera.org', 'edx.org', 'udacity.com', 'khanacademy.org']) or 'course' in title:
+                categorized["courses"].append(standardized_resource)
+            elif resource_type == "documentation" or 'docs.' in link or 'documentation' in title:
+                categorized["documentation"].append(standardized_resource)
+            elif resource_type == "interactive" or any(term in title for term in ['tutorial', 'hands-on', 'practice', 'exercise']):
+                categorized["interactive"].append(standardized_resource)
+            elif resource_type == "academic" or any(domain in link for domain in ['arxiv.org', 'ieee.org', 'acm.org', 'scholar.google.com']):
+                categorized["academic"].append(standardized_resource)
+            else:
+                categorized["articles"].append(standardized_resource)
+        
+        return categorized
+
+    def _determine_resource_type(self, url: str, title: str, description: str) -> str:
+        """Determine resource type based on URL, title, and description"""
+        url_lower = url.lower()
+        title_lower = title.lower()
+        desc_lower = description.lower()
+        
+        # Video detection
+        if any(domain in url_lower for domain in ['youtube.com', 'vimeo.com', 'ted.com']) or 'video' in title_lower:
+            return "video"
+        
+        # Course detection
+        if any(domain in url_lower for domain in ['coursera.org', 'edx.org', 'udacity.com', 'khanacademy.org']) or 'course' in title_lower:
+            return "course"
+        
+        # Documentation detection
+        if 'docs.' in url_lower or any(term in title_lower for term in ['documentation', 'api reference', 'guide']):
+            return "documentation"
+        
+        # Interactive detection
+        if any(term in title_lower for term in ['tutorial', 'hands-on', 'practice', 'exercise', 'lab']):
+            return "interactive"
+        
+        # Academic detection
+        if any(domain in url_lower for domain in ['arxiv.org', 'ieee.org', 'acm.org', 'researchgate.net']):
+            return "academic"
+        
+        return "article"
+
+    def _estimate_difficulty(self, title: str, description: str) -> str:
+        """Estimate difficulty based on title and description"""
+        text = (title + " " + description).lower()
+        
+        if any(term in text for term in ['beginner', 'introduction', 'basics', 'getting started', 'fundamentals']):
+            return "beginner"
+        elif any(term in text for term in ['advanced', 'expert', 'deep dive', 'mastery', 'professional']):
+            return "advanced"
+        else:
+            return "intermediate"
+
+    def _estimate_time(self, url: str, title: str, description: str) -> int:
+        """Estimate time to complete based on resource type and content"""
+        resource_type = self._determine_resource_type(url, title, description)
+        
+        time_mapping = {
+            "video": 20,       # Average video length
+            "course": 120,     # Full course estimate
+            "documentation": 15, # Reading documentation
+            "interactive": 45,  # Hands-on tutorials
+            "academic": 30,     # Academic papers
+            "article": 10       # Blog posts/articles
+        }
+        
+        return time_mapping.get(resource_type, 15)
+
+    def _get_source_credibility(self, url: str) -> float:
+        """
+        Get credibility score for a URL based on domain.
+        """
+        try:
+            parsed = urlparse(url)
+            domain = parsed.netloc.lower()
+            
+            for source, score in self.source_credibility_scores.items():
+                if source in domain:
+                    return score
+            
+            return self.source_credibility_scores["default"]
+        except:
+            return 0.5
+
+    async def generate_course_from_search_results(self, query: str, categorized_resources: Dict, preferences: Dict = None) -> Dict:
+        """
+        Use Gemini to create intelligent course structure from Google search results.
+        
+        Args:
+            query: The original search query
+            categorized_resources: Categorized search results
+            preferences: User preferences for course structure
+            
+        Returns:
+            Complete course structure with modules and resources
+        """
+        try:
+            preferences = preferences or {}
+            
+            # Create a comprehensive prompt for course generation
+            course_prompt = f"""
+            You are an expert curriculum designer. Create a comprehensive learning path for "{query}" using these categorized resources from Google search results.
+
+            Available Resources:
+            {json.dumps(categorized_resources, indent=2)}
+
+            User Preferences:
+            - Learning Style: {preferences.get('learning_style', 'balanced')}
+            - Difficulty Level: {preferences.get('difficulty', 'intermediate')}
+            - Time Preference: {preferences.get('time_preference', 'flexible')}
+
+            Create a structured course with:
+            1. Course title and description
+            2. 3-5 learning modules with logical progression
+            3. Each module should include 2-4 resources from the categorized list
+            4. Estimated time for each module
+            5. Clear learning objectives
+
+            Return a JSON object with this structure:
+            {{
+                "title": "Course title based on query",
+                "description": "Comprehensive course description",
+                "estimated_hours": 12.5,
+                "difficulty": "beginner|intermediate|advanced",
+                "modules": [
+                    {{
+                        "id": "module_1",
+                        "title": "Module Title",
+                        "description": "What students will learn",
+                        "estimated_hours": 3.0,
+                        "resources": [
+                            {{
+                                "title": "Resource title from search results",
+                                "link": "URL from search results",
+                                "snippet": "Description from search results",
+                                "type": "video|article|course|documentation",
+                                "difficulty": "beginner|intermediate|advanced",
+                                "estimated_time_minutes": 45
+                            }}
+                        ]
+                    }}
+                ]
+            }}
+
+            Ensure the course follows a logical learning progression and uses the actual search results provided.
+            """
+
+            response = await self.model.generate_content_async(course_prompt)
+            
+            try:
+                course_structure = json.loads(response.text)
+                
+                # Add metadata
+                course_structure.update({
+                    "query": query,
+                    "created_at": datetime.utcnow().isoformat(),
+                    "search_based": True,
+                    "total_resources": sum(len(resources) for resources in categorized_resources.values())
+                })
+                
+                logger.info(f"Successfully generated course structure for '{query}'")
+                return course_structure
+                
+            except json.JSONDecodeError:
+                logger.warning("Failed to parse Gemini course generation response as JSON")
+                return self._create_fallback_course(query, categorized_resources)
+                
+        except Exception as e:
+            logger.error(f"Error generating course from search results: {e}")
+            return self._create_fallback_course(query, categorized_resources)
+
+    def _create_fallback_course(self, query: str, categorized_resources: Dict) -> Dict:
+        """
+        Create a basic course structure when Gemini fails.
+        """
+        # Get all resources from categories
+        all_resources = []
+        for category, resources in categorized_resources.items():
+            for resource in resources:
+                resource["type"] = category
+                all_resources.append(resource)
+        
+        # Create basic modules
+        modules = []
+        resources_per_module = max(2, len(all_resources) // 3)
+        
+        for i in range(0, len(all_resources), resources_per_module):
+            module_resources = all_resources[i:i + resources_per_module]
+            modules.append({
+                "id": f"module_{i//resources_per_module + 1}",
+                "title": f"{query} - Part {i//resources_per_module + 1}",
+                "description": f"Learn about {query.lower()} fundamentals",
+                "estimated_hours": len(module_resources) * 0.5,
+                "resources": module_resources
+            })
+        
+        return {
+            "title": f"Introduction to {query}",
+            "description": f"A comprehensive learning path for {query.lower()}",
+            "estimated_hours": sum(module["estimated_hours"] for module in modules),
+            "difficulty": "intermediate",
+            "modules": modules,
+            "query": query,
+            "created_at": datetime.utcnow().isoformat(),
+            "search_based": True,
+            "total_resources": len(all_resources)
+        }
 
     def _apply_content_filtering(self, content_items: List[Dict[str, Any]], preferences: Dict[str, Any] = None) -> List[Dict[str, Any]]:
         """Apply enhanced content filtering based on quality, age, and other criteria"""
@@ -1109,7 +1340,262 @@ class VertexAIClient:
         
         return max(difficulty_counts, key=difficulty_counts.get)
 
+    def _enhance_search_query(self, query: str, preferences: Dict[str, Any] = None) -> str:
+        """
+        Enhance user query for better Vertex AI search results
+        
+        Args:
+            query: Original user query
+            preferences: User preferences for context
+            
+        Returns:
+            Enhanced query string
+        """
+        enhanced_terms = []
+        enhanced_terms.append(query)
+        
+        # Add learning-focused terms
+        learning_terms = ["tutorial", "course", "learning", "guide", "education"]
+        if not any(term in query.lower() for term in learning_terms):
+            enhanced_terms.append("tutorial")
+        
+        # Add difficulty context if specified in preferences
+        if preferences and "difficulty" in preferences:
+            difficulty = preferences["difficulty"].lower()
+            if difficulty == "beginner":
+                enhanced_terms.extend(["beginner", "introduction", "basics"])
+            elif difficulty == "intermediate":
+                enhanced_terms.extend(["intermediate", "practical"])
+            elif difficulty == "advanced":
+                enhanced_terms.extend(["advanced", "deep dive", "masterclass"])
+        
+        # Add format preferences
+        if preferences and "formats" in preferences:
+            formats = preferences["formats"]
+            if "video" in formats:
+                enhanced_terms.append("video tutorial")
+            if "interactive" in formats:
+                enhanced_terms.append("hands-on")
+            if "article" in formats:
+                enhanced_terms.append("comprehensive guide")
+        
+        # Add practical context
+        practical_terms = ["step by step", "practical examples", "real world"]
+        enhanced_terms.extend(practical_terms[:1])  # Add one practical term
+        
+        # Combine and clean
+        enhanced_query = " ".join(enhanced_terms)
+        
+        # Limit length to avoid overly long queries
+        if len(enhanced_query) > 200:
+            enhanced_query = enhanced_query[:200].rsplit(' ', 1)[0]
+        
+        return enhanced_query
+
+    async def generate_flashcards(self, content: str, options: Dict[str, Any] = None) -> List[Dict[str, Any]]:
+        """
+        Generate interactive flashcards from user-provided content using Vertex AI
+        
+        Args:
+            content: User-provided text content or topic
+            options: Configuration options (num_cards, difficulty, etc.)
+            
+        Returns:
+            List of flashcard objects with question/answer pairs
+        """
+        try:
+            options = options or {}
+            num_cards = options.get("num_cards", 10)
+            difficulty = options.get("difficulty", "intermediate")
+            
+            # Validate input
+            if not content or len(content.strip()) < 10:
+                raise ValueError("Content must be at least 10 characters long")
+            
+            if num_cards < 3 or num_cards > 20:
+                raise ValueError("Number of cards must be between 3 and 20")
+            
+            # Create flashcard generation prompt
+            prompt = self._create_flashcard_prompt(content, num_cards, difficulty)
+            
+            # Log the generation request
+            self._track_usage("flashcard_generation", {
+                "content_length": len(content),
+                "num_cards": num_cards,
+                "difficulty": difficulty
+            })
+            
+            # Execute generation with optimal config for flashcards (low temperature for consistency)
+            response = await self._execute_model_async(
+                prompt,
+                temperature=0.2,  # Low temperature for consistent flashcard format
+                max_tokens=2048
+            )
+            
+            # Parse and validate flashcards
+            flashcards = self._parse_flashcard_response(response)
+            
+            # Enhance flashcards with metadata
+            enhanced_flashcards = self._enhance_flashcards(flashcards, difficulty)
+            
+            logger.info(f"Successfully generated {len(enhanced_flashcards)} flashcards")
+            return enhanced_flashcards
+            
+        except Exception as e:
+            logger.error(f"Error generating flashcards: {str(e)}")
+            # Return fallback flashcards if generation fails
+            return self._create_fallback_flashcards(content, num_cards)
+
+    def _create_flashcard_prompt(self, content: str, num_cards: int, difficulty: str) -> str:
+        """Create optimized prompt for flashcard generation based on Context7 best practices"""
+        
+        difficulty_instructions = {
+            "beginner": "Focus on basic definitions, simple concepts, and fundamental facts. Use clear, straightforward language.",
+            "intermediate": "Include some application and analysis questions. Test understanding of relationships between concepts.",
+            "advanced": "Challenge with synthesis, evaluation, and complex applications. Include edge cases and nuanced understanding."
+        }
+        
+        instruction = difficulty_instructions.get(difficulty, difficulty_instructions["intermediate"])
+        
+        return f"""
+        You are an expert educational content creator. Generate {num_cards} high-quality study flashcards from the following content.
+
+        CONTENT: {content}
+
+        REQUIREMENTS:
+        - Difficulty level: {difficulty} - {instruction}
+        - Create clear, concise questions that test key concepts
+        - Provide accurate, complete answers
+        - Focus on the most important information from the content
+        - Ensure questions are neither too easy nor impossibly difficult for {difficulty} level
+        - Make questions specific enough to avoid ambiguity
+
+        FORMAT: Return ONLY a valid JSON array with this exact structure:
+        [
+            {{
+                "question": "Clear, specific question about the content",
+                "answer": "Complete, accurate answer",
+                "hint": "Optional hint to guide thinking (leave empty if not needed)",
+                "topic": "Main topic/concept this card covers"
+            }},
+            {{
+                "question": "Another question...",
+                "answer": "Another answer...",
+                "hint": "",
+                "topic": "Another topic..."
+            }}
+        ]
+
+        Generate exactly {num_cards} flashcards. Ensure the JSON is valid and properly formatted.
+        """
+
+    def _parse_flashcard_response(self, response: str) -> List[Dict[str, Any]]:
+        """Parse AI response into structured flashcard data with robust error handling"""
+        try:
+            # Clean the response and extract JSON
+            cleaned_response = self._clean_json_response(response)
+            
+            # Try to extract JSON array
+            json_start = cleaned_response.find('[')
+            json_end = cleaned_response.rfind(']') + 1
+            
+            if json_start >= 0 and json_end > json_start:
+                json_str = cleaned_response[json_start:json_end]
+                flashcards = json.loads(json_str)
+                
+                # Validate structure
+                validated_flashcards = []
+                for i, card in enumerate(flashcards):
+                    if isinstance(card, dict) and "question" in card and "answer" in card:
+                        validated_card = {
+                            "id": f"card_{i+1}",
+                            "question": str(card.get("question", "")).strip(),
+                            "answer": str(card.get("answer", "")).strip(),
+                            "hint": str(card.get("hint", "")).strip(),
+                            "topic": str(card.get("topic", "General")).strip()
+                        }
+                        
+                        # Only add if question and answer are non-empty
+                        if validated_card["question"] and validated_card["answer"]:
+                            validated_flashcards.append(validated_card)
+                
+                if validated_flashcards:
+                    return validated_flashcards
+                else:
+                    raise ValueError("No valid flashcards found in response")
+            else:
+                raise ValueError("Could not extract valid JSON array from response")
+                
+        except json.JSONDecodeError as e:
+            logger.error(f"JSON parsing error in flashcard response: {str(e)}")
+            raise ValueError(f"Invalid JSON in flashcard response: {str(e)}")
+        except Exception as e:
+            logger.error(f"Error parsing flashcard response: {str(e)}")
+            raise
+
+    def _enhance_flashcards(self, flashcards: List[Dict[str, Any]], difficulty: str) -> List[Dict[str, Any]]:
+        """Enhance flashcards with additional metadata and features"""
+        enhanced = []
+        
+        for i, card in enumerate(flashcards):
+            enhanced_card = {
+                **card,
+                "id": f"flashcard_{i+1}",
+                "difficulty": difficulty,
+                "created_at": datetime.utcnow().isoformat(),
+                "study_metadata": {
+                    "times_reviewed": 0,
+                    "correct_answers": 0,
+                    "last_reviewed": None,
+                    "confidence_level": "not_reviewed"
+                }
+            }
+            enhanced.append(enhanced_card)
+        
+        return enhanced
+
+    def _create_fallback_flashcards(self, content: str, num_cards: int) -> List[Dict[str, Any]]:
+        """Create basic fallback flashcards if AI generation fails"""
+        # Extract key terms and create simple definition cards
+        words = content.split()
+        fallback_cards = []
+        
+        # Simple fallback: create cards asking about key concepts
+        for i in range(min(num_cards, 3)):  # Limit fallback to 3 cards
+            fallback_cards.append({
+                "id": f"fallback_{i+1}",
+                "question": f"What is the main concept #{i+1} discussed in this content?",
+                "answer": "Please review the provided content to understand the key concepts.",
+                "hint": "Look for important terms and definitions in the source material.",
+                "topic": "General Review",
+                "difficulty": "beginner",
+                "created_at": datetime.utcnow().isoformat(),
+                "is_fallback": True
+            })
+        
+        return fallback_cards
+
     def _clean_json_response(self, response: str) -> str:
+        """Clean and prepare response text for JSON parsing"""
+        if not response:
+            return ""
+        
+        # Remove common markdown code block markers
+        response = response.replace("```json", "").replace("```", "")
+        
+        # Remove extra whitespace and newlines
+        response = response.strip()
+        
+        # Remove any leading/trailing text that might interfere with JSON parsing
+        lines = response.split('\n')
+        cleaned_lines = []
+        
+        for line in lines:
+            line = line.strip()
+            if line and not line.startswith('#') and not line.startswith('//'):
+                cleaned_lines.append(line)
+        
+        return '\n'.join(cleaned_lines)
         """Enhanced JSON cleaning with multiple fallback strategies"""
         # Remove markdown indicators
         response = response.replace("```json", "").replace("```", "")

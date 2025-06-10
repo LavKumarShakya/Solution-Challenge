@@ -1,5 +1,11 @@
 document.addEventListener('DOMContentLoaded', async function() {
-    const navbarContainer = document.getElementById('navbar-placeholder');
+    const navbarContainer = document.getElementById('navbar-container') || document.getElementById('navbar-placeholder');
+    
+    // Check if navbar container exists before proceeding
+    if (!navbarContainer) {
+        console.warn('Navbar container not found - skipping navbar loading');
+        return;
+    }
     try {
         // Check if we're on the index page or in a subdirectory
         const isIndexPage = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/');
@@ -56,7 +62,7 @@ function initializeSearch() {
     const searchInput = document.querySelector('.search-overlay-input');
 
     if (!searchBtn || !searchOverlay || !closeSearchBtn || !searchInput) {
-        console.error('Search elements not found');
+        // Search elements not found - silently skip search initialization
         return;
     }
 

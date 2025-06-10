@@ -89,18 +89,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Close popup when clicking outside
-    resetPopup.addEventListener('click', (e) => {
-        if (e.target === resetPopup) {
-            closeResetPopup();
-        }
-    });
+    if (resetPopup) {
+        resetPopup.addEventListener('click', (e) => {
+            if (e.target === resetPopup) {
+                closeResetPopup();
+            }
+        });
 
-    // Close popup on escape key
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && resetPopup.classList.contains('active')) {
-            closeResetPopup();
-        }
-    });
+        // Close popup on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && resetPopup.classList.contains('active')) {
+                closeResetPopup();
+            }
+        });
+    }
 
     
     
@@ -209,9 +211,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Loading screen
     window.addEventListener('load', () => {
         const loadingScreen = document.getElementById('loading-screen');
-        loadingScreen.style.opacity = '0';
-        setTimeout(() => {
-            loadingScreen.style.display = 'none';
-        }, 300);
+        if (loadingScreen) {
+            loadingScreen.style.opacity = '0';
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+            }, 300);
+        }
     });
 });

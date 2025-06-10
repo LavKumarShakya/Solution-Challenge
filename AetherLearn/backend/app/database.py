@@ -61,10 +61,74 @@ async def init_db():
         print("Connected to MongoDB database:", MONGODB_DB)
         
     except Exception as e:
-        print(f"Failed to connect to MongoDB: {e}")
-        print("Application will continue but database features may not work")
+        print(f"❌ Failed to connect to MongoDB: {e}")
+        print("🔄 Application will continue but database features may not work")
         # Set db to None so the app can still start
         db = None
+
+async def get_db():
+    """Get database instance with connection check for real Vertex AI integration"""
+    global db
+    
+    if db is None:
+        print("🔄 Attempting to reconnect to database for real integration...")
+        await init_db()
+    
+    return db
+
+async def test_database_connection() -> bool:
+    """Test database connection and return status"""
+    global db
+    try:
+        if db is None:
+            await init_db()
+        
+        if db is not None:
+            # Simple ping test
+            await client.admin.command('ping')
+            print("✅ Database connection test successful")
+            return True
+        else:
+            print("❌ Database is None")
+            return False
+            
+    except Exception as e:
+        print(f"❌ Database connection test failed: {e}")
+        return False
+
+async def ensure_real_data_collections():
+    """Ensure collections exist for real Vertex AI data storage"""
+    global db
+    
+    if db is None:
+        return
+    
+    try:
+        # Required collections for real Vertex AI integration
+        required_collections = [
+            'learning_paths',
+            'search_status',
+            'saved_courses',
+            'vertex_ai_content'  # For caching real search results
+        ]
+        
+        existing_collections = await db.list_collection_names()
+        
+        for collection_name in required_collections:
+            if collection_name not in existing_collections:
+                await db.create_collection(collection_name)
+                print(f"📝 Created collection for real data: {collection_name}")
+        
+        # Create additional indexes for Vertex AI content
+        try:
+            await db.vertex_ai_content.create_index("query")
+            await db.vertex_ai_content.create_index("created_at")
+            print("📚 Created Vertex AI content indexes")
+        except Exception as e:
+            print(f"⚠️ Failed to create Vertex AI indexes: {e}")
+        
+    except Exception as e:
+        print(f"⚠️ Failed to ensure real data collections: {e}")
 
 async def close_db():
     if client:
