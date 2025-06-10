@@ -102,15 +102,17 @@ function setupAuthStateListener() {
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
-  // Load Firebase (this will handle auth initialization)
-  await loadFirebase();
+  const navbarContainer = document.getElementById('navbar-container') || document.getElementById('navbar-placeholder');
+  
+  // Check if navbar container exists before proceeding
+  if (!navbarContainer) {
+    console.warn('Navbar container not found - skipping navbar loading');
+    return;
+  }
 
-  const navbarContainer = document.getElementById("navbar-placeholder");
   try {
     // Check if we're on the index page or in a subdirectory
-    const isIndexPage =
-      window.location.pathname.endsWith("index.html") ||
-      window.location.pathname.endsWith("/");
+    const isIndexPage = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/');
     const navbarPath = isIndexPage
       ? "AetherLearn/html/navbar.html"
       : "../html/navbar.html";
@@ -152,12 +154,20 @@ document.addEventListener("DOMContentLoaded", async function () {
           link.classList.add("active");
         }
       }
-    }); // Handle authentication UI
+    });
+
+    // Initialize search functionality
+    initializeSearch();
+
+    // Load Firebase and setup authentication after navbar is loaded
+    await loadFirebase();
+
+    // Handle authentication UI after Firebase is loaded
     const logoutBtn = document.getElementById("logout-btn");
     const signInBtn = document.getElementById("sign-in-btn");
 
     if (logoutBtn && signInBtn && auth) {
-      // If auth is already loaded, setup listeners directly
+      // If auth is loaded, setup listeners
       setupAuthStateListener();
     }
   } catch (error) {
@@ -166,3 +176,67 @@ document.addEventListener("DOMContentLoaded", async function () {
       "<p>Error loading navigation. Please refresh the page.</p>";
   }
 });
+
+function initializeSearch() {
+  const searchBtn = document.querySelector('.nav-search-btn');
+  const searchOverlay = document.querySelector('.search-overlay');
+  const closeSearchBtn = document.querySelector('.close-search');
+  const searchInput = document.querySelector('.search-overlay-input');
+
+  if (!searchBtn || !searchOverlay || !closeSearchBtn || !searchInput) {
+    // Search elements not found - silently skip search initialization
+    return;
+  }
+
+  // Open search overlay
+  searchBtn.addEventListener('click', () => {
+    searchOverlay.classList.add('active');
+    searchInput.focus();
+    document.body.style.overflow = 'hidden';
+  });
+
+  // Close search overlay
+  closeSearchBtn.addEventListener('click', closeSearch);
+
+  // Close on escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && searchOverlay.classList.contains('active')) {
+      closeSearch();
+    }
+  });
+
+  // Close if clicked outside search content
+  searchOverlay.addEventListener('click', (e) => {
+    if (e.target === searchOverlay) {
+      closeSearch();
+    }
+  });
+
+  // Handle search input
+  let searchTimeout;
+  searchInput.addEventListener('input', (e) => {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+      const query = e.target.value.trim();
+      if (query.length >= 2) {
+        performSearch(query);
+      }
+    }, 300);
+  });
+}
+
+function closeSearch() {
+  const searchOverlay = document.querySelector('.search-overlay');
+  const searchInput = document.querySelector('.search-overlay-input');
+  
+  searchOverlay.classList.remove('active');
+  document.body.style.overflow = '';
+  searchInput.value = '';
+}
+
+async function performSearch(query) {
+  // TODO: Implement actual search functionality
+  console.log('Searching for:', query);
+  // This is where you would make an API call to your backend search service
+  // and display the results in the search overlay
+}
