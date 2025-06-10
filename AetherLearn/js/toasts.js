@@ -75,9 +75,43 @@ function showCurrentlyUnavailableToast(event) {
     });
 }
 
+// Function to show "Experimental Features" toast notification
+function showExperimentalFeaturesToast() {
+    const toast = document.createElement('div');
+    toast.className = 'toast-message warning show';
+    
+    toast.innerHTML = `
+        <i class="fas fa-flask"></i>
+        <span>Community features are highly experimental and may not work as expected</span>
+    `;
+    
+    document.body.appendChild(toast);
+    
+    // Auto-remove after 6 seconds (longer duration for important message)
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
+        }, 300);
+    }, 6000);
+    
+    // Allow clicking to dismiss
+    toast.addEventListener('click', () => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
+        }, 300);
+    });
+}
+
 // Make functions available globally for use across pages
 window.showComingSoonToast = showComingSoonToast;
 window.showCurrentlyUnavailableToast = showCurrentlyUnavailableToast;
+window.showExperimentalFeaturesToast = showExperimentalFeaturesToast;
 
 // Log successful load
 console.log('AetherLearn Utils.js loaded successfully');

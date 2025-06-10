@@ -639,4 +639,16 @@
             mirror: false,
             anchorPlacement: 'top-bottom'
         });
+
+        // Show experimental features warning when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Delay the toast slightly to allow page to fully load
+            setTimeout(() => {
+                if (typeof showExperimentalFeaturesToast === 'function') {
+                    showExperimentalFeaturesToast();
+                } else {
+                    console.warn('showExperimentalFeaturesToast function not available');
+                }
+            }, 1000);
+        });
     </script>
