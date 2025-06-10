@@ -105,19 +105,18 @@ async def get_search_status(search_id: str):
     """
     Get the current status of a learning path search.
     """
-    # Prioritize REAL database results over mock data (Real Vertex AI Integration)
+    # Use SearchManager's new get_search_status method (handles DB + memory fallback)
     try:
-        if db is not None:
-            status = await db.search_status.find_one({"search_id": search_id})
-            if status:
-                print(f"✅ Found real search status in database for: {search_id}")
-                return status
-            else:
-                print(f"⏳ Search {search_id} not found in database yet, checking mock fallback...")
+        status = await search_manager.get_search_status(search_id)
+        if status:
+            print(f"✅ Found search status for: {search_id}")
+            return status
+        else:
+            print(f"⏳ Search {search_id} not found, checking enhanced mock fallback...")
     except Exception as e:
-        print(f"⚠️ Database query failed: {e}, using fallback...")
+        print(f"⚠️ Search status query failed: {e}, using fallback...")
     
-    # Fallback to enhanced mock data only if database is unavailable or no real data found
+    # Fallback to enhanced mock data only if no real data found
     if db is None or search_id in mock_search_data:
         # Get stored query data for mock response
         search_data = mock_search_data.get(search_id, {"query": "Unknown query", "preferences": {}})
@@ -232,22 +231,21 @@ async def get_learning_path(learning_path_id: str):
     """
     Get a specific learning path by ID.
     """
-    # Prioritize REAL learning paths from database (Real Vertex AI Integration)
+    # Use SearchManager's new get_learning_path method (handles DB + memory fallback)
     try:
-        if db is not None and not learning_path_id.startswith("mock_path_"):
-            path = await db.learning_paths.find_one({"_id": learning_path_id})
-            if path:
-                print(f"✅ Found real learning path in database: {learning_path_id}")
-                return path
-            else:
-                print(f"⚠️ Learning path {learning_path_id} not found in database, checking mock fallback...")
+        learning_path = await search_manager.get_learning_path(learning_path_id)
+        if learning_path:
+            print(f"✅ Found learning path: {learning_path_id}")
+            return learning_path
+        else:
+            print(f"⚠️ Learning path {learning_path_id} not found, using enhanced fallback...")
     except Exception as e:
-        print(f"⚠️ Database query failed: {e}, using fallback...")
+        print(f"⚠️ Learning path retrieval failed: {e}, using fallback...")
     
-    # Fallback to mock data only if database is unavailable or for mock testing
-    if db is None or learning_path_id.startswith("mock_path_"):
+    # Enhanced fallback if no real data found
+    if learning_path_id.startswith("mock_path_"):
         # Extract search_id from learning_path_id to get stored query
-        search_id = learning_path_id.replace("mock_path_", "") if learning_path_id.startswith("mock_path_") else learning_path_id
+        search_id = learning_path_id.replace("mock_path_", "")
         search_data = mock_search_data.get(search_id, {"query": "Sample Learning Topic", "preferences": {}})
         user_query = search_data["query"]
         

@@ -20,6 +20,8 @@ class SearchManager:
         # Google Custom Search API configuration
         self.search_api_key = os.getenv("SEARCH_API_KEY")
         self.search_engine_id = os.getenv("SEARCH_ENGINE_ID")
+        # In-memory search status cache (fallback when database unavailable)
+        self.search_cache = {}
 
     async def _call_google_search(self, query: str, num_results: int = 10):
         """Call Google Custom Search API to get web search results"""
@@ -45,14 +47,69 @@ class SearchManager:
             return []
 
     async def update_search_status(self, search_id: str, update: SearchStatusUpdate):
-        """Update the search status in the database"""
+        """Update the search status in the database or in-memory store"""
         update_dict = update.dict(exclude_none=True)
         update_dict["updated_at"] = datetime.utcnow()
+        update_dict["search_id"] = search_id
         
-        await db.search_status.update_one(
-            {"search_id": search_id},
-            {"$set": update_dict}
-        )
+        # Try database first, fallback to in-memory storage
+        if db is not None:
+            try:
+                await db.search_status.update_one(
+                    {"search_id": search_id},
+                    {"$set": update_dict},
+                    upsert=True
+                )
+                logger.info(f"✅ Search status updated in database for {search_id}")
+                return
+            except Exception as e:
+                logger.warning(f"Database update failed, using in-memory storage: {e}")
+        
+        # Fallback to in-memory storage
+        self.search_cache[search_id] = update_dict
+        logger.info(f"✅ Search status updated in memory for {search_id}")
+
+    async def get_search_status(self, search_id: str):
+        """Get search status from database or in-memory store"""
+        # Try database first
+        if db is not None:
+            try:
+                result = await db.search_status.find_one({"search_id": search_id})
+                if result:
+                    logger.info(f"✅ Search status retrieved from database for {search_id}")
+                    return result
+            except Exception as e:
+                logger.warning(f"Database retrieval failed, checking in-memory storage: {e}")
+        
+        # Fallback to in-memory storage
+        if search_id in self.search_cache:
+            logger.info(f"✅ Search status retrieved from memory for {search_id}")
+            return self.search_cache[search_id]
+        
+        logger.warning(f"❌ Search status not found for {search_id}")
+        return None
+
+    async def get_learning_path(self, learning_path_id: str):
+        """Get learning path from database or in-memory store"""
+        # Try database first
+        if db is not None:
+            try:
+                from bson import ObjectId
+                result = await db.learning_paths.find_one({"_id": ObjectId(learning_path_id)})
+                if result:
+                    logger.info(f"✅ Learning path retrieved from database for {learning_path_id}")
+                    return result
+            except Exception as e:
+                logger.warning(f"Database retrieval failed, checking in-memory storage: {e}")
+        
+        # Fallback to in-memory storage
+        cache_key = f"learning_path_{learning_path_id}"
+        if cache_key in self.search_cache:
+            logger.info(f"✅ Learning path retrieved from memory for {learning_path_id}")
+            return self.search_cache[cache_key]
+        
+        logger.warning(f"❌ Learning path not found for {learning_path_id}")
+        return None
 
     async def process_search(self, search_id: str, query: str, user_id: str = None, preferences: dict = None):
         """Process a search query using Google Custom Search API + Vertex AI Gemini"""
@@ -145,9 +202,21 @@ class SearchManager:
             learning_path_data["total_resources"] = total_resources
             learning_path_data["avg_quality"] = avg_quality
             
-            # Store the learning path in the database
-            result = await db.learning_paths.insert_one(learning_path_data)
-            learning_path_id = str(result.inserted_id)
+            # Store the learning path in the database or generate mock ID
+            if db is not None:
+                try:
+                    result = await db.learning_paths.insert_one(learning_path_data)
+                    learning_path_id = str(result.inserted_id)
+                    logger.info(f"✅ Learning path saved to database with ID: {learning_path_id}")
+                except Exception as e:
+                    logger.warning(f"Database save failed, using mock ID: {e}")
+                    learning_path_id = f"mock_path_{search_id[:8]}"
+            else:
+                learning_path_id = f"mock_path_{search_id[:8]}"
+                logger.info(f"✅ Using mock learning path ID: {learning_path_id}")
+            
+            # Store the learning path data in memory for retrieval
+            self.search_cache[f"learning_path_{learning_path_id}"] = learning_path_data
             
             # Update status to COMPLETED
             await self.update_search_status(

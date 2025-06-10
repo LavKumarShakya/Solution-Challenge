@@ -812,7 +812,7 @@ window.LearningPathUI = class LearningPathUI {
             // Show a success message
             const successMsg = document.createElement('div');
             successMsg.className = 'success-message';
-            successMsg.innerHTML = `<i class="fas fa-check-circle"></i> Your personalized learning path has been created by Vertex AI!`;
+            successMsg.innerHTML = `<i class="fas fa-check-circle"></i> Your personalized learning path has been created using Google Custom Search + Vertex AI Gemini!`;
             
             // Insert the success message at the top of the results stage
             resultsStage.appendChild(successMsg);

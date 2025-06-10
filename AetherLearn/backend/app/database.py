@@ -19,13 +19,12 @@ async def init_db():
     try:
         # Connect to MongoDB with SSL configuration
         if "mongodb+srv://" in MONGODB_URL:
-            # For MongoDB Atlas connections, add SSL parameters
+            # For MongoDB Atlas connections, use simplified SSL configuration
             client = AsyncIOMotorClient(
                 MONGODB_URL,
-                tls=True,
-                tlsAllowInvalidCertificates=True,
-                serverSelectionTimeoutMS=5000,
-                connectTimeoutMS=5000,
+                serverSelectionTimeoutMS=10000,
+                connectTimeoutMS=10000,
+                socketTimeoutMS=10000,
                 maxPoolSize=10,
                 retryWrites=True
             )
