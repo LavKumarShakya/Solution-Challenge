@@ -13,7 +13,7 @@ from models.ai_tools import (
     DifficultyLevel
 )
 from utils.vertex_ai import VertexAIClient
-from utils.vertex_ai_flashcards_new import FlashcardGenerator
+from utils.intelligent_flashcard_generator import IntelligentFlashcardGenerator
 # Removed User import - using simple test class instead
 
 logger = logging.getLogger(__name__)
@@ -57,10 +57,10 @@ async def health_check():
             "timestamp": datetime.utcnow().isoformat()
         }
 
-# Initialize VertexAI client and Flashcard Generator
+# Initialize VertexAI client and Intelligent Flashcard Generator
 try:
     vertex_client = VertexAIClient()
-    flashcard_generator = FlashcardGenerator()
+    flashcard_generator = IntelligentFlashcardGenerator()
     logger.info("✅ AI clients initialized successfully")
 except Exception as e:
     logger.error(f"❌ Failed to initialize AI clients: {e}")
@@ -125,22 +125,42 @@ async def generate_flashcards(
             logger.error("Flashcard generator not initialized")
             raise HTTPException(status_code=500, detail="Flashcard generation service unavailable")
         
-        # Generate flashcards using the improved Flashcard Generator
-        logger.info("Calling improved flashcard generator...")
+        # Generate flashcards using the Intelligent Flashcard Generator
+        logger.info("Calling intelligent flashcard generator...")
         try:
-            flashcards_data = await flashcard_generator.generate_flashcards(
-                content=request.content,
-                options={
-                    "num_cards": num_cards,
-                    "difficulty": difficulty
-                }
+            # Prepare comprehensive options including preferences
+            generation_options = {
+                "num_cards": num_cards,
+                "difficulty": difficulty,
+                "formats": options.get("formats", []),
+                "learning_style": options.get("learning_style", []),
+                "time_preference": options.get("time_preference"),
+                "focus_areas": options.get("focus_areas", [])
+            }
+            
+            # Generate with the intelligent system
+            generation_result = await flashcard_generator.generate_flashcards(
+                input_data=request.content,
+                options=generation_options
             )
+            
+            # Extract flashcards and metadata
+            flashcards_data = generation_result.get("flashcards", [])
+            generation_metadata = generation_result.get("metadata", {})
+            
             logger.info(f"Generated {len(flashcards_data)} flashcards successfully")
+            logger.info(f"Generation method: {generation_metadata.get('generation_method', 'unknown')}")
+            logger.info(f"Input type detected: {generation_metadata.get('input_type', 'unknown')}")
+            
         except Exception as gen_error:
-            logger.error(f"Flashcard generation failed: {gen_error}")
+            logger.error(f"Intelligent flashcard generation failed: {gen_error}")
             # Create fallback flashcards if AI generation fails
             flashcards_data = create_fallback_flashcards(request.content, num_cards, difficulty)
-            logger.info(f"Created {len(flashcards_data)} fallback flashcards")
+            generation_metadata = {
+                "generation_method": "emergency_fallback",
+                "input_type": "content"
+            }
+            logger.info(f"Created {len(flashcards_data)} emergency fallback flashcards")
         
         # Convert to FlashcardData objects
         flashcard_objects = [
@@ -180,18 +200,21 @@ async def generate_flashcards(
         )
         
         # Prepare response metadata
-        metadata = {
+        enhanced_metadata = {
             "generation_time": datetime.utcnow().isoformat(),
             "content_length": len(request.content),
             "difficulty": difficulty,
             "total_cards": len(flashcard_objects),
-            "session_id": session_id
+            "session_id": session_id,
+            "generation_method": generation_metadata.get("generation_method", "unknown"),
+            "input_type": generation_metadata.get("input_type", "unknown"),
+            "ai_model": generation_metadata.get("ai_model", "unknown")
         }
         
         return FlashcardGenerationResponse(
             session_id=session_id,
             flashcards=flashcard_objects,
-            metadata=metadata,
+            metadata=enhanced_metadata,
             success=True
         )
         

@@ -73,7 +73,7 @@ def test_vertex_ai_access():
         
         vertexai.init(project=project_id, location=location)
         
-        model = GenerativeModel("gemini-1.5-flash-001")
+        model = GenerativeModel("gemini-2.0-flash-001")
         
         print("🚀 Testing model generation...")
         response = model.generate_content("Generate a simple test flashcard about Python programming.")

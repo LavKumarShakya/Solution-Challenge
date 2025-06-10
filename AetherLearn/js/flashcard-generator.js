@@ -125,8 +125,19 @@ class FlashcardGenerator {
             // Clear draft content on successful generation
             window.AIToolsUtils.LocalStorageManager.clearDraftContent('flashcard');
 
-            // Show success message
-            window.messageManager.success('Flashcards generated successfully!');
+            // Show success message with count and method
+            const count = response.flashcards ? response.flashcards.length : 0;
+            const method = response.metadata?.generation_method || 'unknown';
+            const inputType = response.metadata?.input_type || 'content';
+            
+            let successMessage = `Successfully generated ${count} flashcards!`;
+            if (method === 'ai') {
+                successMessage += ` 🤖 AI detected your input as ${inputType} and created high-quality educational content.`;
+            } else if (method === 'intelligent_fallback') {
+                successMessage += ` 🛡️ Using intelligent fallback system.`;
+            }
+            
+            window.messageManager.success(successMessage);
 
         } catch (error) {
             this.hideLoadingState();
