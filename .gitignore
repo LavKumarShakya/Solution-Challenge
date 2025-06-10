@@ -1,3 +1,6 @@
 
 AetherLearn/.env
 AetherLearn/docs
+.vscode/settings.json
+AetherLearn/backend/.env
+credentials/service-account.json
