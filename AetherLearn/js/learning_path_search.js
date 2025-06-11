@@ -270,7 +270,7 @@ async function getSuggestions(query) {
         'Mobile App Development', 'Artificial Intelligence', 'Blockchain'
     ];
     
-    return topics
+    return educationalTopics
         .filter(topic => topic.toLowerCase().includes(query.toLowerCase()))
         .slice(0, 5);
 }

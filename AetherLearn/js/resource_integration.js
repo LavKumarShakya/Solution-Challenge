@@ -79,45 +79,39 @@ language: "English"
 }
 ];
 
-// Override the showLearningPathResults function to include individual resources
-(function() {
-// Store the original function
-const originalShowLearningPathResults = window.showLearningPathResults;
+// REMOVED CONFLICTING OVERRIDE - Let the learning path system handle everything naturally
+// This override was preventing modules from being populated correctly
+console.log('✅ Resource Integration: Not overriding showLearningPathResults to prevent conflicts');
 
-// Override with enhanced version
-window.showLearningPathResults = async function(learningPathId) {
-    try {
-        // Call the original function first
-        if (originalShowLearningPathResults) {
-            await originalShowLearningPathResults(learningPathId);
-        }
-        
-        // Add individual resources after a short delay to ensure DOM is ready
-        setTimeout(() => {
-            // Check if we have real data from the API, otherwise use mock data
-            const hasRealData = checkForRealResourceData();
-            
-            if (hasRealData) {
-                // Use real data from API response (this would be implemented when backend is ready)
-                // populateIndividualResources(realResourceData);
-            } else {
-                // Use mock data for now
-                populateIndividualResources(mockIndividualResources);
+// Alternative: Enhance the existing system instead of overriding
+document.addEventListener('DOMContentLoaded', () => {
+    // Listen for when the learning path results stage becomes visible
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                const target = mutation.target;
+                if (target.id === 'learningPathResultsStage' && target.style.display === 'flex') {
+                    console.log('🔧 Learning path results stage is now visible, enhancing with individual resources...');
+                    setTimeout(() => {
+                        // Only populate individual resources if they haven't been populated yet
+                        const resourcesGrid = document.getElementById('individualResourcesGrid');
+                        if (resourcesGrid && resourcesGrid.children.length <= 3) {
+                            populateIndividualResources(mockIndividualResources);
+                        }
+                    }, 1000);
+                }
             }
-        }, 500);
-        
-    } catch (error) {
-        console.error('Error in enhanced showLearningPathResults:', error);
-        
-        // Fallback: still try to show individual resources with mock data
-        setTimeout(() => {
-            populateIndividualResources(mockIndividualResources);
-        }, 1000);
+        });
+    });
+    
+    const resultsStage = document.getElementById('learningPathResultsStage');
+    if (resultsStage) {
+        observer.observe(resultsStage, {
+            attributes: true,
+            attributeFilter: ['style']
+        });
     }
-};
-
-
-})();
+});
 
 // Check if we have real resource data from the API
 function checkForRealResourceData() {
