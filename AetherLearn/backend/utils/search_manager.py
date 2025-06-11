@@ -142,11 +142,8 @@ class SearchManager:
             import asyncio
             await asyncio.sleep(0.5)
             
-            # Enhance query for educational materials
-            enhanced_query = self._enhance_query_for_education(query)
-            
             # Call Google Custom Search API
-            search_results = await self._call_google_search(enhanced_query)
+            search_results = await self._call_google_search(query)
             
             # Update with search results found - Start Stage 2
             await self.update_search_status(
