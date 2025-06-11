@@ -138,10 +138,14 @@ class SearchManager:
                 )
             )
             
+            # Reduced delay for faster experience
+            import asyncio
+            await asyncio.sleep(1)
+            
             # Call Google Custom Search API
             search_results = await self._call_google_search(query)
             
-            # Update with search results found
+            # Update with search results found - Start Stage 2
             await self.update_search_status(
                 search_id,
                 SearchStatusUpdate(
@@ -154,6 +158,9 @@ class SearchManager:
                 )
             )
             
+            # Reduced delay for faster Stage 2 experience
+            await asyncio.sleep(1)
+            
             # Step 3: Categorize search results using Vertex AI Gemini
             await self.update_search_status(
                 search_id,
@@ -165,6 +172,9 @@ class SearchManager:
                     sources_scanned=len(set(result.get('displayLink', '') for result in search_results))
                 )
             )
+            
+            # Minimal delay for categorization
+            await asyncio.sleep(0.5)
             
             categorized_resources = await self.vertex_ai.categorize_resources(search_results, query)
             
@@ -179,6 +189,9 @@ class SearchManager:
                     sources_scanned=len(set(result.get('displayLink', '') for result in search_results))
                 )
             )
+            
+            # Minimal delay for generation stage
+            await asyncio.sleep(0.5)
             
             # Generate course structure using Vertex AI Gemini
             learning_path_data = await self.vertex_ai.generate_course_from_search_results(

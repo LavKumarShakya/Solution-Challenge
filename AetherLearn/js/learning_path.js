@@ -349,6 +349,19 @@ window.LearningPathUI = class LearningPathUI {
     }
 
     /**
+     * Ensure Stage 1 is active and visible
+     */
+    static ensureStage1Active() {
+        const stage1 = document.getElementById('searchProcessingStage');
+        const stage2 = document.getElementById('resourceDiscoveryStage');
+        const stage3 = document.getElementById('learningPathResultsStage');
+        
+        if (stage1) stage1.style.display = 'flex';
+        if (stage2) stage2.style.display = 'none';
+        if (stage3) stage3.style.display = 'none';
+    }
+
+    /**
      * Transition to Stage 2: Resource Discovery
      */
     static transitionToStage2() {
@@ -362,16 +375,20 @@ window.LearningPathUI = class LearningPathUI {
             resourceDiscoveryStage.style.display = 'flex';
         }
 
-        // Initialize discovery feed
+        // Clear any existing discovery feed to prevent conflicts
         const discoveryFeed = document.getElementById('discoveryFeed');
         if (discoveryFeed) {
             discoveryFeed.innerHTML = `
-                <div class="discovery-feed-item">
-                    <div class="feed-icon"><i class="fas fa-search"></i></div>
-                    <div class="feed-content">
-                        <h4>🔍 Google Custom Search Initiated</h4>
-                        <p>Scanning educational repositories with enhanced query...</p>
-                        <span class="feed-timestamp">Just now</span>
+                <div class="discovery-status-message">
+                    <div class="status-icon"><i class="fas fa-radar-chart"></i></div>
+                    <div class="status-content">
+                        <h4>🔍 Scanning Educational Resources</h4>
+                        <p>Google Custom Search + Vertex AI Gemini analyzing web content...</p>
+                        <div class="status-indicator">
+                            <div class="scanning-dots">
+                                <span></span><span></span><span></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             `;
@@ -379,6 +396,259 @@ window.LearningPathUI = class LearningPathUI {
 
         // Reset discovery statistics
         this.updateDiscoveryStats(0, 0, 0);
+    }
+
+    /**
+     * Transition to Stage 3: Learning Path Results
+     */
+    static transitionToStage3() {
+        console.log('🔄 Transitioning to Stage 3: Learning Path Results');
+        
+        // Hide previous stages, show Stage 3
+        this.hideStages(['searchProcessingStage', 'resourceDiscoveryStage']);
+        
+        const resultsStage = document.getElementById('learningPathResultsStage');
+        if (resultsStage) {
+            resultsStage.style.display = 'flex';
+        }
+    }
+
+    /**
+     * Populate Stage 3 overlay with actual learning path data
+     * @param {Object} learningPath - The learning path data from backend
+     */
+    static populateStage3WithData(learningPath) {
+        console.log('📚 Populating Stage 3 with learning path data:', learningPath);
+        
+        // Update query display
+        const resultQueryText = document.getElementById('resultQueryText');
+        if (resultQueryText && learningPath.query) {
+            resultQueryText.textContent = learningPath.query;
+        }
+        
+        // Update result statistics
+        const totalResourcesCount = document.getElementById('totalResourcesCount');
+        const estimatedTime = document.getElementById('estimatedTime');
+        const difficultyLevel = document.getElementById('difficultyLevel');
+        
+        if (totalResourcesCount) {
+            totalResourcesCount.textContent = learningPath.total_resources || learningPath.modules?.length || 0;
+        }
+        
+        if (estimatedTime) {
+            estimatedTime.textContent = learningPath.estimated_hours || this.calculateTotalTime(learningPath);
+        }
+        
+        if (difficultyLevel) {
+            difficultyLevel.textContent = learningPath.difficulty || 'Intermediate';
+        }
+        
+        // Populate learning modules in the existing overlay structure
+        this.populateModulesInOverlay(learningPath);
+    }
+
+    /**
+     * Calculate total estimated time from learning path modules
+     * @param {Object} learningPath - The learning path data
+     * @returns {string} - Formatted time estimate
+     */
+    static calculateTotalTime(learningPath) {
+        if (!learningPath.modules) return '5 hours';
+        
+        let totalMinutes = 0;
+        learningPath.modules.forEach(module => {
+            if (module.resources) {
+                module.resources.forEach(resource => {
+                    // Extract time from resource (e.g., "10 min" -> 10)
+                    const timeMatch = resource.estimated_time?.match(/(\d+)/);
+                    if (timeMatch) {
+                        totalMinutes += parseInt(timeMatch[1]);
+                    }
+                });
+            }
+        });
+        
+        const hours = Math.ceil(totalMinutes / 60);
+        return `${hours} hour${hours !== 1 ? 's' : ''}`;
+    }
+
+    /**
+     * Populate modules in the existing Stage 3 overlay structure
+     * @param {Object} learningPath - The learning path data
+     */
+    static populateModulesInOverlay(learningPath) {
+        const modulesContainer = document.querySelector('.modules-container .modules-grid');
+        if (!modulesContainer || !learningPath.modules) return;
+        
+        // Clear existing modules
+        modulesContainer.innerHTML = '';
+        
+        // Add each module to the overlay
+        learningPath.modules.forEach((module, index) => {
+            const moduleCard = this.createModuleCard(module, index);
+            modulesContainer.appendChild(moduleCard);
+        });
+    }
+
+    /**
+     * Create a module card for the overlay with enhanced styling
+     * @param {Object} module - Module data
+     * @param {number} index - Module index
+     * @returns {HTMLElement} - Module card element
+     */
+    static createModuleCard(module, index) {
+        const moduleCard = document.createElement('div');
+        moduleCard.className = 'course-module-card';
+        
+        // Determine resource types for variety
+        const resourceCount = module.resources ? module.resources.length : 0;
+        const totalTime = this.calculateModuleTime(module);
+        
+        moduleCard.innerHTML = `
+            <div class="course-module-header">
+                <div class="module-number">
+                    <span class="module-badge">Module ${index + 1}</span>
+                </div>
+                <div class="module-title-section">
+                    <h3 class="module-title">${module.title}</h3>
+                    <p class="module-description">${module.description}</p>
+                    <div class="module-stats">
+                        <span class="stat-item">
+                            <i class="fas fa-play-circle"></i>
+                            ${resourceCount} Resources
+                        </span>
+                        <span class="stat-item">
+                            <i class="fas fa-clock"></i>
+                            ${totalTime}
+                        </span>
+                        <span class="stat-item">
+                            <i class="fas fa-signal"></i>
+                            Intermediate
+                        </span>
+                    </div>
+                </div>
+                <div class="module-progress">
+                    <div class="progress-circle">
+                        <span class="progress-text">0%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="course-module-content">
+                <div class="resources-header">
+                    <h4><i class="fas fa-list"></i> Learning Resources</h4>
+                    <span class="expand-toggle"><i class="fas fa-chevron-down"></i></span>
+                </div>
+                
+                <div class="course-resources-grid">
+                    ${module.resources ? module.resources.map((resource, resourceIndex) => `
+                        <div class="course-resource-card ${this.getResourceTypeClass(resource)}">
+                            <div class="resource-type-indicator">
+                                ${this.getResourceTypeIcon(resource)}
+                            </div>
+                            <div class="resource-content">
+                                <div class="resource-main">
+                                    <h5 class="resource-title">${resource.title}</h5>
+                                    <p class="resource-snippet">${this.truncateText(resource.snippet || resource.description || '', 120)}</p>
+                                </div>
+                                <div class="resource-footer">
+                                    <div class="resource-meta-tags">
+                                        <span class="meta-tag time-tag">
+                                            <i class="fas fa-clock"></i>
+                                            ${resource.estimated_time || '10 min'}
+                                        </span>
+                                        <span class="meta-tag difficulty-tag">
+                                            <i class="fas fa-layer-group"></i>
+                                            ${resource.difficulty || 'Intermediate'}
+                                        </span>
+                                        <span class="meta-tag source-tag">
+                                            <i class="fas fa-globe"></i>
+                                            ${this.extractDomain(resource.displayLink || resource.source || 'Web')}
+                                        </span>
+                                    </div>
+                                    <div class="resource-actions">
+                                        <button class="resource-btn preview-btn" onclick="LearningPathUI.previewResource('${resource.link}')">
+                                            <i class="fas fa-eye"></i>
+                                            Preview
+                                        </button>
+                                        <a href="${resource.link}" target="_blank" class="resource-btn primary-btn">
+                                            <i class="fas fa-external-link-alt"></i>
+                                            Open Resource
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('') : '<div class="no-resources"><i class="fas fa-info-circle"></i> No resources available for this module</div>'}
+                </div>
+                
+                <div class="module-actions">
+                    <button class="module-btn secondary-btn">
+                        <i class="fas fa-bookmark"></i>
+                        Save Module
+                    </button>
+                    <button class="module-btn primary-btn">
+                        <i class="fas fa-play"></i>
+                        Start Learning
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        return moduleCard;
+    }
+
+    /**
+     * Helper methods for enhanced module cards
+     */
+    static calculateModuleTime(module) {
+        if (!module.resources) return '30 min';
+        let totalMinutes = 0;
+        module.resources.forEach(resource => {
+            const timeMatch = resource.estimated_time?.match(/(\d+)/);
+            if (timeMatch) totalMinutes += parseInt(timeMatch[1]);
+        });
+        return totalMinutes > 60 ? `${Math.ceil(totalMinutes / 60)}h ${totalMinutes % 60}min` : `${totalMinutes} min`;
+    }
+
+    static getResourceTypeClass(resource) {
+        const link = resource.link?.toLowerCase() || '';
+        const title = resource.title?.toLowerCase() || '';
+        
+        if (link.includes('youtube.com') || link.includes('video') || title.includes('video')) return 'resource-video';
+        if (link.includes('github.com') || title.includes('code') || title.includes('tutorial')) return 'resource-code';
+        if (link.includes('wikipedia.org') || title.includes('reference')) return 'resource-reference';
+        if (link.includes('coursera.org') || link.includes('udemy.com') || title.includes('course')) return 'resource-course';
+        return 'resource-article';
+    }
+
+    static getResourceTypeIcon(resource) {
+        const type = this.getResourceTypeClass(resource);
+        const icons = {
+            'resource-video': '<i class="fas fa-play-circle"></i>',
+            'resource-code': '<i class="fas fa-code"></i>',
+            'resource-reference': '<i class="fas fa-book"></i>',
+            'resource-course': '<i class="fas fa-graduation-cap"></i>',
+            'resource-article': '<i class="fas fa-file-alt"></i>'
+        };
+        return icons[type] || '<i class="fas fa-link"></i>';
+    }
+
+    static truncateText(text, maxLength) {
+        return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+    }
+
+    static extractDomain(url) {
+        try {
+            return new URL(url.startsWith('http') ? url : 'https://' + url).hostname.replace('www.', '');
+        } catch {
+            return url.replace('www.', '').split('/')[0];
+        }
+    }
+
+    static previewResource(url) {
+        // Simple preview functionality
+        window.open(url, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
     }
 
     /**
@@ -437,25 +707,32 @@ window.LearningPathUI = class LearningPathUI {
         // Update progress bar
         this.updateDiscoveryProgress(status.progress || 0);
 
-        // Handle status-specific updates
+        // Handle status-specific updates and stage transitions
         switch (status.status) {
+            case 'INITIATED':
             case 'SEARCHING':
-                this.updateDiscoveryMessage('🔍 Searching with Google Custom Search API...', status.status);
+                // Stay in Stage 1 during initial search
+                this.ensureStage1Active();
                 break;
+                
+            case 'DISCOVERING':
             case 'CATEGORIZING':
-                this.updateDiscoveryMessage('🤖 Vertex AI Gemini is categorizing resources...', status.status);
+                // Transition to Stage 2 for resource discovery
+                this.transitionToStage2();
+                this.updateDiscoveryMessage('🔍 Discovering and categorizing resources...', status.status);
                 break;
+                
             case 'GENERATING':
+                // Stay in Stage 2 but update message for generation
                 this.updateDiscoveryMessage('📚 Creating personalized learning path...', status.status);
                 break;
+                
             default:
                 this.updateDiscoveryMessage(status.message || 'Processing...', status.status);
         }
 
-        // Add real resources to discovery feed if available
-        if (status.latest_resources && status.latest_resources.length > 0) {
-            this.addRealResourcesToFeed(status.latest_resources);
-        }
+        // Update discovery statistics only - no resource feed to prevent conflicts
+        // Resources will be shown properly in Stage 3
     }
 
     /**
@@ -502,26 +779,13 @@ window.LearningPathUI = class LearningPathUI {
     static updateDiscoveryMessage(message, status) {
         console.log(`📊 Discovery: ${message}`);
         
-        // Add message to discovery feed if needed
+        // Update the simplified status message only
         const discoveryFeed = document.getElementById('discoveryFeed');
-        if (discoveryFeed && message) {
-            const feedItem = document.createElement('div');
-            feedItem.className = 'discovery-feed-item';
-            feedItem.innerHTML = `
-                <div class="feed-icon"><i class="fas fa-info-circle"></i></div>
-                <div class="feed-content">
-                    <h4>Status Update</h4>
-                    <p>${message}</p>
-                    <span class="feed-timestamp">Just now</span>
-                </div>
-            `;
-            
-            discoveryFeed.insertBefore(feedItem, discoveryFeed.firstChild);
-            
-            // Keep only last 5 items
-            const items = discoveryFeed.querySelectorAll('.discovery-feed-item');
-            if (items.length > 5) {
-                discoveryFeed.removeChild(items[items.length - 1]);
+        if (discoveryFeed) {
+            // Update the scanning message in our simplified status display
+            const statusContent = discoveryFeed.querySelector('.status-content h4');
+            if (statusContent) {
+                statusContent.textContent = message;
             }
         }
     }
@@ -798,35 +1062,14 @@ window.LearningPathUI = class LearningPathUI {
             // Get the learning path data
             const learningPath = await LearningPathAPI.getLearningPath(learningPathId);
             
-            // Hide the processing stages
-            document.getElementById('searchProcessingStage').style.display = 'none';
-            document.getElementById('resourceDiscoveryStage').style.display = 'none';
+            // Transition to Stage 3: Results
+            this.transitionToStage3();
             
-            // Show the results stage
-            resultsStage.style.display = 'block';
+            // Mark as populated to prevent duplicates
             resultsStage.dataset.populated = 'true';
             
-            // Clear any existing content to prevent duplicates
-            resultsStage.innerHTML = '';
-            
-            // Show a success message
-            const successMsg = document.createElement('div');
-            successMsg.className = 'success-message';
-            successMsg.innerHTML = `<i class="fas fa-check-circle"></i> Your personalized learning path has been created using Google Custom Search + Vertex AI Gemini!`;
-            
-            // Insert the success message at the top of the results stage
-            resultsStage.appendChild(successMsg);
-            
-            // Create container for learning path content
-            const pathContainer = document.createElement('div');
-            pathContainer.className = 'learning-path-container';
-            resultsStage.appendChild(pathContainer);
-            
-            // Render the learning path
-            this.renderLearningPath(learningPath, pathContainer);
-            
-            // Populate Individual Resources Section (Step 4 from plan)
-            this.populateIndividualResources(learningPath);
+            // Populate the existing Stage 3 overlay components with real data
+            this.populateStage3WithData(learningPath);
         } catch (error) {
             console.error('Error showing learning path results:', error);
             this.showErrorMessage('Failed to load learning path results. Please try again.');
