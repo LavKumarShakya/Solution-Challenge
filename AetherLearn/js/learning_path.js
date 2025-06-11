@@ -394,8 +394,72 @@ window.LearningPathUI = class LearningPathUI {
             `;
         }
 
-        // Reset discovery statistics
+        // Reset discovery statistics and start radar animation
         this.updateDiscoveryStats(0, 0, 0);
+        this.startRadarAnimation();
+    }
+
+    /**
+     * Start radar animation with random dots appearing
+     */
+    static startRadarAnimation() {
+        const resourceDots = document.getElementById('resourceDots');
+        if (!resourceDots) return;
+
+        // Clear existing dots
+        resourceDots.innerHTML = '';
+
+        // Store the interval so we can clear it later
+        this.radarInterval = setInterval(() => {
+            this.addRandomRadarDot();
+        }, 800); // Add a dot every 800ms
+    }
+
+    /**
+     * Stop radar animation
+     */
+    static stopRadarAnimation() {
+        if (this.radarInterval) {
+            clearInterval(this.radarInterval);
+            this.radarInterval = null;
+        }
+    }
+
+    /**
+     * Add a random radar dot for loading animation
+     */
+    static addRandomRadarDot() {
+        const resourceDots = document.getElementById('resourceDots');
+        if (!resourceDots) return;
+
+        // Remove oldest dots if too many
+        if (resourceDots.children.length > 12) {
+            resourceDots.removeChild(resourceDots.firstChild);
+        }
+
+        // Create dot element
+        const dot = document.createElement('div');
+        
+        // Random resource type for variety
+        const resourceTypes = ['video', 'article', 'interactive', 'course'];
+        const resourceType = resourceTypes[Math.floor(Math.random() * resourceTypes.length)];
+        
+        dot.className = `resource-dot ${resourceType}`;
+        
+        // Position the dot randomly in the radar
+        const angle = Math.random() * Math.PI * 2; // Random angle
+        const distance = Math.random() * 40 + 10; // Random distance from center (%)
+        
+        const x = 50 + Math.cos(angle) * distance; // Center + offset
+        const y = 50 + Math.sin(angle) * distance;
+        
+        dot.style.left = `${x}%`;
+        dot.style.top = `${y}%`;
+        
+        // Add animation delay for staggered appearance
+        dot.style.animationDelay = `${Math.random() * 0.5}s`;
+        
+        resourceDots.appendChild(dot);
     }
 
     /**
@@ -403,6 +467,9 @@ window.LearningPathUI = class LearningPathUI {
      */
     static transitionToStage3() {
         console.log('🔄 Transitioning to Stage 3: Learning Path Results');
+        
+        // Stop radar animation since we're moving to Stage 3
+        this.stopRadarAnimation();
         
         // Hide previous stages, show Stage 3
         this.hideStages(['searchProcessingStage', 'resourceDiscoveryStage']);
@@ -652,6 +719,28 @@ window.LearningPathUI = class LearningPathUI {
     }
 
     /**
+     * Get animated resource count for loading visualization
+     */
+    static getAnimatedResourceCount() {
+        if (!this.animationStartTime) {
+            this.animationStartTime = Date.now();
+        }
+        const elapsed = (Date.now() - this.animationStartTime) / 1000;
+        return Math.min(15, Math.floor(elapsed * 2 + Math.random() * 3));
+    }
+
+    /**
+     * Get animated source count for loading visualization
+     */
+    static getAnimatedSourceCount() {
+        if (!this.animationStartTime) {
+            this.animationStartTime = Date.now();
+        }
+        const elapsed = (Date.now() - this.animationStartTime) / 1000;
+        return Math.min(8, Math.floor(elapsed * 1.5 + Math.random() * 2));
+    }
+
+    /**
      * Start real-time progress polling
      * @param {string} searchId - The search ID
      */
@@ -697,12 +786,12 @@ window.LearningPathUI = class LearningPathUI {
     static handleProgressUpdate(status) {
         console.log('📊 Progress update:', status);
         
-        // Update discovery statistics
-        this.updateDiscoveryStats(
-            status.resources_found || 0,
-            status.sources_scanned || 0,
-            Math.round((status.avg_quality || 0.85) * 100)
-        );
+        // Update discovery statistics with real data or animated counters
+        const resourcesFound = status.resources_found || this.getAnimatedResourceCount();
+        const sourcesScanned = status.sources_scanned || this.getAnimatedSourceCount();
+        const avgQuality = Math.round((status.avg_quality || 0.85) * 100);
+        
+        this.updateDiscoveryStats(resourcesFound, sourcesScanned, avgQuality);
 
         // Update progress bar
         this.updateDiscoveryProgress(status.progress || 0);
@@ -791,47 +880,14 @@ window.LearningPathUI = class LearningPathUI {
     }
 
     /**
-     * Add real resources to discovery feed
-     * @param {Array} resources - Array of resource objects
-     */
-    static addRealResourcesToFeed(resources) {
-        const discoveryFeed = document.getElementById('discoveryFeed');
-        if (!discoveryFeed) return;
-
-        resources.forEach(resource => {
-            const feedItem = document.createElement('div');
-            feedItem.className = 'discovery-feed-item';
-            feedItem.innerHTML = `
-                <div class="feed-icon">
-                    <i class="${this.getResourceIcon(resource.resource_type || resource.type)}"></i>
-                </div>
-                <div class="feed-content">
-                    <h4>📚 Found: ${resource.title || 'Educational Resource'}</h4>
-                    <p>Source: ${resource.displayLink || resource.source || 'Google Search'}</p>
-                    <span class="feed-timestamp">Just now</span>
-                </div>
-            `;
-
-            // Add to top of feed
-            discoveryFeed.insertBefore(feedItem, discoveryFeed.firstChild);
-
-            // Keep only last 5 items
-            const items = discoveryFeed.querySelectorAll('.discovery-feed-item');
-            if (items.length > 5) {
-                discoveryFeed.removeChild(items[items.length - 1]);
-            }
-        });
-    }
-
-    /**
      * Hide specified stages
      * @param {Array} stageIds - Array of stage IDs to hide
      */
-    static hideStages(stageIds) {
-        stageIds.forEach(id => {
-            const stage = document.getElementById(id);
-            if (stage) stage.style.display = 'none';
-        });
+     static hideStages(stageIds) {
+         stageIds.forEach(id => {
+             const stage = document.getElementById(id);
+             if (stage) stage.style.display = 'none';
+         });
     }
     
     /**

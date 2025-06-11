@@ -5142,3 +5142,30 @@ footer:hover .footer-bottom::before {
         transform: scale(1);
     }
 }
+
+/* Fix overlay width consistency issues */
+.search-process-stage {
+    min-width: 800px !important;
+    max-width: 1200px !important;
+    width: 90vw !important;
+    margin: 0 auto !important;
+}
+
+.stage-content {
+    width: 100% !important;
+    min-height: 400px !important;
+}
+
+.discovery-feed-container,
+.discovery-visualization,
+.discovery-stats {
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* Ensure radar container maintains size */
+.radar-container {
+    width: 200px !important;
+    height: 200px !important;
+    flex-shrink: 0 !important;
+}
