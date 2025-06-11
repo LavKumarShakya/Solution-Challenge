@@ -309,6 +309,80 @@
   box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.1);
   background: rgba(255, 255, 255, 0.08);
 }
+/* Google User Specific Styles */
+.google-populated {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  color: var(--text-muted) !important;
+  border-color: rgba(255, 255, 255, 0.05) !important;
+  cursor: not-allowed !important;
+}
+
+.google-populated:focus {
+  outline: none !important;
+  border-color: rgba(255, 255, 255, 0.05) !important;
+  box-shadow: none !important;
+  background: rgba(255, 255, 255, 0.02) !important;
+}
+
+.google-disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+}
+
+.google-signin-notice {
+  background: linear-gradient(135deg, rgba(66, 133, 244, 0.1), rgba(234, 67, 53, 0.1));
+  border: 1px solid rgba(66, 133, 244, 0.3);
+  border-radius: var(--hero-radius-md);
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.notice-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.notice-content i {
+  color: #4285f4;
+  font-size: 1.2rem;
+}
+
+.notice-content span {
+  color: var(--text-primary);
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+/* Enhanced disabled state for form groups */
+.form-group:has(.google-populated) label {
+  color: var(--text-muted) !important;
+  opacity: 0.7;
+}
+
+.form-group:has(.google-populated) label::after {
+  content: " (Google)";
+  font-size: 0.75rem;
+  color: #4285f4;
+  font-weight: 400;
+  margin-left: 0.25rem;
+}
+
+/* Photo section adjustments for Google users */
+.current-photo:has(~ .google-disabled) {
+  opacity: 0.8;
+  cursor: default;
+}
+
+.current-photo:has(~ .google-disabled):hover {
+  transform: none;
+}
+
+.current-photo:has(~ .google-disabled) .photo-overlay {
+  display: none;
+}
 
 /* Custom Select Dropdown */
 .form-group select {
