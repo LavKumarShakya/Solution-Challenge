@@ -1,7 +1,7 @@
 """
 AetherLearn Intelligent Flashcard Generator
 Sophisticated AI system that intelligently analyzes input, considers preferences,
-and generates high-quality flashcards with proper acknowledgment
+and generates high-quality flashcards using Gemini API
 """
 
 import os
@@ -9,10 +9,9 @@ import json
 import logging
 import asyncio
 import re
+import aiohttp
 from typing import Dict, List, Any
 from datetime import datetime
-import vertexai
-from vertexai.generative_models import GenerativeModel, GenerationConfig
 
 logger = logging.getLogger(__name__)
 
@@ -22,54 +21,37 @@ class IntelligentFlashcardGenerator:
     - Intelligently determines if input is a topic or content
     - Considers user preferences for generation
     - Provides detailed acknowledgment of what was done
-    - Generates contextually appropriate flashcards
+    - Generates contextually appropriate flashcards using Gemini API
     """
     
     def __init__(self):
-        # Use EXACT same settings as working VertexAI client
-        self.project_id = os.getenv("VERTEX_AI_PROJECT_ID")
-        self.location = os.getenv("VERTEX_AI_LOCATION", "us-central1")  # Use supported region
-        self.model_id = os.getenv("VERTEX_AI_MODEL", "gemini-2.0-flash-001")  # Use model_id like working client
-        self.model = None
-        self.vertex_available = False
+        # Gemini API configuration
+        self.api_key = os.getenv("GEMINI_API_KEY")
+        self.model_name = os.getenv("GEMINI_MODEL", "gemini-2.0-flash-001")
+        self.base_url = "https://generativelanguage.googleapis.com/v1beta/models"
+        self.gemini_available = False
         
-        self._initialize_vertex_ai()
+        self._initialize_gemini_api()
     
-    def _initialize_vertex_ai(self):
-        """Initialize Vertex AI with proper error handling"""
+    def _initialize_gemini_api(self):
+        """Initialize Gemini API with proper error handling"""
         try:
-            if not self.project_id:
-                raise ValueError("VERTEX_AI_PROJECT_ID environment variable not set")
+            if not self.api_key:
+                raise ValueError("GEMINI_API_KEY environment variable not set")
             
-            # Explicitly set credentials
-            credentials_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
-            if credentials_path and os.path.exists(credentials_path):
-                logger.info(f"✅ Using Google Application Credentials: {credentials_path}")
-                os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = credentials_path  # Ensure it's set
-            else:
-                logger.warning(f"⚠️ Google Application Credentials not found at: {credentials_path}")
+            logger.info(f"🧠 Initializing Intelligent Flashcard Generator with Gemini API...")
+            logger.info(f"   Model: {self.model_name}")
+            logger.info(f"   API Endpoint: {self.base_url}")
             
-            logger.info(f"🧠 Initializing Intelligent Flashcard Generator...")
-            logger.info(f"   Project: {self.project_id}")
-            logger.info(f"   Location: {self.location}")
-            logger.info(f"   Model: {self.model_id}")
+            # Test API connection
+            self.endpoint_url = f"{self.base_url}/{self.model_name}:generateContent?key={self.api_key}"
+            self.gemini_available = True
             
-            # Initialize with explicit credentials
-            from google.oauth2 import service_account
-            if credentials_path and os.path.exists(credentials_path):
-                credentials = service_account.Credentials.from_service_account_file(credentials_path)
-                vertexai.init(project=self.project_id, location=self.location, credentials=credentials)
-            else:
-                vertexai.init(project=self.project_id, location=self.location)
-                
-            self.model = GenerativeModel(self.model_id)
-            self.vertex_available = True
-            
-            logger.info("✅ Intelligent AI Generator ready!")
+            logger.info("✅ Intelligent AI Generator ready with Gemini API!")
             
         except Exception as e:
-            logger.error(f"❌ Failed to initialize Vertex AI: {e}")
-            self.vertex_available = False
+            logger.error(f"❌ Failed to initialize Gemini API: {e}")
+            self.gemini_available = False
     
     async def generate_flashcards(self, input_data: str, options: Dict[str, Any] = None) -> Dict[str, Any]:
         """
@@ -90,24 +72,24 @@ class IntelligentFlashcardGenerator:
         input_analysis = self._analyze_input(input_data)
         logger.info(f"🔍 Input Analysis: {input_analysis['type']} - {input_analysis['description']}")
         
-        if not self.vertex_available or not self.model:
-            logger.warning("🔄 AI not available, using enhanced fallback")
+        if not self.gemini_available:
+            logger.warning("🔄 Gemini API not available, using enhanced fallback")
             return await self._create_intelligent_fallback(input_data, options, input_analysis)
         
         try:
             # Create sophisticated prompt based on analysis
             prompt = self._create_intelligent_prompt(input_data, options, input_analysis)
             
-            # Generate with AI
-            logger.info(f"🚀 Generating {num_cards} {difficulty} flashcards using advanced AI...")
-            response = await self._generate_content_async(prompt)
+            # Generate with Gemini API
+            logger.info(f"🚀 Generating {num_cards} {difficulty} flashcards using Gemini API...")
+            response = await self._generate_content_gemini_api(prompt)
             
-            if not response or not response.text:
-                logger.warning("⚠️ Empty AI response, using intelligent fallback")
+            if not response:
+                logger.warning("⚠️ Empty Gemini API response, using intelligent fallback")
                 return await self._create_intelligent_fallback(input_data, options, input_analysis)
             
             # Parse the sophisticated AI response
-            parsed_result = self._parse_ai_response(response.text)
+            parsed_result = self._parse_ai_response(response)
             
             if not parsed_result or not parsed_result.get("flashcards"):
                 logger.warning("⚠️ Failed to parse AI response")
@@ -284,40 +266,86 @@ Generate the {num_cards} flashcards now:
         
         return prompt.strip()
     
-    async def _generate_content_async(self, prompt: str):
-        """Generate content asynchronously with optimal settings"""
+    async def _generate_content_gemini_api(self, prompt: str):
+        """Generate content using Gemini API with optimal settings"""
         try:
-            loop = asyncio.get_event_loop()
-            response = await loop.run_in_executor(
-                None, 
-                lambda: self.model.generate_content(
-                    prompt,
-                    generation_config=GenerationConfig(
-                        temperature=0.4,  # Balanced creativity and consistency
-                        top_k=40,
-                        top_p=0.9,
-                        max_output_tokens=3000  # Increased for detailed responses
-                    )
-                )
-            )
-            return response
+            payload = {
+                "contents": [{
+                    "parts": [{
+                        "text": prompt
+                    }]
+                }],
+                "generationConfig": {
+                    "temperature": 0.4,
+                    "topK": 40,
+                    "topP": 0.9,
+                    "maxOutputTokens": 3000
+                }
+            }
+            
+            async with aiohttp.ClientSession() as session:
+                async with session.post(
+                    self.endpoint_url,
+                    json=payload,
+                    headers={"Content-Type": "application/json"}
+                ) as response:
+                    if response.status == 200:
+                        data = await response.json()
+                        # Extract text from Gemini API response
+                        if 'candidates' in data and len(data['candidates']) > 0:
+                            content = data['candidates'][0]['content']['parts'][0]['text']
+                            return content
+                        else:
+                            logger.error("No candidates in Gemini API response")
+                            return None
+                    else:
+                        error_text = await response.text()
+                        logger.error(f"Gemini API error {response.status}: {error_text}")
+                        return None
+                        
         except Exception as e:
-            logger.error(f"Error in async generation: {e}")
+            logger.error(f"Error in Gemini API generation: {e}")
             return None
     
     def _parse_ai_response(self, response_text: str) -> Dict[str, Any]:
-        """Parse the AI response"""
+        """Parse the AI response with robust error handling"""
         try:
             # Clean up the response
             cleaned_response = response_text.strip()
             
             # Remove markdown code blocks if present
             if "```json" in cleaned_response:
-                cleaned_response = cleaned_response.split("```json")[1].split("```")[0].strip()
+                # Extract content between ```json and ```
+                start_marker = "```json"
+                end_marker = "```"
+                start_idx = cleaned_response.find(start_marker) + len(start_marker)
+                end_idx = cleaned_response.find(end_marker, start_idx)
+                if end_idx > start_idx:
+                    cleaned_response = cleaned_response[start_idx:end_idx].strip()
+                else:
+                    # If end marker not found, take everything after start marker
+                    cleaned_response = cleaned_response[start_idx:].strip()
             elif "```" in cleaned_response:
+                # Try to extract JSON object using regex
                 json_match = re.search(r'\{.*\}', cleaned_response, re.DOTALL)
                 if json_match:
                     cleaned_response = json_match.group(0)
+            
+            # Additional cleanup - remove any trailing non-JSON content
+            if cleaned_response.endswith('...'):
+                # Find the last complete JSON structure
+                brace_count = 0
+                last_valid_pos = 0
+                for i, char in enumerate(cleaned_response):
+                    if char == '{':
+                        brace_count += 1
+                    elif char == '}':
+                        brace_count -= 1
+                        if brace_count == 0:
+                            last_valid_pos = i + 1
+                
+                if last_valid_pos > 0:
+                    cleaned_response = cleaned_response[:last_valid_pos]
             
             # Parse JSON
             data = json.loads(cleaned_response)
@@ -380,7 +408,7 @@ Generate the {num_cards} flashcards now:
                 "total_cards": len(flashcards),
                 "generation_time": datetime.utcnow().isoformat(),
                 "input_type": analysis["type"],
-                "ai_model": self.model_id if generation_method == "ai" else "fallback"
+                "ai_model": self.model_name if generation_method == "ai" else "fallback"
             },
             "success": True
         }
@@ -493,17 +521,16 @@ Generate the {num_cards} flashcards now:
     def health_check(self) -> Dict[str, Any]:
         """Get health status of the intelligent generator"""
         return {
-            "vertex_available": self.vertex_available,
-            "project_id": self.project_id,
-            "location": self.location,
-            "model_name": self.model_id,
-            "generator_type": "intelligent",
+            "gemini_available": self.gemini_available,
+            "api_endpoint": self.base_url,
+            "model_name": self.model_name,
+            "generator_type": "intelligent_gemini",
             "capabilities": [
                 "input_analysis",
-                "preference_awareness", 
+                "preference_awareness",
                 "intelligent_prompting",
                 "detailed_acknowledgment",
                 "fallback_generation"
             ],
-            "status": "intelligent_ready" if self.vertex_available else "fallback_mode"
+            "status": "intelligent_ready" if self.gemini_available else "fallback_mode"
         }

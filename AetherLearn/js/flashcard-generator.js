@@ -15,7 +15,6 @@ class FlashcardGenerator {
         };
         
         this.initializeEventListeners();
-        this.loadSavedFlashcards();
         this.loadDraftContent();
     }
 
@@ -75,11 +74,6 @@ class FlashcardGenerator {
             dontKnowBtn.addEventListener('click', () => this.markCard('incorrect'));
         }
 
-        // Load saved flashcards
-        const loadSavedBtn = document.getElementById('load-saved-btn');
-        if (loadSavedBtn) {
-            loadSavedBtn.addEventListener('click', () => this.loadSavedFlashcards());
-        }
 
         // Auto-save draft content
         const contentInput = document.getElementById('content-input');
@@ -501,134 +495,6 @@ class FlashcardGenerator {
         window.messageManager.success('Form cleared!');
     }
 
-    async loadSavedFlashcards() {
-        try {
-            const response = await window.aiToolsAPI.getSavedFlashcards();
-            this.displaySavedFlashcards(response.flashcard_sets);
-        } catch (error) {
-            console.error('Failed to load saved flashcards:', error);
-            // Silently fail - don't show error popup on page load
-        }
-    }
-
-    displaySavedFlashcards(flashcardSets) {
-        const grid = document.getElementById('saved-flashcards-grid');
-        if (!grid) return;
-
-        grid.innerHTML = '';
-
-        if (!flashcardSets || flashcardSets.length === 0) {
-            grid.innerHTML = `
-                <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--text-muted);">
-                    <i class="fas fa-layer-group" style="font-size: 2rem; margin-bottom: 1rem; opacity: 0.5;"></i>
-                    <p>No saved flashcard sets found. Create your first set above!</p>
-                </div>
-            `;
-            return;
-        }
-
-        flashcardSets.forEach((set, index) => {
-            const setElement = this.createSavedFlashcardElement(set);
-            setElement.style.opacity = '0';
-            setElement.style.transform = 'translateY(20px)';
-            grid.appendChild(setElement);
-
-            // Animate in
-            setTimeout(() => {
-                window.AIToolsUtils.AnimationUtils.slideUp(setElement);
-            }, index * 100);
-        });
-    }
-
-    createSavedFlashcardElement(set) {
-        const div = document.createElement('div');
-        div.className = 'saved-flashcard-item';
-        
-        const createdDate = new Date(set.created_at).toLocaleDateString();
-        const lastStudiedDate = set.last_studied ? 
-            new Date(set.last_studied).toLocaleDateString() : 'Never';
-
-        div.innerHTML = `
-            <div class="saved-item-header">
-                <h4 class="saved-item-title">${this.escapeHtml(set.title)}</h4>
-                <span class="difficulty-badge ${set.difficulty}">${set.difficulty}</span>
-            </div>
-            <div class="saved-item-meta">
-                <span><i class="fas fa-layer-group"></i> ${set.total_cards} cards</span>
-                <span><i class="fas fa-calendar"></i> Created: ${createdDate}</span>
-                <span><i class="fas fa-clock"></i> Last studied: ${lastStudiedDate}</span>
-            </div>
-            <div class="saved-item-actions">
-                <button class="btn btn-small btn-primary load-set-btn" data-session-id="${set.session_id}">
-                    <i class="fas fa-play"></i> Study
-                </button>
-                <button class="btn btn-small btn-secondary view-set-btn" data-session-id="${set.session_id}">
-                    <i class="fas fa-eye"></i> View
-                </button>
-                <button class="btn btn-small btn-danger delete-set-btn" data-session-id="${set.session_id}">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
-        `;
-
-        // Add event listeners
-        const loadBtn = div.querySelector('.load-set-btn');
-        const viewBtn = div.querySelector('.view-set-btn');
-        const deleteBtn = div.querySelector('.delete-set-btn');
-
-        if (loadBtn) {
-            loadBtn.addEventListener('click', () => this.loadFlashcardSet(set.session_id, true));
-        }
-
-        if (viewBtn) {
-            viewBtn.addEventListener('click', () => this.loadFlashcardSet(set.session_id, false));
-        }
-
-        if (deleteBtn) {
-            deleteBtn.addEventListener('click', () => this.deleteFlashcardSet(set.session_id));
-        }
-
-        return div;
-    }
-
-    async loadFlashcardSet(sessionId, startStudyMode = false) {
-        try {
-            const response = await window.aiToolsAPI.getFlashcardSet(sessionId);
-            const flashcardSet = response.flashcard_set;
-
-            this.displayFlashcards(flashcardSet.flashcards, {
-                session_id: flashcardSet.session_id,
-                title: flashcardSet.title
-            });
-
-            if (startStudyMode) {
-                setTimeout(() => {
-                    this.toggleStudyMode();
-                }, 500);
-            }
-
-            window.messageManager.success('Flashcard set loaded!');
-
-        } catch (error) {
-            console.error('Failed to load flashcard set:', error);
-            window.messageManager.error('Failed to load flashcard set');
-        }
-    }
-
-    async deleteFlashcardSet(sessionId) {
-        if (!confirm('Are you sure you want to delete this flashcard set? This action cannot be undone.')) {
-            return;
-        }
-
-        try {
-            await window.aiToolsAPI.deleteFlashcardSet(sessionId);
-            this.loadSavedFlashcards(); // Refresh the list
-            window.messageManager.success('Flashcard set deleted');
-        } catch (error) {
-            console.error('Failed to delete flashcard set:', error);
-            window.messageManager.error('Failed to delete flashcard set');
-        }
-    }
 
     saveDraftContent() {
         const contentInput = document.getElementById('content-input');

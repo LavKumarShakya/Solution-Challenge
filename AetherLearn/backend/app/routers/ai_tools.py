@@ -27,9 +27,9 @@ async def health_check():
         if flashcard_generator:
             generator_health = flashcard_generator.health_check()
             
-            if generator_health["vertex_available"]:
+            if generator_health["gemini_available"]:
                 status = "healthy_with_ai"
-                message = "AI tools service is running with Vertex AI"
+                message = "AI tools service is running with Gemini API"
             else:
                 status = "healthy_fallback"
                 message = "AI tools service is running with fallback generation"
@@ -44,7 +44,7 @@ async def health_check():
             "timestamp": datetime.utcnow().isoformat(),
             "services": {
                 "flashcard_generator": bool(flashcard_generator),
-                "vertex_ai": bool(flashcard_generator and flashcard_generator.vertex_available),
+                "gemini_api": bool(flashcard_generator and flashcard_generator.gemini_available),
                 "vertex_client": bool(vertex_client)
             },
             "generator_details": generator_health
@@ -125,52 +125,32 @@ async def generate_flashcards(
             logger.error("Flashcard generator not initialized")
             raise HTTPException(status_code=500, detail="Flashcard generation service unavailable")
         
-        # Use the WORKING VertexAI client directly (same as learning path)
-        logger.info("Using working VertexAI client for flashcard generation...")
+        # Generate flashcards using the Intelligent Flashcard Generator with Gemini API
+        logger.info("Calling intelligent flashcard generator with Gemini API...")
         try:
-            # Use the working VertexAI client that powers learning paths
-            if vertex_client:
-                raw_flashcards = await vertex_client.generate_flashcards(
-                    content=request.content,
-                    options={
-                        "num_cards": num_cards,
-                        "difficulty": difficulty
-                    }
-                )
-                
-                # Convert to proper format with front/back
-                flashcards_data = []
-                for i, card in enumerate(raw_flashcards):
-                    flashcard_data = {
-                        "id": str(i + 1),
-                        "front": card.get("question", card.get("front", "No question available")),
-                        "back": card.get("answer", card.get("back", "No answer available")),
-                        "question": card.get("question", card.get("front", "No question available")),
-                        "answer": card.get("answer", card.get("back", "No answer available")),
-                        "difficulty": difficulty,
-                        "created_at": datetime.utcnow().isoformat(),
-                        "study_metadata": {
-                            "times_reviewed": 0,
-                            "correct_answers": 0,
-                            "last_reviewed": None,
-                            "confidence_level": "new"
-                        },
-                        "estimated_study_time": 45,
-                        "tags": ["ai-generated", "real-gemini", difficulty]
-                    }
-                    flashcards_data.append(flashcard_data)
-                
-                generation_metadata = {
-                    "generation_method": "ai",
-                    "input_type": "topic" if len(request.content.split()) <= 10 else "content",
-                    "ai_model": "gemini-2.0-flash-001"
-                }
-                
-                logger.info(f"✅ REAL GEMINI AI Generated {len(flashcards_data)} flashcards!")
-                logger.info(f"Generation method: {generation_metadata.get('generation_method', 'unknown')}")
-                logger.info(f"Input type detected: {generation_metadata.get('input_type', 'unknown')}")
-            else:
-                raise Exception("VertexAI client not available")
+            # Prepare comprehensive options including preferences
+            generation_options = {
+                "num_cards": num_cards,
+                "difficulty": difficulty,
+                "formats": options.get("formats", []),
+                "learning_style": options.get("learning_style", []),
+                "time_preference": options.get("time_preference"),
+                "focus_areas": options.get("focus_areas", [])
+            }
+            
+            # Generate with the Gemini API-powered intelligent system
+            generation_result = await flashcard_generator.generate_flashcards(
+                input_data=request.content,
+                options=generation_options
+            )
+            
+            # Extract flashcards and metadata
+            flashcards_data = generation_result.get("flashcards", [])
+            generation_metadata = generation_result.get("metadata", {})
+            
+            logger.info(f"✅ Generated {len(flashcards_data)} flashcards with Gemini API!")
+            logger.info(f"Generation method: {generation_metadata.get('generation_method', 'unknown')}")
+            logger.info(f"Input type detected: {generation_metadata.get('input_type', 'unknown')}")
             
         except Exception as gen_error:
             logger.error(f"Intelligent flashcard generation failed: {gen_error}")
