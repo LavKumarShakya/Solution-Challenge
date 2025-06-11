@@ -23,74 +23,28 @@ class SearchManager:
         # In-memory search status cache (fallback when database unavailable)
         self.search_cache = {}
 
-    async def _call_google_search(self, query: str, num_results: int | None = None):
+    async def _call_google_search(self, query: str, num_results: int = 10):
         """Call Google Custom Search API to get web search results"""
         try:
-            # Use environment variable for number of results if not specified
-            if num_results is None:
-                num_results = int(os.getenv("SEARCH_RESULTS_PER_QUERY", "50"))
-            
-            # Limit to Google's maximum of 10 results per request
-            num_results = min(num_results, 10)
-            
-            # Import Google API client
-            from googleapiclient.discovery import build
-            from googleapiclient.errors import HttpError
-            
-            # Build the service object for the Custom Search API
-            service = build("customsearch", "v1", developerKey=self.search_api_key)
-            
-            # Execute the search query
-            result = service.cse().list(
-                q=query,
-                cx=self.search_engine_id,
-                num=num_results
-            ).execute()
-            
-            # Parse and format the results
-            items = result.get('items', [])
-            formatted_resources = []
-            
-            for item in items:
-                formatted_resources.append({
-                    'title': item.get('title', ''),
-                    'link': item.get('link', ''),
-                    'snippet': item.get('snippet', ''),
-                    'displayLink': item.get('displayLink', '')
-                })
-            
-            logger.info(f"Google Custom Search API returned {len(formatted_resources)} results for query: {query}")
-            return formatted_resources
+            # Use the same endpoint we created in main.py but call it internally
+            async with httpx.AsyncClient() as client:
+                response = await client.post(
+                    "http://localhost:8000/api/v1/search-resources",
+                    json={"query": query},
+                    timeout=30.0
+                )
+                
+                if response.status_code == 200:
+                    search_data = response.json()
+                    return search_data.get("resources", [])
+                else:
+                    logger.error(f"Google Search API error: {response.status_code}")
+                    return []
                     
         except Exception as e:
             logger.error(f"Error calling Google Custom Search API: {e}")
             # Return empty list if search fails
             return []
-
-    def _enhance_query_for_education(self, query: str) -> str:
-        """Enhance the search query to focus on educational materials"""
-        # Add educational terms to improve search quality
-        educational_terms = [
-            "tutorial", "learn", "course", "guide", "education",
-            "training", "how to", "beginner", "introduction",
-            "fundamentals", "basics", "documentation"
-        ]
-        
-        # Exclude non-educational content
-        exclude_terms = [
-            "-news", "-drama", "-entertainment", "-gossip",
-            "-download", "-install", "-buy", "-price",
-            "-review", "-comparison", "-vs"
-        ]
-        
-        # Enhanced query with educational focus
-        enhanced_query = f"{query} learn tutorial course guide"
-        
-        # Add exclude terms
-        enhanced_query += " " + " ".join(exclude_terms)
-        
-        logger.info(f"Enhanced query: '{query}' -> '{enhanced_query}'")
-        return enhanced_query
 
     async def update_search_status(self, search_id: str, update: SearchStatusUpdate):
         """Update the search status in the database or in-memory store"""
@@ -157,7 +111,7 @@ class SearchManager:
         logger.warning(f"❌ Learning path not found for {learning_path_id}")
         return None
 
-    async def process_search(self, search_id: str, query: str, user_id: str | None = None, preferences: dict | None = None):
+    async def process_search(self, search_id: str, query: str, user_id: str = None, preferences: dict = None):
         """Process a search query using Google Custom Search API + Vertex AI Gemini"""
         try:
             # Step 1: Initialize search
@@ -188,11 +142,8 @@ class SearchManager:
             import asyncio
             await asyncio.sleep(0.5)
             
-            # Enhance query for educational materials
-            enhanced_query = self._enhance_query_for_education(query)
-            
             # Call Google Custom Search API
-            search_results = await self._call_google_search(enhanced_query)
+            search_results = await self._call_google_search(query)
             
             # Update with search results found - Start Stage 2
             await self.update_search_status(
@@ -244,7 +195,7 @@ class SearchManager:
             
             # Generate course structure using Vertex AI Gemini
             learning_path_data = await self.vertex_ai.generate_course_from_search_results(
-                query, categorized_resources, preferences or {}
+                query, categorized_resources, preferences
             )
             
             # Calculate quality metrics
@@ -382,7 +333,7 @@ class SearchManager:
             
         return stats
 
-    async def customize_learning_path(self, learning_path_id: str, preferences: dict, user_id: str | None = None):
+    async def customize_learning_path(self, learning_path_id: str, preferences: dict, user_id: str = None):
         """Customize an existing learning path based on user preferences"""
         try:
             # Retrieve the existing learning path
@@ -427,7 +378,7 @@ class SearchManager:
             raise e
 
     async def customize_learning_path_with_status(
-        self, search_id: str, learning_path_id: str, preferences: dict, user_id: str | None = None
+        self, search_id: str, learning_path_id: str, preferences: dict, user_id: str = None
     ):
         """Customize an existing learning path with status tracking"""
         try:
