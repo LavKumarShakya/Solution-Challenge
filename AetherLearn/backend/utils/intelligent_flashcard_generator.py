@@ -249,8 +249,9 @@ RULES:
 2. Answers should be comprehensive but concise (2-4 sentences)
 3. Focus on the most important concepts
 4. Make questions educational and valuable
+5. CRITICAL: Generate ALL {num_cards} flashcards - do not stop early
 
-Return JSON in this format:
+Return ONLY valid JSON in this EXACT format:
 {{
   "count": {num_cards},
   "flashcards": [
@@ -261,10 +262,30 @@ Return JSON in this format:
   ]
 }}
 
-Generate the {num_cards} flashcards now:
+IMPORTANT: Complete all {num_cards} flashcards. Do not truncate the response.
         """
         
         return prompt.strip()
+    
+    def _calculate_max_tokens(self, prompt: str) -> int:
+        """Calculate optimal max tokens based on prompt and expected response size"""
+        # Extract number of cards from prompt
+        import re
+        num_cards_match = re.search(r'exactly (\d+) flashcards', prompt)
+        num_cards = int(num_cards_match.group(1)) if num_cards_match else 10
+        
+        # Base tokens per card (question + answer + JSON overhead)
+        tokens_per_card = 150  # Conservative estimate
+        base_overhead = 200    # JSON structure overhead
+        
+        # Calculate total needed tokens
+        total_tokens = (num_cards * tokens_per_card) + base_overhead
+        
+        # Set reasonable bounds (minimum 2000, maximum 8000)
+        max_tokens = max(2000, min(total_tokens, 8000))
+        
+        logger.info(f"📊 Calculated max tokens: {max_tokens} for {num_cards} cards")
+        return max_tokens
     
     async def _generate_content_gemini_api(self, prompt: str):
         """Generate content using Gemini API with optimal settings"""
@@ -279,7 +300,7 @@ Generate the {num_cards} flashcards now:
                     "temperature": 0.4,
                     "topK": 40,
                     "topP": 0.9,
-                    "maxOutputTokens": 3000
+                    "maxOutputTokens": self._calculate_max_tokens(prompt)
                 }
             }
             
