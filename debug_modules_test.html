@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Modules Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-result { margin: 10px 0; padding: 10px; border-radius: 4px; }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+    </style>
+</head>
+<body>
+    <h1>Debug: Modules Population Test</h1>
+    
+    <div id="test-results"></div>
+    
+    <h2>Test Data Structure</h2>
+    <pre id="test-data"></pre>
+    
+    <h2>Mock Modules Container</h2>
+    <div class="modules-container">
+        <h3>Learning Modules</h3>
+        <div class="modules-grid" id="test-modules-grid">
+            <!-- Modules will be populated here -->
+        </div>
+    </div>
+
+    <script>
+        // Mock learning path data matching the backend structure
+        const mockLearningPath = {
+            "id": "test_path_123",
+            "query": "Machine Learning",
+            "title": "Complete Machine Learning Learning Path",
+            "modules": [
+                {
+                    "id": "module_1",
+                    "title": "Introduction to Machine Learning",
+                    "description": "Learn the basics of machine learning and its applications",
+                    "order": 1,
+                    "resources": [
+                        {
+                            "id": "resource_1",
+                            "title": "Machine Learning Explained - A Complete Guide",
+                            "link": "https://www.youtube.com/watch?v=machine-learning-guide",
+                            "snippet": "Comprehensive introduction to machine learning concepts and applications. Perfect for beginners starting their journey.",
+                            "resource_type": "video",
+                            "source": "YouTube",
+                            "estimated_time_minutes": 45,
+                            "difficulty": "Beginner",
+                            "quality_score": 0.92
+                        },
+                        {
+                            "id": "resource_2",
+                            "title": "Understanding Machine Learning - Practical Applications",
+                            "link": "https://medium.com/topic/machine-learning-practical",
+                            "snippet": "Practical examples and real-world applications of machine learning with code examples and case studies.",
+                            "resource_type": "article",
+                            "source": "Medium",
+                            "estimated_time_minutes": 20,
+                            "difficulty": "Beginner",
+                            "quality_score": 0.87
+                        }
+                    ]
+                },
+                {
+                    "id": "module_2",
+                    "title": "Advanced Machine Learning Techniques",
+                    "description": "Deep dive into advanced machine learning concepts and implementations",
+                    "order": 2,
+                    "resources": [
+                        {
+                            "id": "resource_3",
+                            "title": "Mastering Machine Learning - Interactive Tutorial",
+                            "link": "https://www.codecademy.com/learn/machine-learning-advanced",
+                            "snippet": "Advanced hands-on experience building real projects with machine learning. Includes portfolio-ready assignments.",
+                            "resource_type": "interactive",
+                            "source": "Codecademy",
+                            "estimated_time_minutes": 90,
+                            "difficulty": "Intermediate",
+                            "quality_score": 0.94
+                        }
+                    ]
+                }
+            ]
+        };
+
+        // Test helper functions from learning_path.js
+        class TestLearningPathUI {
+            static truncateText(text, maxLength) {
+                if (!text || text.length <= maxLength) return text;
+                return text.substring(0, maxLength) + '...';
+            }
+
+            static getResourceTypeClass(resource) {
+                const type = resource.resource_type || resource.type || 'article';
+                return type;
+            }
+
+            static getResourceTypeIcon(resource) {
+                const type = resource.resource_type || resource.type || 'article';
+                const icons = {
+                    video: '<i class="fas fa-play-circle"></i>',
+                    article: '<i class="fas fa-file-alt"></i>',
+                    interactive: '<i class="fas fa-laptop-code"></i>',
+                    course: '<i class="fas fa-graduation-cap"></i>',
+                    book: '<i class="fas fa-book"></i>'
+                };
+                return icons[type] || '<i class="fas fa-file"></i>';
+            }
+
+            static createModuleCard(module, index) {
+                const moduleCard = document.createElement('div');
+                moduleCard.className = 'module-card';  // Fixed: Use correct CSS class
+                
+                // Determine resource types for variety
+                const resourceCount = module.resources ? module.resources.length : 0;
+                
+                moduleCard.innerHTML = `
+                    <div class="module-header">
+                        <div class="module-icon"><i class="fas fa-cube"></i></div>
+                        <h4>Module ${index + 1}: ${module.title}</h4>
+                    </div>
+                    <div class="module-resources">
+                        ${module.resources ? module.resources.map((resource, resourceIndex) => `
+                            <div class="resource-item">
+                                <div class="resource-icon ${this.getResourceTypeClass(resource)}">
+                                    ${this.getResourceTypeIcon(resource)}
+                                </div>
+                                <div class="resource-info">
+                                    <h5>${resource.title}</h5>
+                                    <p>${this.truncateText(resource.snippet || resource.description || '', 80)}</p>
+                                    <div class="resource-meta">
+                                        <span><i class="fas fa-clock"></i> ${resource.estimated_time_minutes || resource.estimated_time || '10'} min</span>
+                                        <span><i class="fas fa-star"></i> ${resource.quality_score ? (resource.quality_score * 5).toFixed(1) : '4.5'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('') : '<div class="no-resources"><i class="fas fa-info-circle"></i> No resources available for this module</div>'}
+                    </div>
+                `;
+                
+                return moduleCard;
+            }
+
+            static populateModulesInOverlay(learningPath) {
+                console.log('🔧 Test: Populating modules in overlay:', learningPath);
+                
+                const modulesContainer = document.querySelector('.modules-container .modules-grid');
+                if (!modulesContainer) {
+                    console.error('❌ Test: Modules container not found');
+                    return false;
+                }
+                
+                if (!learningPath.modules || learningPath.modules.length === 0) {
+                    console.warn('⚠️ Test: No modules found in learning path');
+                    modulesContainer.innerHTML = `
+                        <div class="no-modules-message">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <h3>No Modules Available</h3>
+                            <p>There was an issue generating the learning modules. Please try searching again.</p>
+                        </div>
+                    `;
+                    return false;
+                }
+                
+                console.log(`✅ Test: Found ${learningPath.modules.length} modules to display`);
+                
+                // Clear existing modules
+                modulesContainer.innerHTML = '';
+                
+                // Add each module to the overlay
+                learningPath.modules.forEach((module, index) => {
+                    console.log(`📝 Test: Creating module ${index + 1}:`, module.title);
+                    const moduleCard = this.createModuleCard(module, index);
+                    modulesContainer.appendChild(moduleCard);
+                });
+
+                return true;
+            }
+        }
+
+        // Run tests
+        function runTests() {
+            const resultsContainer = document.getElementById('test-results');
+            const testDataContainer = document.getElementById('test-data');
+            
+            // Display test data
+            testDataContainer.textContent = JSON.stringify(mockLearningPath, null, 2);
+            
+            let results = [];
+            
+            // Test 1: Check if modules container exists
+            const modulesContainer = document.querySelector('.modules-container .modules-grid');
+            if (modulesContainer) {
+                results.push({ type: 'success', message: '✅ Modules container found' });
+            } else {
+                results.push({ type: 'error', message: '❌ Modules container not found' });
+            }
+            
+            // Test 2: Check learning path data structure
+            if (mockLearningPath.modules && mockLearningPath.modules.length > 0) {
+                results.push({ type: 'success', message: `✅ Learning path has ${mockLearningPath.modules.length} modules` });
+            } else {
+                results.push({ type: 'error', message: '❌ No modules in learning path data' });
+            }
+            
+            // Test 3: Try to populate modules
+            try {
+                const success = TestLearningPathUI.populateModulesInOverlay(mockLearningPath);
+                if (success) {
+                    results.push({ type: 'success', message: '✅ Modules populated successfully' });
+                    
+                    // Check if module cards were created
+                    const moduleCards = document.querySelectorAll('.module-card');
+                    results.push({ type: 'info', message: `ℹ️ Created ${moduleCards.length} module cards` });
+                } else {
+                    results.push({ type: 'error', message: '❌ Failed to populate modules' });
+                }
+            } catch (error) {
+                results.push({ type: 'error', message: `❌ Error populating modules: ${error.message}` });
+            }
+            
+            // Display results
+            resultsContainer.innerHTML = results.map(result => 
+                `<div class="test-result ${result.type}">${result.message}</div>`
+            ).join('');
+        }
+
+        // Run tests when page loads
+        window.addEventListener('load', runTests);
+    </script>
+</body>
+</html>

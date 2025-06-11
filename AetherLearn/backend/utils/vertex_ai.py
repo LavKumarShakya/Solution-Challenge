@@ -136,25 +136,42 @@ class VertexAIClient:
         try:
             # Create prompt for Gemini to categorize search results
             categorization_prompt = f"""
-            You are an expert educational content curator. Analyze these search results for the query "{query}" and categorize them by type.
+            You are an expert educational content curator. Analyze these search results for the query "{query}" and categorize ONLY EDUCATIONAL RESOURCES.
+
+            **CRITICAL FILTERING REQUIREMENTS:**
+            - EXCLUDE: News articles, entertainment content, product reviews, download pages, commercial software pages, drama/gossip content
+            - EXCLUDE: Oracle/vendor download pages, installation guides, pricing pages, product comparisons
+            - INCLUDE ONLY: Tutorials, educational courses, learning guides, documentation, academic content, how-to guides, training materials
 
             Search Results:
             {json.dumps(search_results, indent=2)}
 
-            Please categorize these resources into the following types and return a JSON object:
-            - "videos": Video tutorials, YouTube content, video courses
-            - "articles": Blog posts, articles, written tutorials
-            - "courses": Structured online courses, MOOCs
-            - "documentation": Official documentation, reference materials
-            - "interactive": Hands-on tutorials, coding exercises, interactive content
-            - "academic": Academic papers, research materials
+            **STRICT EDUCATIONAL FILTERING:**
+            1. First, filter out NON-EDUCATIONAL content:
+               - News articles and current events
+               - Entertainment or gossip content
+               - Product download/installation pages
+               - Commercial vendor pages (like Oracle downloads)
+               - Review/comparison articles
+               - Pricing or sales pages
 
-            For each resource, also estimate:
+            2. Then categorize ONLY the remaining EDUCATIONAL resources into:
+               - "videos": Educational video tutorials, course videos, instructional content
+               - "articles": Learning articles, how-to guides, educational blog posts
+               - "courses": Structured learning courses, MOOCs, training programs
+               - "documentation": Official learning documentation, reference guides
+               - "interactive": Hands-on tutorials, coding exercises, practice materials
+               - "academic": Academic papers, educational research, scholarly content
+
+            **For each EDUCATIONAL resource, estimate:**
             - difficulty: "beginner", "intermediate", or "advanced"
-            - estimated_time_minutes: time to complete/read
-            - quality_score: 0.0 to 1.0 based on source credibility
+            - estimated_time_minutes: time to complete/read (realistic estimates)
+            - quality_score: 0.0 to 1.0 based on educational value and source credibility
+            - learning_objective: What the learner will gain from this resource
 
-            Return only valid JSON format.
+            **IMPORTANT:** If a resource is not clearly educational in nature, DO NOT include it. Only return resources that help someone learn the topic.
+
+            Return only valid JSON format with filtered educational content.
             """
 
             response = await self.model.generate_content_async(categorization_prompt)

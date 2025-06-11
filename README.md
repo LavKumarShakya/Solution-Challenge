@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://private-user-images.githubusercontent.com/74038190/241765440-80728820-e06b-4f96-9c9e-9df46f0cc0a5.gif?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDM5MzkwMjIsIm5iZiI6MTc0MzkzODcyMiwicGF0aCI6Ii83NDAzODE5MC8yNDE3NjU0NDAtODA3Mjg4MjAtZTA2Yi00Zjk2LTljOWUtOWRmNDZmMGNjMGE1LmdpZj9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTA0MDYlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUwNDA2VDExMjUyMlomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPThmMjQxNzA5MjQ2ZGIwMDVjZmQ2ZTU4NGM3NDZhYzM1MGExNDQ0Yjg1MmEyYzkyZTVhY2ViZGQxNTFiZTAwNDkmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.VWi1OZKhaLiOqfX-dEwTqtjpHtEZc5cGmPVdtT1XOxw" width="700px">
+  <img src="https://user-images.githubusercontent.com/74038190/221352995-5ac18bdf-1a19-4f99-bbb6-77559b220470.gif" width="700px">
 </div>
 
 # <img src="https://user-images.githubusercontent.com/74038190/216122069-5b8169d7-1d8e-4a13-b245-a8e4176c99f8.png" width="40px"/> AetherLearn: Revolutionizing Digital Education
@@ -9,8 +9,8 @@
 <div align="center">
   
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Status](https://img.shields.io/badge/Frontend-95%25_Complete-green.svg)]()
-[![Status](https://img.shields.io/badge/Backend-In_Development-orange.svg)]()
+[![Status](https://img.shields.io/badge/Frontend-Complete-green.svg)]()
+[![Status](https://img.shields.io/badge/Backend-Complete-green.svg)]()
 [![Demo](https://img.shields.io/badge/Live_Demo-aetherlearn.tech-blueviolet.svg)](https://aetherlearn.tech)
 
 </div>
@@ -64,52 +64,58 @@ Most platforms are just static content libraries – PDFs, videos, courses dumpe
       <h3>🎓 AI-Powered Learning Dashboard</h3>
       <ul>
         <li>Personalized dashboard with adaptive modules</li>
-        <li>Real-time progress tracking</li>
-        <li>Performance-based learning experience</li>
+        <li>Real-time progress tracking with Firebase integration</li>
+        <li>Enhanced dashboard displaying real user data and preferences</li>
+        <li>Profile integration with navbar and dashboard</li>
       </ul>
     </td>
     <td width="50%">
       <h3>🔍 Universal Search & Content Aggregation</h3>
       <ul>
-        <li>Smart filtering to combine platform content with OERs</li>
+        <li>Fully functional resource aggregator backend</li>
+        <li>Google Custom Search API integration for comprehensive results</li>
+        <li>AI-powered course generation using Vertex AI Gemini-2.0-flash</li>
         <li>Dynamic educational material scanning and assessment</li>
-        <li>High-quality resource curation</li>
       </ul>
     </td>
   </tr>
   <tr>
     <td>
-      <h3>🤖 Gemini-Powered AI Learning Assistant</h3>
+      <h3>🤖 Enhanced AI Learning Assistant</h3>
       <ul>
-        <li>24/7 conversational support and query resolution</li>
-        <li>Multi-style explanations adapting to your needs</li>
-        <li>Automated content generation (articles, quizzes, mind-maps)</li>
+        <li>Improved AI assistant with better platform understanding</li>
+        <li>Smarter responses and enhanced query resolution</li>
+        <li>Automated content generation with flashcard generator</li>
+        <li>Fully functional AI tools backend with Gemini-2.0-flash</li>
       </ul>
     </td>
     <td>
-      <h3>📚 Customized Study Plans</h3>
+      <h3>📚 User Preferences & Settings</h3>
       <ul>
-        <li>Fully personalized course pathways</li>
-        <li>Learning style adaptation (visual, auditory, kinesthetic)</li>
+        <li>New preferences page with Firebase data persistence</li>
+        <li>Comprehensive settings page with real-time saving</li>
+        <li>Personalized learning experience based on user preferences</li>
         <li>Smart content transformation for effective learning</li>
       </ul>
     </td>
   </tr>
   <tr>
     <td>
-      <h3>🌐 Global Accessibility</h3>
+      <h3>🌐 Enhanced User Experience</h3>
       <ul>
-        <li>Support for 50+ languages via Translation API</li>
-        <li>Screen reader optimization & dyslexia-friendly fonts</li>
-        <li>Offline capabilities & responsive design</li>
+        <li>Toast notifications across the entire platform</li>
+        <li>Restructured and improved home and resources pages</li>
+        <li>Working footer links with proper navigation</li>
+        <li>Enhanced responsive design with better accessibility</li>
       </ul>
     </td>
     <td>
-      <h3>👥 Community & Collaboration</h3>
+      <h3>🔧 AI-Powered Tools</h3>
       <ul>
-        <li>Resource sharing and annotation tools</li>
-        <li>Peer collaboration spaces</li>
-        <li>Community discussions and knowledge sharing</li>
+        <li>Intelligent flashcard generator with Gemini-2.0-flash</li>
+        <li>MongoDB Atlas database integration</li>
+        <li>Cloud-hosted backend on Google Cloud Run</li>
+        <li>Dockerized backend architecture for scalability</li>
       </ul>
     </td>
   </tr>
@@ -127,12 +133,12 @@ Most platforms are just static content libraries – PDFs, videos, courses dumpe
   
 | Component | Status | Details |
 |-----------|--------|---------|
-| Frontend UI | ✅ 95% Complete | HTML, CSS, and JavaScript components fully implemented |
-| Responsive Design | ✅ Complete | Mobile-first approach with cross-device compatibility |
-| Gemini AI Integration | ✅ Complete | AI assistant implementation ready |
-| Backend Services | 🟡 In Progress | Core APIs in development |
-| Database Setup | 🟡 In Progress | Schema designed, implementation ongoing |
-| Authentication | ✅ Complete | User login/signup flows implemented |
+| Frontend UI | ✅ Complete | All pages enhanced with preferences, settings, and improved UX |
+| Firebase Integration | ✅ Complete | Authentication, user data, and preferences working |
+| AI Assistant | ✅ Enhanced | Smarter responses with better platform understanding |
+| Backend Services | ✅ Complete | Resource aggregator and AI tools backends deployed |
+| Database Setup | ✅ Complete | MongoDB Atlas for backend services, Firebase for user data |
+| Cloud Deployment | ✅ Complete | Backend hosted on Google Cloud Run with Docker |
 
 </div>
 
@@ -156,21 +162,20 @@ Most platforms are just static content libraries – PDFs, videos, courses dumpe
       <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white">
       <img src="https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white">
       <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black">
-      <img src="https://img.shields.io/badge/React-61DAFB?style=flat&logo=react&logoColor=black">
-      <img src="https://img.shields.io/badge/TailwindCSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white">
-    </td>
-    <td>
-      <img src="https://img.shields.io/badge/Node.js-339933?style=flat&logo=node.js&logoColor=white">
-      <img src="https://img.shields.io/badge/Express-000000?style=flat&logo=express&logoColor=white">
-      <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white">
       <img src="https://img.shields.io/badge/Firebase-FFCA28?style=flat&logo=firebase&logoColor=black">
-      <img src="https://img.shields.io/badge/Redis-DC382D?style=flat&logo=redis&logoColor=white">
     </td>
     <td>
-      <img src="https://img.shields.io/badge/Gemini_API-4285F4?style=flat&logo=google&logoColor=white">
+      <img src="https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white">
+      <img src="https://img.shields.io/badge/FastAPI-009688?style=flat&logo=fastapi&logoColor=white">
+      <img src="https://img.shields.io/badge/Uvicorn-009688?style=flat&logo=uvicorn&logoColor=white">
+      <img src="https://img.shields.io/badge/MongoDB-47A248?style=flat&logo=mongodb&logoColor=white">
+      <img src="https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white">
+    </td>
+    <td>
       <img src="https://img.shields.io/badge/Vertex_AI-4285F4?style=flat&logo=google-cloud&logoColor=white">
-      <img src="https://img.shields.io/badge/Project_IDX-4285F4?style=flat&logo=google-cloud&logoColor=white">
-      <img src="https://img.shields.io/badge/Translation_API-4285F4?style=flat&logo=google-translate&logoColor=white">
+      <img src="https://img.shields.io/badge/Gemini_2.0_Flash-4285F4?style=flat&logo=google&logoColor=white">
+      <img src="https://img.shields.io/badge/Cloud_Run-4285F4?style=flat&logo=google-cloud&logoColor=white">
+      <img src="https://img.shields.io/badge/Custom_Search_API-4285F4?style=flat&logo=google&logoColor=white">
     </td>
   </tr>
 </table>
@@ -213,25 +218,31 @@ No need for npm or other build tools - this project currently uses pure HTML, CS
 
 ```
 Solution-Challenge/
-├── index.html     # Main landing page
-├── README.md      # Project documentation
-├── CNAME          # Custom domain configuration
-├── .idx           # Project IDX configuration
-└── AetherLearn/   # Core application directory
-    ├── css/             # Modular stylesheets
-    ├── html/            # Page templates for each section
-    └── js/              # JavaScript functionality
+├── .idx/                         # Project IDX configuration files
+├── index.html                    # Enhanced landing page
+├── README.md                     # Project documentation
+├── CNAME                         # Custom domain configuration
+├── docker-compose.yml            # Docker orchestration
+└── AetherLearn/                  # Core application directory
+    ├── backend/                  # Python FastAPI backend with MongoDB
+    ├── css/                      # Enhanced stylesheets and UI components
+    ├── html/                     # Complete page templates and components
+    ├── js/                       # Enhanced JavaScript modules and Firebase integration
+    └── images/                   # Static assets and media files
+     
 ```
 
 ### Key Implemented Pages:
 
-- `index.html` - Engaging landing page
-- `AetherLearn/html/login.html`, `signup.html` - User authentication 
-- `AetherLearn/html/dashboard.html` - Personalized user experience center
-- `AetherLearn/html/courses.html` - Course discovery and organization
-- `AetherLearn/html/ai-assistant.html` - Gemini-powered learning companion
-- `AetherLearn/html/community.html` - Social learning and collaboration hub
-- `AetherLearn/html/resources.html` - Educational tools and materials
+- `index.html` - Enhanced landing page with restructured content
+- `AetherLearn/html/login.html`, `signup.html` - Firebase-integrated authentication
+- `AetherLearn/html/dashboard.html` - Enhanced dashboard with real user data display
+- `AetherLearn/html/preferences-overlay.html` - New preferences management system
+- `AetherLearn/html/settings.html` - Comprehensive settings page with Firebase saving
+- `AetherLearn/html/ai-assistant.html` - Enhanced AI assistant with improved responses
+- `AetherLearn/html/flashcards.html` - AI-powered flashcard generator tool
+- `AetherLearn/html/resources.html` - Restructured resources page with working backend
+- `AetherLearn/backend/` - Complete Python backend with FastAPI and MongoDB integration
 
 <div align="center">
   <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">
@@ -244,20 +255,24 @@ Solution-Challenge/
 
 | Phase | Focus | Timeline |
 |-------|-------|----------|
-| **1** | Complete backend development & API stabilization | In Progress |
-| **2** | ML model training for personalized recommendations | Upcoming |
-| **3** | Mobile app development (Android/iOS) | Planned |
-| **4** | Expanded resource integration & partnerships | Planned |
+| **1** | ✅ Backend development & API stabilization | **Completed** |
+| **2** | Advanced AI capabilities & smart recommendations | In Progress |
+| **3** | Cross-platform expansion & enhanced community features | Upcoming |
+| **4** | Global scale & enterprise partnerships | Planned |
 
 </div>
 
 Our comprehensive future plan includes:
 
-- **Expanded Resource Library:** Forge new partnerships to continuously enrich the repository
-- **Enhanced AI Capabilities:** Introduce AI-generated resource summaries and predictive analytics for learning gaps
-- **Global Scalability:** Increase language support to 100+ languages with optimization for areas with intermittent internet
-- **Community-Driven Innovations:** Develop mentorship programs connecting students with industry professionals
-- **Long-Term Vision:** Impact underserved regions globally with accessible educational technology
+- **🧠 Next-Generation Resource Intelligence:** Transform resource aggregation with advanced query understanding, contextual content discovery, and AI-powered course generation that adapts to individual learning trajectories
+- **📚 Intelligent Course Ecosystem:** Revolutionize the courses page with dynamic saved course management, curated pre-made learning paths, and smart recommendation algorithms that evolve with user preferences and learning patterns
+- **🎯 Predictive Learning Analytics:** Deploy advanced ML recommendation models that analyze user behavior, preferences, and learning outcomes to deliver hyper-personalized content suggestions and optimal learning sequences
+- **⚡ Real-Time AI Assistant Evolution:** Implement streaming API responses and backend gateway integration for lightning-fast, contextually-aware interactions that feel truly conversational and responsive
+- **🛠️ Comprehensive AI Learning Suite:** Expand beyond flashcards to include an AI Project Mentor for guided development, intelligent mind map generation for visual learning, and adaptive quiz systems that adjust difficulty in real-time
+- **👥 Vibrant Learning Community:** Build a fully-featured community platform with peer collaboration, knowledge sharing, mentorship matching, and social learning features that connect learners globally
+- **📊 Data-Driven Dashboard Intelligence:** Transform the dashboard into a comprehensive learning command center with real-time progress analytics, achievement tracking, personalized insights, and predictive learning recommendations
+- **📱 Cross-Platform Mobile Experience:** Develop native mobile applications (iOS/Android) with offline learning capabilities and cross-device synchronization for seamless learning continuity
+- **🌍 Global Impact Expansion:** Scale to underserved regions with offline capabilities, multi-language support, and partnerships with educational institutions worldwide
 
 <div align="center">
   <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">

@@ -71,10 +71,13 @@ async def search_for_resources(search_query: SearchQuery):
         service = build("customsearch", "v1", developerKey=settings.search_api_key)
 
         # Execute the search query
+        # Google Custom Search API has a maximum of 10 results per request
+        num_results = min(settings.search_results_per_query, 10)
+        
         result = service.cse().list(
             q=search_query.query,
             cx=settings.search_engine_id,
-            num=settings.search_results_per_query
+            num=num_results
         ).execute()
 
         # Parse and format the results
