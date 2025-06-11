@@ -217,6 +217,9 @@ function goBack() {
   window.location.href = "./dashboard.html";
 }
 
+// Make goBack function globally available
+window.goBack = goBack;
+
 // Setup navigation between settings panels
 function setupNavigation() {
   const navItems = document.querySelectorAll(".nav-item");
