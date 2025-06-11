@@ -1107,4 +1107,238 @@ input:checked + .toggle-slider:before {
   .modal-body {
     padding: 1.5rem;
   }
+/* ===== ENHANCED CUSTOM MODAL STYLES ===== */
+
+/* Enhanced Custom Confirmation Modals */
+#logout-all-modal .confirmation-content,
+#delete-account-modal .confirmation-content {
+  text-align: center;
+  padding: 1.5rem 0 2rem 0;
+}
+
+#logout-all-modal .confirmation-icon,
+#delete-account-modal .confirmation-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  display: block;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+#logout-all-modal .confirmation-icon.warning {
+  color: #ff9800;
+}
+
+#delete-account-modal .confirmation-icon.danger {
+  color: #f44336;
+}
+
+#logout-all-modal .confirmation-content p,
+#delete-account-modal .confirmation-content p {
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+#delete-account-modal .confirmation-content strong {
+  color: #f44336;
+  font-weight: 700;
+}
+
+/* Enhanced Input Field for Delete Confirmation */
+#delete-confirmation-input {
+  width: 100% !important;
+  max-width: 300px !important;
+  margin: 1rem auto 0 auto !important;
+  padding: 1rem 1.5rem !important;
+  border: 2px solid var(--input-border) !important;
+  border-radius: var(--hero-radius-lg) !important;
+  background: var(--gradient-dark) !important;
+  color: var(--text-primary) !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  text-align: center !important;
+  letter-spacing: 0.1em !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  backdrop-filter: blur(20px) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+#delete-confirmation-input:focus {
+  outline: none !important;
+  border-color: #f44336 !important;
+  box-shadow: 0 0 0 4px rgba(244, 67, 54, 0.2), 0 8px 30px rgba(244, 67, 54, 0.1) !important;
+  background: rgba(244, 67, 54, 0.05) !important;
+  transform: translateY(-2px) !important;
+}
+
+#delete-confirmation-input::placeholder {
+  color: var(--text-muted) !important;
+  font-style: italic !important;
+  font-weight: 400 !important;
+  letter-spacing: normal !important;
+}
+
+/* Enhanced Red Button Styling for Modal Actions */
+#logout-all-modal .btn-danger,
+#delete-account-modal .btn-danger {
+  background: linear-gradient(135deg, #f44336, #d32f2f) !important;
+  color: white !important;
+  border: none !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+#logout-all-modal .btn-danger::before,
+#delete-account-modal .btn-danger::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: -100% !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent) !important;
+  transition: left 0.6s !important;
+}
+
+#logout-all-modal .btn-danger:hover,
+#delete-account-modal .btn-danger:hover {
+  background: linear-gradient(135deg, #e53935, #c62828) !important;
+  transform: translateY(-3px) !important;
+  box-shadow: 0 8px 25px rgba(244, 67, 54, 0.4) !important;
+}
+
+#logout-all-modal .btn-danger:hover::before,
+#delete-account-modal .btn-danger:hover::before {
+  left: 100% !important;
+}
+
+#logout-all-modal .btn-danger:active,
+#delete-account-modal .btn-danger:active {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3) !important;
+}
+
+/* Enhanced Cancel Button Styling */
+#logout-all-modal .btn-ghost,
+#delete-account-modal .btn-ghost {
+  background: transparent !important;
+  color: var(--text-secondary) !important;
+  border: 2px solid rgba(255, 255, 255, 0.2) !important;
+  font-weight: 500 !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+#logout-all-modal .btn-ghost:hover,
+#delete-account-modal .btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: var(--text-primary) !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2) !important;
+}
+
+#logout-all-modal .btn-ghost:active,
+#delete-account-modal .btn-ghost:active {
+  transform: translateY(0) !important;
+}
+
+/* Enhanced Danger Header for Delete Modal */
+#delete-account-modal .danger-header {
+  border-bottom-color: rgba(244, 67, 54, 0.3) !important;
+  background: linear-gradient(135deg, rgba(244, 67, 54, 0.15), rgba(255, 99, 71, 0.1)) !important;
+  position: relative !important;
+}
+
+#delete-account-modal .danger-header::after {
+  content: '' !important;
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 2px !important;
+  background: linear-gradient(90deg, #f44336, #ff5722) !important;
+}
+
+#delete-account-modal .danger-header h3 {
+  color: #f44336 !important;
+  font-weight: 700 !important;
+}
+
+/* Enhanced Close Button Styling */
+#logout-all-modal .close-btn,
+#delete-account-modal .close-btn {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: var(--text-secondary) !important;
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  font-size: 1.2rem !important;
+}
+
+#logout-all-modal .close-btn:hover,
+#delete-account-modal .close-btn:hover {
+  background: rgba(244, 67, 54, 0.2) !important;
+  border-color: #f44336 !important;
+  color: #f44336 !important;
+  transform: rotate(90deg) scale(1.1) !important;
+}
+
+/* Button Disabled State for Delete Modal */
+#delete-account-modal .btn-danger:disabled {
+  opacity: 0.4 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+#delete-account-modal .btn-danger:disabled::before {
+  display: none !important;
+}
+
+/* Enhanced Form Actions Layout */
+#logout-all-modal .form-actions,
+#delete-account-modal .form-actions {
+  justify-content: center !important;
+  gap: 2rem !important;
+  margin-top: 2rem !important;
+}
+
+#logout-all-modal .form-actions button,
+#delete-account-modal .form-actions button {
+  min-width: 150px !important;
+  padding: 1rem 2rem !important;
+  font-size: 0.95rem !important;
+}
+
+/* Enhanced Modal Animation */
+#logout-all-modal.show .modal-content,
+#delete-account-modal.show .modal-content {
+  animation: enhancedModalBounce 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
+}
+
+@keyframes enhancedModalBounce {
+  0% {
+    opacity: 0;
+    transform: translateY(-60px) scale(0.7);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(8px) scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
 }

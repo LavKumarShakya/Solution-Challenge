@@ -2,12 +2,19 @@
 
 console.log("Settings.js loading...");
 
-// Import Firebase auth (exactly like dashboard.js)
-import { auth } from "./firebase-init.js";
+// Import Firebase auth and Firestore
+import { auth, db } from "./firebase-init.js";
 import {
   onAuthStateChanged,
   signOut,
 } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-auth.js";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  serverTimestamp,
+} from "https://www.gstatic.com/firebasejs/11.5.0/firebase-firestore.js";
 
 console.log("✅ Firebase modules imported");
 console.log("Auth object:", !!auth);
@@ -60,6 +67,97 @@ function updateUserProfile(user) {
     updateUserProfileElements(user);
   }
 }
+// Check if user signed in with Google
+function isGoogleUser(user) {
+  if (!user || !user.providerData) return false;
+  return user.providerData.some(provider => provider.providerId === 'google.com');
+}
+
+// Auto-populate profile fields from Google data
+function populateGoogleUserData(user) {
+  if (!isGoogleUser(user)) return;
+
+  console.log("Populating Google user data...", user);
+  
+  // Extract first and last name from displayName
+  const displayName = user.displayName || '';
+  const nameParts = displayName.split(' ');
+  const firstName = nameParts[0] || '';
+  const lastName = nameParts.slice(1).join(' ') || '';
+
+  // Populate fields with Google data
+  const firstNameInput = document.getElementById("first-name");
+  const lastNameInput = document.getElementById("last-name");
+  const emailInput = document.getElementById("email");
+  const profilePhotoElement = document.getElementById("profile-photo");
+
+  if (firstNameInput) {
+    firstNameInput.value = firstName;
+    firstNameInput.disabled = true;
+    firstNameInput.classList.add('google-populated');
+  }
+
+  if (lastNameInput) {
+    lastNameInput.value = lastName;
+    lastNameInput.disabled = true;
+    lastNameInput.classList.add('google-populated');
+  }
+
+  if (emailInput) {
+    emailInput.value = user.email || '';
+    emailInput.disabled = true;
+    emailInput.classList.add('google-populated');
+  }
+
+  if (profilePhotoElement && user.photoURL) {
+    profilePhotoElement.src = user.photoURL;
+  }
+
+  // Disable photo upload buttons for Google users
+  const uploadBtn = document.getElementById("upload-photo");
+  const removeBtn = document.getElementById("remove-photo");
+  if (uploadBtn) {
+    uploadBtn.disabled = true;
+    uploadBtn.classList.add('google-disabled');
+  }
+  if (removeBtn) {
+    removeBtn.disabled = true;
+    removeBtn.classList.add('google-disabled');
+  }
+
+  // Disable change password button for Google users
+  const changePasswordBtn = document.getElementById("change-password-btn");
+  if (changePasswordBtn) {
+    changePasswordBtn.disabled = true;
+    changePasswordBtn.classList.add('google-disabled');
+    changePasswordBtn.innerHTML = '<i class="fas fa-key"></i> Managed by Google';
+  }
+
+  // Add Google sign-in indicator
+  addGoogleSignInIndicator();
+  
+  console.log("Google user data populated and fields disabled");
+}
+
+// Add visual indicator for Google sign-in
+function addGoogleSignInIndicator() {
+  const profileSection = document.getElementById("profile-section");
+  if (!profileSection || document.querySelector('.google-signin-notice')) return;
+
+  const notice = document.createElement('div');
+  notice.className = 'google-signin-notice';
+  notice.innerHTML = `
+    <div class="notice-content">
+      <i class="fab fa-google"></i>
+      <span>Profile information is managed by Google and cannot be edited here.</span>
+    </div>
+  `;
+
+  const profileForm = profileSection.querySelector('.profile-form');
+  if (profileForm) {
+    profileForm.parentNode.insertBefore(notice, profileForm);
+  }
+}
 
 // Update user profile DOM elements
 function updateUserProfileElements(user) {
@@ -91,15 +189,20 @@ function updateUserProfileElements(user) {
     profilePhotoElement.alt = `${user.displayName || "User"}'s profile picture`;
     console.log("Updated profile photo element");
   }
+
+  // Auto-populate Google user data if applicable
+  populateGoogleUserData(user);
 }
 
 // Initialize settings functionality
-function initializeSettings() {
+async function initializeSettings() {
   // Set up navigation
   setupNavigation();
 
-  // Load saved settings
-  loadSettings();
+  // Load saved settings after a brief delay to ensure user is authenticated
+  setTimeout(async () => {
+    await loadSettings();
+  }, 500);
 }
 
 // Load user data (placeholder function)
@@ -217,6 +320,14 @@ function handlePhotoUpload(event) {
   const file = event.target.files[0];
   if (!file) return;
 
+  // Check if user is a Google user (photo upload should be disabled)
+  const uploadBtn = document.getElementById("upload-photo");
+  if (uploadBtn && uploadBtn.classList.contains('google-disabled')) {
+    showNotification("Profile photo is managed by Google and cannot be changed", "error");
+    event.target.value = ""; // Clear the file input
+    return;
+  }
+
   // Validate file type
   if (!file.type.startsWith("image/")) {
     showNotification("Please select a valid image file", "error");
@@ -240,6 +351,13 @@ function handlePhotoUpload(event) {
 
 // Remove profile photo
 function removeProfilePhoto() {
+  // Check if user is a Google user (photo removal should be disabled)
+  const removeBtn = document.getElementById("remove-photo");
+  if (removeBtn && removeBtn.classList.contains('google-disabled')) {
+    showNotification("Profile photo is managed by Google and cannot be removed", "error");
+    return;
+  }
+
   document.getElementById("profile-photo").src = "../images/default-avatar.svg";
   document.getElementById("photo-input").value = "";
   showNotification("Profile photo removed", "success");
@@ -247,6 +365,13 @@ function removeProfilePhoto() {
 
 // Open password change modal
 function openPasswordModal() {
+  // Check if user is a Google user (password change should be disabled)
+  const changePasswordBtn = document.getElementById("change-password-btn");
+  if (changePasswordBtn && changePasswordBtn.classList.contains('google-disabled')) {
+    showNotification("Password is managed by Google and cannot be changed here", "error");
+    return;
+  }
+  
   document.getElementById("password-modal").style.display = "block";
 }
 
@@ -284,47 +409,69 @@ function handlePasswordChange(event) {
 
 // Enable 2FA
 function enable2FA() {
-  // Simulate 2FA setup
-  showNotification(
-    "2FA setup initiated. Check your email for instructions.",
-    "info"
-  );
-
-  // Update button state
-  const btn = document.getElementById("enable-2fa-btn");
-  btn.innerHTML = '<i class="fas fa-check"></i> 2FA Enabled';
-  btn.disabled = true;
-  btn.style.opacity = "0.6";
+  // Show coming soon toast using the toasts.js function
+  showComingSoonToast();
 }
 
 // Logout all devices
 function logoutAllDevices() {
-  if (
-    confirm(
-      "Are you sure you want to sign out of all devices? You will need to sign in again on this device."
-    )
-  ) {
-    showNotification("Signed out of all devices successfully", "success");
-    // Simulate logout
-    setTimeout(() => {
-      window.location.href = "./login.html";
-    }, 2000);
-  }
+  document.getElementById("logout-all-modal").style.display = "block";
+}
+
+// Close logout all modal
+function closeLogoutAllModal() {
+  document.getElementById("logout-all-modal").style.display = "none";
+}
+
+// Confirm logout all devices
+function confirmLogoutAll() {
+  closeLogoutAllModal();
+  showNotification("Signed out of all devices successfully", "success");
+  // Simulate logout
+  setTimeout(() => {
+    window.location.href = "./login.html";
+  }, 2000);
 }
 
 // Confirm account deletion
 function confirmDeleteAccount() {
-  const confirmation = prompt('Type "DELETE" to confirm account deletion:');
-
-  if (confirmation === "DELETE") {
-    if (confirm("This action cannot be undone. Are you absolutely sure?")) {
-      // Simulate account deletion
-      showNotification(
-        "Account deletion initiated. You will receive a confirmation email.",
-        "warning"
-      );
+  document.getElementById("delete-account-modal").style.display = "block";
+  
+  // Set up input validation
+  const input = document.getElementById("delete-confirmation-input");
+  const confirmBtn = document.getElementById("confirm-delete-btn");
+  
+  input.value = "";
+  confirmBtn.disabled = true;
+  
+  input.addEventListener("input", function() {
+    if (input.value === "DELETE") {
+      confirmBtn.disabled = false;
+    } else {
+      confirmBtn.disabled = true;
     }
-  } else if (confirmation !== null) {
+  });
+}
+
+// Close delete account modal
+function closeDeleteAccountModal() {
+  document.getElementById("delete-account-modal").style.display = "none";
+  document.getElementById("delete-confirmation-input").value = "";
+  document.getElementById("confirm-delete-btn").disabled = true;
+}
+
+// Confirm account deletion
+function confirmAccountDeletion() {
+  const input = document.getElementById("delete-confirmation-input");
+  
+  if (input.value === "DELETE") {
+    closeDeleteAccountModal();
+    // Simulate account deletion
+    showNotification(
+      "Account deletion initiated. You will receive a confirmation email.",
+      "warning"
+    );
+  } else {
     showNotification(
       "Account deletion cancelled - confirmation text did not match",
       "info"
@@ -357,7 +504,7 @@ function handlePushNotifications(event) {
 }
 
 // Save all settings
-function saveAllSettings() {
+async function saveAllSettings() {
   const btn = document.getElementById("save-settings");
   const originalText = btn.innerHTML;
 
@@ -365,39 +512,54 @@ function saveAllSettings() {
   btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
   btn.disabled = true;
 
-  // Collect all form data
-  const settings = {
-    profile: {
-      firstName: document.getElementById("first-name").value,
-      lastName: document.getElementById("last-name").value,
-      email: document.getElementById("email").value,
-      bio: document.getElementById("bio").value,
-      location: document.getElementById("location").value,
-      website: document.getElementById("website").value,
-    },
-    preferences: {
-      learningStyle: document.getElementById("learning-style").value,
-      difficultyLevel: document.getElementById("difficulty-level").value,
-      studyGoal: document.getElementById("study-goal").value,
-      language: document.getElementById("language").value,
-      timezone: document.getElementById("timezone").value,
-    },
-    notifications: {
-      emailStudyReminders: document.getElementById("email-study-reminders")
-        .checked,
-      emailCourseUpdates: document.getElementById("email-course-updates")
-        .checked,
-      emailNewsletter: document.getElementById("email-newsletter").checked,
-      pushNotifications: document.getElementById("push-notifications").checked,
-      smsReminders: document.getElementById("sms-reminders").checked,
-    },
-  };
+  try {
+    // Get current user
+    const user = auth.currentUser;
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
 
-  // Save to localStorage
-  localStorage.setItem("userSettings", JSON.stringify(settings));
+    // Collect all form data (skip disabled Google fields)
+    const settings = {
+      profile: {
+        firstName: document.getElementById("first-name").disabled ? undefined : document.getElementById("first-name").value,
+        lastName: document.getElementById("last-name").disabled ? undefined : document.getElementById("last-name").value,
+        email: document.getElementById("email").disabled ? undefined : document.getElementById("email").value,
+        bio: document.getElementById("bio").value,
+        location: document.getElementById("location").value,
+        website: document.getElementById("website").value,
+      },
+      preferences: {
+        language: getDropdownValue("language"),
+        timezone: getDropdownValue("timezone"),
+      },
+      notifications: {
+        emailStudyReminders: document.getElementById("email-study-reminders")
+          .checked,
+        emailCourseUpdates: document.getElementById("email-course-updates")
+          .checked,
+        emailAchievements: document.getElementById("email-achievements")
+          .checked,
+        pushNotifications: document.getElementById("push-notifications").checked,
+      },
+      lastUpdated: serverTimestamp(),
+      isGoogleUser: isGoogleUser(user),
+    };
 
-  // Simulate save with delay
-  setTimeout(() => {
+    // Remove undefined values from profile
+    Object.keys(settings.profile).forEach(key => {
+      if (settings.profile[key] === undefined) {
+        delete settings.profile[key];
+      }
+    });
+
+    // Save to Firebase Firestore
+    const userDocRef = doc(db, "users", user.uid);
+    await setDoc(userDocRef, { settings }, { merge: true });
+
+    // Also save to localStorage as backup
+    localStorage.setItem("userSettings", JSON.stringify(settings));
+
     btn.innerHTML = '<i class="fas fa-check"></i> Saved!';
 
     setTimeout(() => {
@@ -405,48 +567,204 @@ function saveAllSettings() {
       btn.disabled = false;
     }, 2000);
 
-    showNotification("Settings saved successfully", "success");
-  }, 1500);
+    const isGoogleSignIn = document.querySelector('.google-signin-notice');
+    const message = isGoogleSignIn
+      ? "Settings saved successfully (Google profile fields are managed by Google)"
+      : "Settings saved successfully";
+    
+    showNotification(message, "success");
+
+  } catch (error) {
+    console.error("Error saving settings:", error);
+    btn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error!';
+    
+    setTimeout(() => {
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    }, 2000);
+
+    showNotification("Failed to save settings. Please try again.", "error");
+  }
+}
+
+// Helper function to get dropdown values
+function getDropdownValue(selectName) {
+  const select = document.querySelector(`[data-name="${selectName}"]`);
+  if (!select) return "";
+  
+  const selectedOption = select.querySelector(".select-option.selected");
+  return selectedOption ? selectedOption.getAttribute("data-value") : "";
+}
+
+// Save individual preference to Firebase
+async function savePreferenceToFirebase(selectName, value) {
+  try {
+    const user = auth.currentUser;
+    if (!user) {
+      console.log("No user authenticated, saving to localStorage only");
+      // Fallback to localStorage
+      const settings = JSON.parse(localStorage.getItem("userSettings") || "{}");
+      if (!settings.preferences) settings.preferences = {};
+      settings.preferences[selectName] = value;
+      localStorage.setItem("userSettings", JSON.stringify(settings));
+      return;
+    }
+
+    // Save to Firebase
+    const userDocRef = doc(db, "users", user.uid);
+    await updateDoc(userDocRef, {
+      [`settings.preferences.${selectName}`]: value,
+      [`settings.lastUpdated`]: serverTimestamp(),
+    });
+
+    // Also save to localStorage as backup
+    const settings = JSON.parse(localStorage.getItem("userSettings") || "{}");
+    if (!settings.preferences) settings.preferences = {};
+    settings.preferences[selectName] = value;
+    localStorage.setItem("userSettings", JSON.stringify(settings));
+
+    console.log(`Preference ${selectName} saved to Firebase:`, value);
+  } catch (error) {
+    console.error("Error saving preference to Firebase:", error);
+    // Fallback to localStorage on error
+    const settings = JSON.parse(localStorage.getItem("userSettings") || "{}");
+    if (!settings.preferences) settings.preferences = {};
+    settings.preferences[selectName] = value;
+    localStorage.setItem("userSettings", JSON.stringify(settings));
+  }
 }
 
 // Load saved settings
-function loadSettings() {
-  const settings = JSON.parse(localStorage.getItem("userSettings") || "{}");
+async function loadSettings() {
+  try {
+    const user = auth.currentUser;
+    if (!user) {
+      console.log("No user authenticated, skipping settings load");
+      return;
+    }
 
-  // Load profile data
-  if (settings.profile) {
-    const { firstName, lastName, email, bio, location, website } =
-      settings.profile;
-    if (firstName) document.getElementById("first-name").value = firstName;
-    if (lastName) document.getElementById("last-name").value = lastName;
-    if (email) document.getElementById("email").value = email;
-    if (bio) document.getElementById("bio").value = bio;
-    if (location) document.getElementById("location").value = location;
-    if (website) document.getElementById("website").value = website;
+    // Try to load from Firebase first
+    const userDocRef = doc(db, "users", user.uid);
+    const userDoc = await getDoc(userDocRef);
+    
+    let settings = {};
+    
+    if (userDoc.exists() && userDoc.data().settings) {
+      settings = userDoc.data().settings;
+      console.log("Settings loaded from Firebase:", settings);
+    } else {
+      // Fallback to localStorage
+      settings = JSON.parse(localStorage.getItem("userSettings") || "{}");
+      console.log("Settings loaded from localStorage:", settings);
+    }
+
+    // Load profile data (skip disabled Google fields)
+    if (settings.profile) {
+      const { firstName, lastName, email, bio, location, website } =
+        settings.profile;
+      
+      const firstNameInput = document.getElementById("first-name");
+      const lastNameInput = document.getElementById("last-name");
+      const emailInput = document.getElementById("email");
+      
+      if (firstName && firstNameInput && !firstNameInput.disabled) {
+        firstNameInput.value = firstName;
+      }
+      if (lastName && lastNameInput && !lastNameInput.disabled) {
+        lastNameInput.value = lastName;
+      }
+      if (email && emailInput && !emailInput.disabled) {
+        emailInput.value = email;
+      }
+      if (bio) document.getElementById("bio").value = bio;
+      if (location) document.getElementById("location").value = location;
+      if (website) document.getElementById("website").value = website;
+    }
+
+    // Load preferences (for dropdowns)
+    if (settings.preferences) {
+      const preferences = settings.preferences;
+      
+      // Set dropdown values after a delay to ensure they're initialized
+      setTimeout(() => {
+        if (preferences.language) setDropdownValue("language", preferences.language);
+        if (preferences.timezone) setDropdownValue("timezone", preferences.timezone);
+      }, 200);
+    }
+
+    // Load notification preferences
+    if (settings.notifications) {
+      const notifications = settings.notifications;
+      if (notifications.emailStudyReminders !== undefined) {
+        document.getElementById("email-study-reminders").checked =
+          notifications.emailStudyReminders;
+      }
+      if (notifications.emailCourseUpdates !== undefined) {
+        document.getElementById("email-course-updates").checked =
+          notifications.emailCourseUpdates;
+      }
+      if (notifications.emailAchievements !== undefined) {
+        document.getElementById("email-achievements").checked =
+          notifications.emailAchievements;
+      }
+      if (notifications.pushNotifications !== undefined) {
+        document.getElementById("push-notifications").checked =
+          notifications.pushNotifications;
+      }
+    }
+
+  } catch (error) {
+    console.error("Error loading settings:", error);
+    // Fallback to localStorage if Firebase fails
+    const settings = JSON.parse(localStorage.getItem("userSettings") || "{}");
+    console.log("Fallback: Settings loaded from localStorage:", settings);
+    
+    // Apply the same loading logic for localStorage fallback
+    if (settings.profile) {
+      const { firstName, lastName, email, bio, location, website } = settings.profile;
+      
+      const firstNameInput = document.getElementById("first-name");
+      const lastNameInput = document.getElementById("last-name");
+      const emailInput = document.getElementById("email");
+      
+      if (firstName && firstNameInput && !firstNameInput.disabled) {
+        firstNameInput.value = firstName;
+      }
+      if (lastName && lastNameInput && !lastNameInput.disabled) {
+        lastNameInput.value = lastName;
+      }
+      if (email && emailInput && !emailInput.disabled) {
+        emailInput.value = email;
+      }
+      if (bio) document.getElementById("bio").value = bio;
+      if (location) document.getElementById("location").value = location;
+      if (website) document.getElementById("website").value = website;
+    }
   }
+}
 
-  // Load notification preferences
-  if (settings.notifications) {
-    const notifications = settings.notifications;
-    if (notifications.emailStudyReminders !== undefined) {
-      document.getElementById("email-study-reminders").checked =
-        notifications.emailStudyReminders;
-    }
-    if (notifications.emailCourseUpdates !== undefined) {
-      document.getElementById("email-course-updates").checked =
-        notifications.emailCourseUpdates;
-    }
-    if (notifications.emailNewsletter !== undefined) {
-      document.getElementById("email-newsletter").checked =
-        notifications.emailNewsletter;
-    }
-    if (notifications.pushNotifications !== undefined) {
-      document.getElementById("push-notifications").checked =
-        notifications.pushNotifications;
-    }
-    if (notifications.smsReminders !== undefined) {
-      document.getElementById("sms-reminders").checked =
-        notifications.smsReminders;
+// Helper function to set dropdown values
+function setDropdownValue(selectName, value) {
+  const select = document.querySelector(`[data-name="${selectName}"]`);
+  if (!select) return;
+  
+  const option = select.querySelector(`[data-value="${value}"]`);
+  if (option) {
+    // Remove previous selection
+    const allOptions = select.querySelectorAll(".select-option");
+    allOptions.forEach((opt) => {
+      opt.classList.remove("selected");
+      opt.setAttribute("aria-selected", "false");
+    });
+    
+    // Set new selection
+    option.classList.add("selected");
+    option.setAttribute("aria-selected", "true");
+    
+    // Update trigger text
+    const textElement = select.querySelector(".select-text");
+    if (textElement) {
+      textElement.textContent = option.textContent;
     }
   }
 }
@@ -503,6 +821,33 @@ function initializeCustomDropdowns() {
   console.log("Initializing custom dropdowns...");
   const customSelects = document.querySelectorAll(".custom-select");
   console.log("Found", customSelects.length, "custom selects");
+// Enhanced modal event listeners for custom confirmation modals
+document.addEventListener("click", function (event) {
+  const passwordModal = document.getElementById("password-modal");
+  const logoutModal = document.getElementById("logout-all-modal");
+  const deleteModal = document.getElementById("delete-account-modal");
+  
+  if (event.target === passwordModal) {
+    closePasswordModal();
+  }
+  
+  if (event.target === logoutModal) {
+    closeLogoutAllModal();
+  }
+  
+  if (event.target === deleteModal) {
+    closeDeleteAccountModal();
+  }
+});
+
+// Enhanced escape key handling for all modals
+document.addEventListener("keydown", function (event) {
+  if (event.key === "Escape") {
+    closePasswordModal();
+    closeLogoutAllModal();
+    closeDeleteAccountModal();
+  }
+});
 
   if (customSelects.length === 0) {
     console.warn("No custom select elements found. Retrying in 500ms...");
@@ -641,13 +986,8 @@ function initializeCustomDropdowns() {
         options.classList.remove("show");
         select.setAttribute("aria-expanded", "false");
 
-        // Save to localStorage
-        const settings = JSON.parse(
-          localStorage.getItem("userSettings") || "{}"
-        );
-        if (!settings.preferences) settings.preferences = {};
-        settings.preferences[selectName] = value;
-        localStorage.setItem("userSettings", JSON.stringify(settings));
+        // Save to Firebase and localStorage
+        savePreferenceToFirebase(selectName, value);
 
         // Show success message
         showToast(`${text} selected successfully!`, "success");
@@ -669,33 +1009,26 @@ function initializeCustomDropdowns() {
   console.log("Custom dropdowns initialization complete");
 }
 
-// Load saved dropdown values
+// Load saved dropdown values (now integrated into loadSettings)
 function loadDropdownValues() {
-  const settings = JSON.parse(localStorage.getItem("userSettings") || "{}");
+  // This function is now deprecated in favor of the integrated approach in loadSettings
+  // Keeping it for backward compatibility, but it will try to load from current auth user
+  if (auth.currentUser) {
+    loadSettings(); // This will load all settings including dropdowns
+  } else {
+    // Fallback to localStorage for non-authenticated users
+    const settings = JSON.parse(localStorage.getItem("userSettings") || "{}");
 
-  if (settings.preferences) {
-    document.querySelectorAll(".custom-select").forEach((select) => {
-      const selectName = select.getAttribute("data-name");
-      const savedValue = settings.preferences[selectName];
+    if (settings.preferences) {
+      document.querySelectorAll(".custom-select").forEach((select) => {
+        const selectName = select.getAttribute("data-name");
+        const savedValue = settings.preferences[selectName];
 
-      if (savedValue) {
-        const option = select.querySelector(`[data-value="${savedValue}"]`);
-        if (option) {
-          // Update selected option
-          const allOptions = select.querySelectorAll(".select-option");
-          allOptions.forEach((opt) => {
-            opt.classList.remove("selected");
-            opt.setAttribute("aria-selected", "false");
-          });
-          option.classList.add("selected");
-          option.setAttribute("aria-selected", "true");
-
-          // Update trigger text
-          const textElement = select.querySelector(".select-text");
-          textElement.textContent = option.textContent;
+        if (savedValue) {
+          setDropdownValue(selectName, savedValue);
         }
-      }
-    });
+      });
+    }
   }
 }
 
