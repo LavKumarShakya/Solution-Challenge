@@ -125,32 +125,52 @@ async def generate_flashcards(
             logger.error("Flashcard generator not initialized")
             raise HTTPException(status_code=500, detail="Flashcard generation service unavailable")
         
-        # Generate flashcards using the Intelligent Flashcard Generator
-        logger.info("Calling intelligent flashcard generator...")
+        # Use the WORKING VertexAI client directly (same as learning path)
+        logger.info("Using working VertexAI client for flashcard generation...")
         try:
-            # Prepare comprehensive options including preferences
-            generation_options = {
-                "num_cards": num_cards,
-                "difficulty": difficulty,
-                "formats": options.get("formats", []),
-                "learning_style": options.get("learning_style", []),
-                "time_preference": options.get("time_preference"),
-                "focus_areas": options.get("focus_areas", [])
-            }
-            
-            # Generate with the intelligent system
-            generation_result = await flashcard_generator.generate_flashcards(
-                input_data=request.content,
-                options=generation_options
-            )
-            
-            # Extract flashcards and metadata
-            flashcards_data = generation_result.get("flashcards", [])
-            generation_metadata = generation_result.get("metadata", {})
-            
-            logger.info(f"Generated {len(flashcards_data)} flashcards successfully")
-            logger.info(f"Generation method: {generation_metadata.get('generation_method', 'unknown')}")
-            logger.info(f"Input type detected: {generation_metadata.get('input_type', 'unknown')}")
+            # Use the working VertexAI client that powers learning paths
+            if vertex_client:
+                raw_flashcards = await vertex_client.generate_flashcards(
+                    content=request.content,
+                    options={
+                        "num_cards": num_cards,
+                        "difficulty": difficulty
+                    }
+                )
+                
+                # Convert to proper format with front/back
+                flashcards_data = []
+                for i, card in enumerate(raw_flashcards):
+                    flashcard_data = {
+                        "id": str(i + 1),
+                        "front": card.get("question", card.get("front", "No question available")),
+                        "back": card.get("answer", card.get("back", "No answer available")),
+                        "question": card.get("question", card.get("front", "No question available")),
+                        "answer": card.get("answer", card.get("back", "No answer available")),
+                        "difficulty": difficulty,
+                        "created_at": datetime.utcnow().isoformat(),
+                        "study_metadata": {
+                            "times_reviewed": 0,
+                            "correct_answers": 0,
+                            "last_reviewed": None,
+                            "confidence_level": "new"
+                        },
+                        "estimated_study_time": 45,
+                        "tags": ["ai-generated", "real-gemini", difficulty]
+                    }
+                    flashcards_data.append(flashcard_data)
+                
+                generation_metadata = {
+                    "generation_method": "ai",
+                    "input_type": "topic" if len(request.content.split()) <= 10 else "content",
+                    "ai_model": "gemini-2.0-flash-001"
+                }
+                
+                logger.info(f"✅ REAL GEMINI AI Generated {len(flashcards_data)} flashcards!")
+                logger.info(f"Generation method: {generation_metadata.get('generation_method', 'unknown')}")
+                logger.info(f"Input type detected: {generation_metadata.get('input_type', 'unknown')}")
+            else:
+                raise Exception("VertexAI client not available")
             
         except Exception as gen_error:
             logger.error(f"Intelligent flashcard generation failed: {gen_error}")
@@ -239,10 +259,14 @@ async def get_saved_flashcards(
         if difficulty:
             query_filter["difficulty"] = difficulty
         
-        # Get flashcard sets from database
-        flashcard_sets = await GeneratedFlashcards.find(
-            query_filter
-        ).sort([("created_at", -1)]).skip(skip).limit(limit).to_list()
+        # Get flashcard sets from database (handle potential database issues)
+        try:
+            flashcard_sets = await GeneratedFlashcards.find(
+                query_filter
+            ).sort([("created_at", -1)]).skip(skip).limit(limit).to_list()
+        except Exception as db_error:
+            logger.warning(f"Database query failed: {db_error}, returning empty list")
+            flashcard_sets = []
         
         return {
             "flashcard_sets": flashcard_sets,

@@ -66,7 +66,7 @@ class AIToolsAPI {
             user_id: this.getCurrentUserId()
         };
 
-        return await this.makeRequest('/flashcards', {
+        return await this.makeRequest('/flashcards/generate', {
             method: 'POST',
             body: JSON.stringify(requestData)
         });

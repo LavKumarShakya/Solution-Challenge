@@ -26,9 +26,10 @@ class IntelligentFlashcardGenerator:
     """
     
     def __init__(self):
+        # Use EXACT same settings as working VertexAI client
         self.project_id = os.getenv("VERTEX_AI_PROJECT_ID")
-        self.location = os.getenv("VERTEX_AI_LOCATION", "us-central1")
-        self.model_name = "gemini-2.0-flash-001"
+        self.location = os.getenv("VERTEX_AI_LOCATION", "us-central1")  # Use supported region
+        self.model_id = os.getenv("VERTEX_AI_MODEL", "gemini-2.0-flash-001")  # Use model_id like working client
         self.model = None
         self.vertex_available = False
         
@@ -40,13 +41,28 @@ class IntelligentFlashcardGenerator:
             if not self.project_id:
                 raise ValueError("VERTEX_AI_PROJECT_ID environment variable not set")
             
+            # Explicitly set credentials
+            credentials_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+            if credentials_path and os.path.exists(credentials_path):
+                logger.info(f"✅ Using Google Application Credentials: {credentials_path}")
+                os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = credentials_path  # Ensure it's set
+            else:
+                logger.warning(f"⚠️ Google Application Credentials not found at: {credentials_path}")
+            
             logger.info(f"🧠 Initializing Intelligent Flashcard Generator...")
             logger.info(f"   Project: {self.project_id}")
             logger.info(f"   Location: {self.location}")
-            logger.info(f"   Model: {self.model_name}")
+            logger.info(f"   Model: {self.model_id}")
             
-            vertexai.init(project=self.project_id, location=self.location)
-            self.model = GenerativeModel(self.model_name)
+            # Initialize with explicit credentials
+            from google.oauth2 import service_account
+            if credentials_path and os.path.exists(credentials_path):
+                credentials = service_account.Credentials.from_service_account_file(credentials_path)
+                vertexai.init(project=self.project_id, location=self.location, credentials=credentials)
+            else:
+                vertexai.init(project=self.project_id, location=self.location)
+                
+            self.model = GenerativeModel(self.model_id)
             self.vertex_available = True
             
             logger.info("✅ Intelligent AI Generator ready!")
@@ -338,7 +354,7 @@ Generate the {num_cards} flashcards now:
         flashcards = []
         for i, card in enumerate(parsed_data["flashcards"]):
             flashcard = {
-                "id": i + 1,
+                "id": str(i + 1),
                 "front": card["front"],
                 "back": card["back"],
                 "question": card["front"],  # Compatibility
@@ -364,7 +380,7 @@ Generate the {num_cards} flashcards now:
                 "total_cards": len(flashcards),
                 "generation_time": datetime.utcnow().isoformat(),
                 "input_type": analysis["type"],
-                "ai_model": self.model_name if generation_method == "ai" else "fallback"
+                "ai_model": self.model_id if generation_method == "ai" else "fallback"
             },
             "success": True
         }
@@ -412,7 +428,7 @@ Generate the {num_cards} flashcards now:
         
         for i in range(min(num_cards, len(base_questions))):
             flashcard = {
-                "id": i + 1,
+                "id": str(i + 1),
                 "front": base_questions[i],
                 "back": f"This question about {topic} requires knowledge of the subject. Please refer to your study materials for comprehensive information about {topic}.",
                 "question": base_questions[i],
@@ -448,7 +464,7 @@ Generate the {num_cards} flashcards now:
                 question_words[key_word_idx] = "______"
                 
                 flashcard = {
-                    "id": i + 1,
+                    "id": str(i + 1),
                     "front": f"Fill in the blank: {' '.join(question_words)}",
                     "back": f"Answer: {key_word}\n\nContext: {sentence}",
                     "question": f"Fill in the blank: {' '.join(question_words)}",
@@ -480,7 +496,7 @@ Generate the {num_cards} flashcards now:
             "vertex_available": self.vertex_available,
             "project_id": self.project_id,
             "location": self.location,
-            "model_name": self.model_name,
+            "model_name": self.model_id,
             "generator_type": "intelligent",
             "capabilities": [
                 "input_analysis",
