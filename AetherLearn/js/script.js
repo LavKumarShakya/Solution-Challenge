@@ -1031,7 +1031,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 setTimeout(() => {
                     searchProcessingStage.style.display = 'none';
                     resourceDiscoveryStage.style.display = 'block';
-                    simulateResourceDiscovery();
+                    // simulateResourceDiscovery(); // Disabled - using real Google Custom Search + Vertex AI system
                 }, 1000);
             }
         }, 30); // Speed of progress simulation
