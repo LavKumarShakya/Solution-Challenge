@@ -172,7 +172,15 @@ class VertexAIClient:
             Return only valid JSON format with filtered educational content.
             """
 
-            response = self.model.generate_content(categorization_prompt)
+            # Use optimized generation config for faster categorization
+            generation_config = genai.GenerationConfig(
+                temperature=0.1,  # Very low temperature for consistent categorization
+                max_output_tokens=2048,  # Smaller limit for categorization
+                top_p=0.8,
+                top_k=20
+            )
+            
+            response = self.model.generate_content(categorization_prompt, generation_config=generation_config)
             
             try:
                 categorized = json.loads(response.text)
@@ -374,7 +382,15 @@ class VertexAIClient:
             Ensure the course follows a logical learning progression and uses the actual search results provided.
             """
 
-            response = self.model.generate_content(course_prompt)
+            # Use optimized generation config for faster response
+            generation_config = genai.GenerationConfig(
+                temperature=0.2,  # Lower temperature for more consistent, faster responses
+                max_output_tokens=4096,  # Reasonable limit
+                top_p=0.8,  # Lower top_p for faster generation
+                top_k=20   # Lower top_k for faster generation
+            )
+            
+            response = self.model.generate_content(course_prompt, generation_config=generation_config)
             
             try:
                 course_structure = json.loads(response.text)

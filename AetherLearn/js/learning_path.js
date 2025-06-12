@@ -16,6 +16,9 @@ window.LearningPathAPI = class LearningPathAPI {
      * @returns {Promise<Object>} - Response with search ID
      */
     static async initiateSearch(query, preferences = {}) {
+        const startTime = performance.now();
+        console.log('🕐 [TIMING] initiateSearch started at:', new Date().toISOString());
+        
         try {
             const headers = {
                 'Content-Type': 'application/json'
@@ -27,6 +30,9 @@ window.LearningPathAPI = class LearningPathAPI {
                 headers['Authorization'] = `Bearer ${token}`;
             }
             
+            const fetchStart = performance.now();
+            console.log('🕐 [TIMING] About to fetch /learning-path/search');
+            
             const response = await fetch(`${window.API_BASE_URL}/learning-path/search`, {
                 method: 'POST',
                 headers: headers,
@@ -35,6 +41,9 @@ window.LearningPathAPI = class LearningPathAPI {
                     preferences
                 })
             });
+            
+            const fetchEnd = performance.now();
+            console.log(`🕐 [TIMING] /learning-path/search fetch completed in ${fetchEnd - fetchStart}ms`);
             
             if (!response.ok) {
                 let errorMessage = `Error: ${response.status} ${response.statusText}`;
@@ -51,9 +60,19 @@ window.LearningPathAPI = class LearningPathAPI {
                 throw new Error(errorMessage);
             }
             
-            return await response.json();
+            const parseStart = performance.now();
+            const result = await response.json();
+            const parseEnd = performance.now();
+            
+            const totalTime = performance.now() - startTime;
+            console.log(`🕐 [TIMING] JSON parsing took ${parseEnd - parseStart}ms`);
+            console.log(`🕐 [TIMING] Total initiateSearch time: ${totalTime}ms`);
+            console.log('🕐 [TIMING] Search initiated, search_id:', result.search_id);
+            
+            return result;
         } catch (error) {
-            console.error('Failed to initiate search:', error);
+            const totalTime = performance.now() - startTime;
+            console.error(`🕐 [TIMING] initiateSearch failed after ${totalTime}ms:`, error);
             throw error;
         }
     }
@@ -64,6 +83,8 @@ window.LearningPathAPI = class LearningPathAPI {
      * @returns {Promise<Object>} - Search status object
      */
     static async getSearchStatus(searchId) {
+        const startTime = performance.now();
+        
         try {
             const headers = {};
             
@@ -77,13 +98,23 @@ window.LearningPathAPI = class LearningPathAPI {
                 headers: headers
             });
             
+            const fetchTime = performance.now() - startTime;
+            
             if (!response.ok) {
                 throw new Error(`Error: ${response.status} ${response.statusText}`);
             }
             
-            return await response.json();
+            const parseStart = performance.now();
+            const result = await response.json();
+            const parseTime = performance.now() - parseStart;
+            const totalTime = performance.now() - startTime;
+            
+            console.log(`🕐 [TIMING] Status poll: fetch=${fetchTime}ms, parse=${parseTime}ms, total=${totalTime}ms, status=${result.status}`);
+            
+            return result;
         } catch (error) {
-            console.error('Failed to get search status:', error);
+            const totalTime = performance.now() - startTime;
+            console.error(`🕐 [TIMING] getSearchStatus failed after ${totalTime}ms:`, error);
             throw error;
         }
     }
@@ -94,20 +125,37 @@ window.LearningPathAPI = class LearningPathAPI {
      * @returns {Promise<Object>} - Learning path object
      */
     static async getLearningPath(learningPathId) {
+        const startTime = performance.now();
+        console.log('🕐 [TIMING] getLearningPath started for ID:', learningPathId);
+        
         try {
+            const fetchStart = performance.now();
             const response = await fetch(`${window.API_BASE_URL}/learning-path/${learningPathId}`, {
                 headers: {
                     'Authorization': `Bearer ${this.getToken()}`
                 }
             });
             
+            const fetchTime = performance.now() - fetchStart;
+            console.log(`🕐 [TIMING] getLearningPath fetch took ${fetchTime}ms`);
+            
             if (!response.ok) {
                 throw new Error(`Error: ${response.status} ${response.statusText}`);
             }
             
-            return await response.json();
+            const parseStart = performance.now();
+            const result = await response.json();
+            const parseTime = performance.now() - parseStart;
+            const totalTime = performance.now() - startTime;
+            
+            console.log(`🕐 [TIMING] getLearningPath: fetch=${fetchTime}ms, parse=${parseTime}ms, total=${totalTime}ms`);
+            console.log('🕐 [TIMING] Learning path data size:', JSON.stringify(result).length, 'characters');
+            console.log('🕐 [TIMING] Number of modules:', result.modules?.length || 0);
+            
+            return result;
         } catch (error) {
-            console.error('Failed to get learning path:', error);
+            const totalTime = performance.now() - startTime;
+            console.error(`🕐 [TIMING] getLearningPath failed after ${totalTime}ms:`, error);
             throw error;
         }
     }
@@ -509,17 +557,28 @@ window.LearningPathUI = class LearningPathUI {
      * @param {Object} learningPath - The learning path data
      */
     static populateModulesInOverlay(learningPath) {
+        const startTime = performance.now();
+        console.log('🕐 [TIMING] populateModulesInOverlay started at:', new Date().toISOString());
         console.log('🔍 [MODULE POPULATION] populateModulesInOverlay called with:', learningPath);
         
         // Enhanced defensive checks
         try {
             // Wait for DOM to be ready and check multiple selectors
+            const containerSearchStart = performance.now();
             const modulesContainer = document.querySelector('.modules-container .modules-grid') ||
                                    document.querySelector('.modules-grid') ||
                                    document.getElementById('modulesGrid');
+            const containerSearchTime = performance.now() - containerSearchStart;
+            console.log(`🕐 [TIMING] Container search took ${containerSearchTime}ms`);
             
             console.log('🔍 [MODULE POPULATION] modulesContainer found:', !!modulesContainer);
             console.log('🔍 [MODULE POPULATION] modulesContainer selector used:', modulesContainer ? modulesContainer.className : 'none');
+            
+            // Prevent multiple population of the same learning path
+            if (modulesContainer && modulesContainer.dataset.populated === 'true') {
+                console.log('⚠️ [MODULE POPULATION] Modules already populated, skipping to prevent duplicates');
+                return true;
+            }
             
             if (!modulesContainer) {
                 console.error('❌ [MODULE POPULATION] CRITICAL: modulesContainer not found!');
@@ -600,19 +659,30 @@ window.LearningPathUI = class LearningPathUI {
             
             console.log(`✅ [MODULE POPULATION] Module population completed: ${successCount}/${learningPath.modules.length} modules added`);
             
+            // Mark as populated to prevent future duplicates
+            modulesContainer.dataset.populated = 'true';
+            
             // Verify the modules were actually added to the DOM
+            const verificationStart = performance.now();
             const addedModules = modulesContainer.querySelectorAll('.course-module-card, .module-card');
+            const verificationTime = performance.now() - verificationStart;
             console.log(`🔍 [MODULE POPULATION] DOM verification: ${addedModules.length} module elements found in container`);
+            console.log(`🕐 [TIMING] DOM verification took ${verificationTime}ms`);
             
             if (addedModules.length === 0) {
                 console.error('❌ [MODULE POPULATION] CRITICAL: No module elements found in DOM after population!');
                 return false;
             }
             
+            const totalTime = performance.now() - startTime;
+            console.log(`🕐 [TIMING] Total populateModulesInOverlay time: ${totalTime}ms`);
+            console.log(`🕐 [TIMING] Modules per second: ${(learningPath.modules.length / (totalTime / 1000)).toFixed(2)}`);
+            
             return true;
             
         } catch (error) {
-            console.error('❌ [MODULE POPULATION] CRITICAL ERROR in populateModulesInOverlay:', error);
+            const totalTime = performance.now() - startTime;
+            console.error(`🕐 [TIMING] populateModulesInOverlay failed after ${totalTime}ms:`, error);
             console.error('❌ [MODULE POPULATION] Stack trace:', error.stack);
             return false;
         }
@@ -740,13 +810,20 @@ window.LearningPathUI = class LearningPathUI {
     }
 
     static getResourceTypeClass(resource) {
+        if (!resource) return 'resource-article';
+        
         const link = resource.link?.toLowerCase() || '';
         const title = resource.title?.toLowerCase() || '';
+        const resourceType = resource.resource_type?.toLowerCase() || '';
         
-        if (link.includes('youtube.com') || link.includes('video') || title.includes('video')) return 'resource-video';
-        if (link.includes('github.com') || title.includes('code') || title.includes('tutorial')) return 'resource-code';
-        if (link.includes('wikipedia.org') || title.includes('reference')) return 'resource-reference';
-        if (link.includes('coursera.org') || link.includes('udemy.com') || title.includes('course')) return 'resource-course';
+        // Check resource_type first if available
+        if (resourceType === 'video' || link.includes('youtube.com') || link.includes('vimeo.com') || title.includes('video')) return 'resource-video';
+        if (resourceType === 'interactive' || resourceType === 'code' || link.includes('github.com') || title.includes('code') || title.includes('interactive')) return 'resource-interactive';
+        if (resourceType === 'course' || link.includes('coursera.org') || link.includes('udemy.com') || link.includes('edx.org') || title.includes('course')) return 'resource-course';
+        if (resourceType === 'tutorial' || title.includes('tutorial') || title.includes('how to')) return 'resource-tutorial';
+        if (resourceType === 'book' || title.includes('book') || link.includes('.pdf')) return 'resource-book';
+        if (resourceType === 'reference' || link.includes('wikipedia.org') || title.includes('reference') || title.includes('documentation')) return 'resource-reference';
+        
         return 'resource-article';
     }
 
@@ -757,9 +834,13 @@ window.LearningPathUI = class LearningPathUI {
             'resource-code': '<i class="fas fa-code"></i>',
             'resource-reference': '<i class="fas fa-book"></i>',
             'resource-course': '<i class="fas fa-graduation-cap"></i>',
-            'resource-article': '<i class="fas fa-file-alt"></i>'
+            'resource-article': '<i class="fas fa-file-alt"></i>',
+            'resource-interactive': '<i class="fas fa-laptop-code"></i>',
+            'resource-tutorial': '<i class="fas fa-chalkboard-teacher"></i>',
+            'resource-pdf': '<i class="fas fa-file-pdf"></i>',
+            'resource-book': '<i class="fas fa-book-open"></i>'
         };
-        return icons[type] || '<i class="fas fa-link"></i>';
+        return icons[type] || '<i class="fas fa-file-alt"></i>';
     }
 
     static truncateText(text, maxLength) {
@@ -784,26 +865,43 @@ window.LearningPathUI = class LearningPathUI {
      * @param {string} searchId - The search ID
      */
     static startRealTimeProgressPolling(searchId) {
+        console.log('🕐 [TIMING] Starting polling for search ID:', searchId);
+        const pollingStartTime = performance.now();
+        
         if (window.SearchState.currentSearchId === searchId) {
             console.log('Already polling this search, ignoring duplicate request');
             return;
         }
         
         window.SearchState.currentSearchId = searchId;
+        let pollCount = 0;
         
         const pollInterval = setInterval(async () => {
+            pollCount++;
+            const pollStartTime = performance.now();
+            console.log(`🕐 [TIMING] Poll #${pollCount} started`);
+            
             try {
                 const status = await LearningPathAPI.getSearchStatus(searchId);
                 
                 // Update UI based on status
                 this.handleProgressUpdate(status);
                 
+                const pollTime = performance.now() - pollStartTime;
+                console.log(`🕐 [TIMING] Poll #${pollCount} completed in ${pollTime}ms, status: ${status.status}`);
+                
                 // Check if completed or failed
                 if (status.status === 'COMPLETED' || status.status === 'FAILED') {
                     clearInterval(pollInterval);
+                    const totalPollingTime = performance.now() - pollingStartTime;
+                    console.log(`🕐 [TIMING] Polling completed after ${pollCount} polls in ${totalPollingTime}ms`);
                     
                     if (status.status === 'COMPLETED' && status.learning_path_id) {
-                        await this.showLearningPathResults(status.learning_path_id);
+                        console.log('🕐 [TIMING] Starting final results display...');
+                        // Add a small delay to ensure UI is ready
+                        setTimeout(async () => {
+                            await this.showLearningPathResults(status.learning_path_id);
+                        }, 500);
                     } else if (status.status === 'FAILED') {
                         this.showErrorMessage(status.message || 'Search process failed. Please try again.');
                     }
@@ -813,9 +911,10 @@ window.LearningPathUI = class LearningPathUI {
                     window.SearchState.currentSearchId = null;
                 }
             } catch (error) {
-                console.warn(`⚠️ Polling error: ${error.message}`);
+                const pollTime = performance.now() - pollStartTime;
+                console.warn(`⚠️ Poll #${pollCount} error after ${pollTime}ms: ${error.message}`);
             }
-        }, 3000); // Poll every 3 seconds
+        }, 2000); // Poll every 2 seconds for better responsiveness
     }
 
     /**
@@ -1146,6 +1245,9 @@ window.LearningPathUI = class LearningPathUI {
      * Show learning path results
      * @param {string} learningPathId - The learning path ID
      */    static async showLearningPathResults(learningPathId) {
+        const startTime = performance.now();
+        console.log('🕐 [TIMING] showLearningPathResults started at:', new Date().toISOString());
+        
         try {
             console.log('🚀 [DEBUG] showLearningPathResults called with ID:', learningPathId);
             
@@ -1161,14 +1263,21 @@ window.LearningPathUI = class LearningPathUI {
             
             // Get the learning path data
             console.log('📡 [DEBUG] Fetching learning path data from API...');
+            const apiCallStart = performance.now();
             const learningPath = await LearningPathAPI.getLearningPath(learningPathId);
+            const apiCallTime = performance.now() - apiCallStart;
+            console.log(`🕐 [TIMING] API call took ${apiCallTime}ms`);
+            
             console.log('📡 [DEBUG] API response received:', learningPath);
             console.log('📡 [DEBUG] API response type:', typeof learningPath);
             console.log('📡 [DEBUG] API response keys:', Object.keys(learningPath || {}));
             
             // Transition to Stage 3: Results
             console.log('🔄 [DEBUG] Transitioning to Stage 3...');
+            const transitionStart = performance.now();
             this.transitionToStage3();
+            const transitionTime = performance.now() - transitionStart;
+            console.log(`🕐 [TIMING] Stage transition took ${transitionTime}ms`);
             
             // Mark as populated to prevent duplicates
             resultsStage.dataset.populated = 'true';
@@ -1176,9 +1285,18 @@ window.LearningPathUI = class LearningPathUI {
             
             // Populate the existing Stage 3 overlay components with real data
             console.log('🎯 [DEBUG] About to populate Stage 3 with data...');
+            const populateStart = performance.now();
             this.populateStage3WithData(learningPath);
+            const populateTime = performance.now() - populateStart;
+            console.log(`🕐 [TIMING] UI population took ${populateTime}ms`);
+            
+            const totalTime = performance.now() - startTime;
+            console.log(`🕐 [TIMING] Total showLearningPathResults time: ${totalTime}ms`);
+            console.log(`🕐 [TIMING] Breakdown: API=${apiCallTime}ms, Transition=${transitionTime}ms, Population=${populateTime}ms`);
+            
         } catch (error) {
-            console.error('❌ [DEBUG] Error in showLearningPathResults:', error);
+            const totalTime = performance.now() - startTime;
+            console.error(`🕐 [TIMING] showLearningPathResults failed after ${totalTime}ms:`, error);
             console.error('❌ [DEBUG] Error stack:', error.stack);
             this.showErrorMessage('Failed to load learning path results. Please try again.');
         }
@@ -1661,8 +1779,8 @@ window.LearningPathUI = class LearningPathUI {
         card.className = 'resource-card enhanced';
         card.dataset.resourceType = resource.resource_type || 'article';
         
-        // Get resource type icon
-        const typeIcon = this.getResourceTypeIcon(resource.resource_type);
+        // Get resource type icon class
+        const typeIcon = this.getResourceTypeIconClass(resource.resource_type);
         
         // Calculate estimated reading time display
         const timeDisplay = resource.estimated_time_minutes
@@ -1830,7 +1948,7 @@ window.LearningPathUI = class LearningPathUI {
      * @param {string} type - Resource type
      * @returns {string} - Icon class
      */
-    static getResourceTypeIcon(type) {
+    static getResourceTypeIconClass(type) {
         const icons = {
             'video': 'fas fa-play-circle',
             'article': 'fas fa-file-alt',
