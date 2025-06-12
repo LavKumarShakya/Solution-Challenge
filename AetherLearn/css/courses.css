@@ -24,7 +24,7 @@
 .featured-paths {
     padding: 4rem 0;
     text-align: center;
-    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+    background: var(--bg-primary);
     position: relative;
     overflow: hidden;
 }

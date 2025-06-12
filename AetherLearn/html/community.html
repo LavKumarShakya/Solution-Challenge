@@ -113,7 +113,7 @@
             <!-- Resource Card -->
             <article class="resource-card">
               <div class="resource-thumbnail">
-                        <img loading="lazy" src="https://images.unsplash.com/photo-1593720219276-0b1eacd0aef4?w=800"
+                        <img loading="lazy" src="https://www.creativeitinstitute.com/images/course/course_1663052056.jpg"
                   alt="Web Development Course Thumbnail"
                 />
                 <span class="resource-type">Course</span>
@@ -162,7 +162,7 @@
             <!-- Second Resource Card -->
             <article class="resource-card">
               <div class="resource-thumbnail">
-                        <img loading="lazy" src="https://imgs.search.brave.com/OQJvSEgHlKpkWDxZyct2WPXo4WJhJBbwAEFpEsd-Opc/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9yZWRy/ZXNzY29tcGxpYW5j/ZS5jb20vd3AtY29u/dGVudC91cGxvYWRz/LzIwMjQvMDMvQ29y/ZS1Db25jZXB0cy1v/Zi1BSS1pbi1JbWFn/ZS1Qcm9jZXNzaW5n/LTEwMjR4NTg1Lndl/YnA"
+                        <img loading="lazy" src="https://flatironschool.com/wp-content/uploads/2023/03/Resized-blog-thumbnail-50.jpg"
                   alt="Machine Learning Course Thumbnail"
                 />
                 <span class="resource-type">Video</span>
@@ -586,10 +586,10 @@
             paths and free resources.
           </p>
           <div class="social-icons">
-            <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
-            <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
-            <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-            <a href="#" title="Discord"><i class="fab fa-discord"></i></a>
+            <a href="https://github.com/LavKumarShakya/Solution-Challenge" title="GitHub" target="_blank"><i class="fab fa-github"></i></a>
+            <a title="Twitter" onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;"><i class="fab fa-twitter"></i></a>
+            <a title="LinkedIn" onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;"><i class="fab fa-linkedin"></i></a>
+            <a title="Discord" onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;"><i class="fab fa-discord"></i></a>
           </div>
         </div>
 
@@ -598,21 +598,21 @@
           <a href="courses.html">Courses</a>
           <a href="ai-assistant.html">AI Assistant</a>
           <a href="community.html">Community</a>
-          <a href="about.html">About Us</a>
+          <a href="https://github.com/LavKumarShakya/Solution-Challenge" target="_blank">About Us</a>
         </div>
 
         <div class="footer-section">
           <h3>Resources</h3>
-          <a href="blog.html">Blog</a>
-          <a href="faq.html">FAQs</a>
-          <a href="support.html">Support</a>
-          <a href="privacy.html">Privacy Policy</a>
+          <a onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;">Blog</a>
+          <a onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;">FAQs</a>
+          <a onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;">Support</a>
+          <a onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;">Privacy Policy</a>
         </div>
 
         <div class="footer-section">
           <h3>Contact Us</h3>
-          <a href="mailto:support@aetherlearn.com">support@aetherlearn.com</a>
-          <a href="tel:+1234567890">+1 (234) 567-890</a>
+          <a onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;">support@aetherlearn.com</a>
+          <a onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;">+1 (234) 567-890</a>
         </div>
       </div>
       <div class="footer-bottom">
@@ -621,7 +621,9 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="../js/navbar.js"></script>
+    <script type="module" src="../js/navbar.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/toasts.js"></script>
     <script src="../js/script.js"></script>
   </body>
 </html>
@@ -636,5 +638,17 @@
             delay: 50,
             mirror: false,
             anchorPlacement: 'top-bottom'
+        });
+
+        // Show experimental features warning when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Delay the toast slightly to allow page to fully load
+            setTimeout(() => {
+                if (typeof showExperimentalFeaturesToast === 'function') {
+                    showExperimentalFeaturesToast();
+                } else {
+                    console.warn('showExperimentalFeaturesToast function not available');
+                }
+            }, 1000);
         });
     </script>

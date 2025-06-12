@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Settings - AetherLearn</title>
+
+    <!-- Core Styles -->
+    <link rel="stylesheet" href="../css/styles.css" />
+    <link rel="stylesheet" href="../css/navbar.css" />
+    <link rel="stylesheet" href="../css/settings.css" />
+
+    <!-- External Resources -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- Navbar Placeholder -->
+    <div id="navbar-placeholder"></div>
+
+    <main class="settings-main">
+      <div class="settings-container">
+        <!-- Settings Header -->
+        <div class="settings-header">
+          <div class="header-content">
+            <button class="back-btn" onclick="goBack()">
+              <i class="fas fa-arrow-left"></i>
+              <span>Back to Dashboard</span>
+            </button>
+            <div class="header-text">
+              <h1 class="gradient-text">Settings</h1>
+              <p class="header-subtitle">Manage your account and preferences</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Settings Grid -->
+        <div class="settings-grid">
+          <!-- Sidebar Navigation -->
+          <div class="settings-sidebar">
+            <div class="sidebar-nav">
+              <div class="nav-item active" data-section="profile">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+              </div>
+              <div class="nav-item" data-section="account">
+                <i class="fas fa-cog"></i>
+                <span>Account</span>
+              </div>
+              <div class="nav-item" data-section="security">
+                <i class="fas fa-shield-alt"></i>
+                <span>Security</span>
+              </div>
+              <div class="nav-item" data-section="notifications">
+                <i class="fas fa-bell"></i>
+                <span>Notifications</span>
+              </div>
+              <div class="nav-item" data-section="privacy">
+                <i class="fas fa-lock"></i>
+                <span>Privacy</span>
+              </div>
+              <div class="nav-item" data-section="about">
+                <i class="fas fa-info-circle"></i>
+                <span>About</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Settings Content -->
+          <div class="settings-content">
+            <!-- Profile Section -->
+            <div class="settings-section active" id="profile-section">
+              <div class="section-header">
+                <h2>Profile Information</h2>
+                <p>Update your personal information and profile picture</p>
+              </div>
+
+              <div class="settings-card">
+                <div class="profile-photo-section">
+                  <div class="current-photo">
+                    <img
+                      id="profile-photo"
+                      src="../images/default-avatar.svg"
+                      alt="Profile Photo"
+                    />
+                    <div class="photo-overlay">
+                      <i class="fas fa-camera"></i>
+                    </div>
+                  </div>
+                  <div class="photo-actions">
+                    <button class="btn-secondary" id="upload-photo">
+                      <i class="fas fa-upload"></i>
+                      Upload Photo
+                    </button>
+                    <button class="btn-ghost" id="remove-photo">
+                      <i class="fas fa-trash"></i>
+                      Remove
+                    </button>
+                  </div>
+                  <input
+                    type="file"
+                    id="photo-input"
+                    accept="image/*"
+                    style="display: none"
+                  />
+                </div>
+
+                <form class="profile-form">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="first-name">First Name</label>
+                      <input
+                        type="text"
+                        id="first-name"
+                        name="firstName"
+                        placeholder="Enter your first name"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="last-name">Last Name</label>
+                      <input
+                        type="text"
+                        id="last-name"
+                        name="lastName"
+                        placeholder="Enter your last name"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      placeholder="Enter your email"
+                    />
+                    <small class="form-hint"
+                      >We'll use this email for important account updates</small
+                    >
+                  </div>
+
+                  <div class="form-group">
+                    <label for="bio">Bio</label>
+                    <textarea
+                      id="bio"
+                      name="bio"
+                      rows="4"
+                      placeholder="Tell us about yourself..."
+                    ></textarea>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="location">Location</label>
+                      <input
+                        type="text"
+                        id="location"
+                        name="location"
+                        placeholder="City, Country"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="website">Website</label>
+                      <input
+                        type="url"
+                        id="website"
+                        name="website"
+                        placeholder="https://yourwebsite.com"
+                      />
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <!-- Account Section -->
+            <div class="settings-section" id="account-section">
+              <div class="section-header">
+                <h2>Account Settings</h2>
+                <p>Manage your account preferences and settings</p>
+              </div>
+
+              <div class="settings-card">
+                <h3>Learning Preferences</h3>
+                <div class="preference-actions">
+                  <button class="btn-secondary" id="change-preferences-btn">
+                    <i class="fas fa-edit"></i>
+                    Change Learning Preferences
+                  </button>
+                  <p class="preference-description">Update your learning style, interests, and goals to get better recommendations.</p>
+                </div>
+              </div>
+
+              <div class="settings-card">
+                <h3>Language & Region</h3>
+                <div class="preferences-grid">
+                  <div class="preference-item">
+                    <label for="language">Language</label>
+                    <div class="custom-select" data-name="language">
+                      <div class="select-trigger">
+                        <span class="select-text">Select language</span>
+                        <i class="fas fa-chevron-down select-arrow"></i>
+                      </div>
+                      <div class="select-options">
+                        <div class="select-option" data-value="en">
+                          English
+                          <i class="fas fa-check checkmark"></i>
+                        </div>
+                        <div class="select-option" data-value="hi">
+                          हिन्दी (Hindi)
+                          <i class="fas fa-check checkmark"></i>
+                        </div>
+                        <div class="select-option" data-value="es">
+                          Español
+                          <i class="fas fa-check checkmark"></i>
+                        </div>
+                        <div class="select-option" data-value="fr">
+                          Français
+                          <i class="fas fa-check checkmark"></i>
+                        </div>
+                        <div class="select-option" data-value="de">
+                          Deutsch
+                          <i class="fas fa-check checkmark"></i>
+                        </div>
+                        <div class="select-option" data-value="zh">
+                          中文 (Chinese)
+                          <i class="fas fa-check checkmark"></i>
+                        </div>
+                        <div class="select-option" data-value="ja">
+                          日本語 (Japanese)
+                          <i class="fas fa-check checkmark"></i>
+                        </div>
+                        <div class="select-option" data-value="ko">
+                          한국어 (Korean)
+                          <i class="fas fa-check checkmark"></i>
+                        </div>
+                        <div class="select-option" data-value="ar">
+                          العربية (Arabic)
+                          <i class="fas fa-check checkmark"></i>
+                        </div>
+                        <div class="select-option" data-value="pt">
+                          Português
+                          <i class="fas fa-check checkmark"></i>
+                        </div>
+                        <div class="select-option" data-value="ru">
+                          Русский (Russian)
+                          <i class="fas fa-check checkmark"></i>
+                        </div>
+                        <div class="select-option" data-value="it">
+                          Italiano
+                          <i class="fas fa-check checkmark"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="preference-item">
+                    <label for="timezone">Timezone</label>
+                    <div class="custom-select" data-name="timezone">
+                      <div class="select-trigger">
+                        <span class="select-text">Select timezone</span>
+                        <i class="fas fa-chevron-down select-arrow"></i>
+                      </div>
+                      <div class="select-options">
+                        <div class="select-option" data-value="UTC">
+                          UTC (Coordinated Universal Time)
+                          <i class="fas fa-check checkmark"></i>
+                        </div>
+                        <div class="select-option" data-value="IST">
+                          IST (Indian Standard Time)
+                          <i class="fas fa-check checkmark"></i>
+                        </div>
+                        <div class="select-option" data-value="PST">
+                          PST (Pacific Standard Time)
+                          <i class="fas fa-check checkmark"></i>
+                        </div>
+                        <div class="select-option" data-value="EST">
+                          EST (Eastern Standard Time)
+                          <i class="fas fa-check checkmark"></i>
+                        </div>
+                        <div class="select-option" data-value="CST">
+                          CST (Central Standard Time)
+                          <i class="fas fa-check checkmark"></i>
+                        </div>
+                        <div class="select-option" data-value="MST">
+                          MST (Mountain Standard Time)
+                          <i class="fas fa-check checkmark"></i>
+                        </div>
+                        <div class="select-option" data-value="CET">
+                          CET (Central European Time)
+                          <i class="fas fa-check checkmark"></i>
+                        </div>
+                        <div class="select-option" data-value="GMT">
+                          GMT (Greenwich Mean Time)
+                          <i class="fas fa-check checkmark"></i>
+                        </div>
+                        <div class="select-option" data-value="JST">
+                          JST (Japan Standard Time)
+                          <i class="fas fa-check checkmark"></i>
+                        </div>
+                        <div class="select-option" data-value="AEST">
+                          AEST (Australian Eastern Standard Time)
+                          <i class="fas fa-check checkmark"></i>
+                        </div>
+                        <div class="select-option" data-value="CST_CHINA">
+                          CST (China Standard Time)
+                          <i class="fas fa-check checkmark"></i>
+                        </div>
+                        <div class="select-option" data-value="KST">
+                          KST (Korea Standard Time)
+                          <i class="fas fa-check checkmark"></i>
+                        </div>
+                        <div class="select-option" data-value="MSK">
+                          MSK (Moscow Standard Time)
+                          <i class="fas fa-check checkmark"></i>
+                        </div>
+                        <div class="select-option" data-value="AST">
+                          AST (Arabia Standard Time)
+                          <i class="fas fa-check checkmark"></i>
+                        </div>
+                        <div class="select-option" data-value="BST">
+                          BST (British Summer Time)
+                          <i class="fas fa-check checkmark"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Security Section -->
+            <div class="settings-section" id="security-section">
+              <div class="section-header">
+                <h2>Security</h2>
+                <p>Keep your account secure with these settings</p>
+              </div>
+
+              <div class="settings-card">
+                <h3>Password</h3>
+                <div class="security-item">
+                  <div class="security-info">
+                    <p>Last changed: Never</p>
+                    <small>Use a strong password to protect your account</small>
+                  </div>
+                  <button class="btn-primary" id="change-password-btn">
+                    <i class="fas fa-key"></i>
+                    Change Password
+                  </button>
+                </div>
+              </div>
+
+              <div class="settings-card">
+                <h3>Two-Factor Authentication</h3>
+                <div class="security-item">
+                  <div class="security-info">
+                    <p>Add an extra layer of security to your account</p>
+                    <small>Status: Not enabled</small>
+                  </div>
+                  <button class="btn-secondary" id="enable-2fa-btn">
+                    <i class="fas fa-mobile-alt"></i>
+                    Enable 2FA
+                  </button>
+                </div>
+              </div>
+
+              <div class="settings-card">
+                <h3>Active Sessions</h3>
+                <div class="sessions-list">
+                  <div class="session-item current">
+                    <div class="session-info">
+                      <div class="session-device">
+                        <i class="fas fa-laptop"></i>
+                        <span>Windows PC - Chrome</span>
+                        <span class="current-badge">Current</span>
+                      </div>
+                      <div class="session-details">
+                        <span>Last active: Now</span>
+                        <span>Location: Your current location</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <button class="btn-ghost" id="logout-all-btn">
+                  <i class="fas fa-sign-out-alt"></i>
+                  Sign out of all devices
+                </button>
+              </div>
+            </div>
+
+            <!-- Notifications Section -->
+            <div class="settings-section" id="notifications-section">
+              <div class="section-header">
+                <h2>Notifications</h2>
+                <p>Choose what notifications you want to receive</p>
+              </div>
+
+              <div class="settings-card">
+                <h3>Email Notifications</h3>
+                <div class="notification-item">
+                  <div class="notification-info">
+                    <span class="notification-title">Study Reminders</span>
+                    <span class="notification-desc"
+                      >Daily reminders to keep up with your studies</span
+                    >
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="email-study-reminders" checked />
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                <div class="notification-item">
+                  <div class="notification-info">
+                    <span class="notification-title">Course Updates</span>
+                    <span class="notification-desc"
+                      >New content and course announcements</span
+                    >
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="email-course-updates" checked />
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                <div class="notification-item">
+                  <div class="notification-info">
+                    <span class="notification-title"
+                      >Achievement Notifications</span
+                    >
+                    <span class="notification-desc"
+                      >When you unlock new achievements</span
+                    >
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="email-achievements" checked />
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="settings-card">
+                <h3>Push Notifications</h3>
+                <div class="notification-item">
+                  <div class="notification-info">
+                    <span class="notification-title"
+                      >Browser Notifications</span
+                    >
+                    <span class="notification-desc"
+                      >Show notifications in your browser</span
+                    >
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="push-notifications" />
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Privacy Section -->
+            <div class="settings-section" id="privacy-section">
+              <div class="section-header">
+                <h2>Privacy</h2>
+                <p>Control how your data is used and shared</p>
+              </div>
+
+              <div class="settings-card">
+                <h3>Profile Visibility</h3>
+                <div class="privacy-item">
+                  <div class="privacy-info">
+                    <span class="privacy-title">Public Profile</span>
+                    <span class="privacy-desc"
+                      >Allow others to view your public profile</span
+                    >
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="public-profile" checked />
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="settings-card">
+                <h3>Data Usage</h3>
+                <div class="privacy-item">
+                  <div class="privacy-info">
+                    <span class="privacy-title">Learning Analytics</span>
+                    <span class="privacy-desc"
+                      >Help improve the platform with anonymous usage data</span
+                    >
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="analytics" checked />
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="settings-card danger-zone">
+                <h3>Danger Zone</h3>
+                <div class="danger-item">
+                  <div class="danger-info">
+                    <span class="danger-title">Delete Account</span>
+                    <span class="danger-desc"
+                      >Permanently delete your account and all associated
+                      data</span
+                    >
+                  </div>
+                  <button class="btn-danger" id="delete-account-btn">
+                    <i class="fas fa-trash"></i>
+                    Delete Account
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- About Section -->
+            <div class="settings-section" id="about-section">
+              <div class="section-header">
+                <h2>About AetherLearn</h2>
+                <p>Information about the platform and support</p>
+              </div>
+
+              <div class="settings-card">
+                <h3>Version Information</h3>
+                <div class="about-info">
+                  <div class="info-item">
+                    <span class="info-label">Version:</span>
+                    <span class="info-value">0.8.2-alpha</span>
+                  </div>
+                  <div class="info-item">
+                    <span class="info-label">Last Updated:</span>
+                    <span class="info-value">June 2025</span>
+                  </div>
+                  <div class="info-item">
+                    <span class="info-label">Build:</span>
+                    <span class="info-value">2025.06.11.0752</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="settings-card">
+                <h3>Support & Resources</h3>
+                <div class="support-links">
+                  <div class="support-link" onclick="showCurrentlyUnavailableToast(event)">
+                    <i class="fas fa-question-circle"></i>
+                    <span>Help Center</span>
+                  </div>
+                  <div class="support-link" onclick="showCurrentlyUnavailableToast(event)">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Terms of Service</span>
+                  </div>
+                  <div class="support-link" onclick="showCurrentlyUnavailableToast(event)">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Privacy Policy</span>
+                  </div>
+                  <div class="support-link" onclick="showCurrentlyUnavailableToast(event)">
+                    <i class="fas fa-envelope"></i>
+                    <span>Contact Support</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Save Button -->
+        <div class="settings-footer">
+          <button class="btn-primary save-btn" id="save-settings">
+            <i class="fas fa-save"></i>
+            Save Changes
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Password Change Modal -->
+    <div id="password-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Change Password</h3>
+          <button class="close-btn" onclick="closePasswordModal()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="password-form">
+            <div class="form-group">
+              <label for="current-password">Current Password</label>
+              <input type="password" id="current-password" required />
+            </div>
+            <div class="form-group">
+              <label for="new-password">New Password</label>
+              <input type="password" id="new-password" required />
+            </div>
+            <div class="form-group">
+              <label for="confirm-password">Confirm New Password</label>
+              <input type="password" id="confirm-password" required />
+            </div>
+            <div class="form-actions">
+              <button type="button" onclick="closePasswordModal()">
+                Cancel
+              </button>
+              <button type="submit">Update Password</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Logout All Devices Confirmation Modal -->
+    <div id="logout-all-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Sign Out of All Devices</h3>
+          <button class="close-btn" onclick="closeLogoutAllModal()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="confirmation-content">
+            <i class="fas fa-sign-out-alt confirmation-icon warning"></i>
+            <p>Are you sure you want to sign out of all devices? You will need to sign in again on this device.</p>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn-ghost" onclick="closeLogoutAllModal()">
+              Cancel
+            </button>
+            <button type="button" class="btn-danger" onclick="confirmLogoutAll()">
+              <i class="fas fa-sign-out-alt"></i>
+              Sign Out All
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete Account Confirmation Modal -->
+    <div id="delete-account-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header danger-header">
+          <h3>Delete Account</h3>
+          <button class="close-btn" onclick="closeDeleteAccountModal()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="confirmation-content">
+            <i class="fas fa-exclamation-triangle confirmation-icon danger"></i>
+            <p><strong>This action cannot be undone.</strong></p>
+            <p>Type <strong>DELETE</strong> to confirm account deletion:</p>
+            <input type="text" id="delete-confirmation-input" placeholder="Type DELETE here" class="form-input">
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn-ghost" onclick="closeDeleteAccountModal()">
+              Cancel
+            </button>
+            <button type="button" class="btn-danger" id="confirm-delete-btn" onclick="confirmAccountDeletion()" disabled>
+              <i class="fas fa-trash"></i>
+              Delete Account
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/script.js"></script>
+    <script type="module" src="../js/navbar.js"></script>
+    <script src="../js/toasts.js"></script>
+    <script type="module" src="../js/settings.js"></script>
+  </body>
+</html>

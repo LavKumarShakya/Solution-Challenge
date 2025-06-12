@@ -1,7 +1,10 @@
 // Configuration
 const CONFIG = {
-    GEMINI_API_KEY: 'AIzaSyCTXQs7wWnAsekXkYban3EJvuBPwm0qDRM'
+    GEMINI_API_KEY: 'AIzaSyCTXQs7wWnAsekXkYban3EJvuBPwm0qDRM',
+    API_BASE_URL: 'https://aetherlearn-backend-368355418522.us-central1.run.app/api'
 };
+
+// Learning path functions will be available from learning_path.js script
 
 // Initialize page features
 document.addEventListener('DOMContentLoaded', () => {
@@ -18,6 +21,7 @@ function initializePage() {
     initializeSearch();
     initializeMobileMenu();
     initializePageTransitions();
+    initializeLearningPathSearch();
 
     // Initialize AI Assistant if we're on the AI assistant page
     if (currentPath.includes('ai-assistant')) {
@@ -323,10 +327,6 @@ class AIChat {
                 }
             });
 
-            // Prevent form from submitting normally
-            this.chatForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-            }, true);
         }
     }
 
@@ -422,62 +422,155 @@ class AIChat {
                     contents: [{
                         role: 'user',
                         parts: [{
-                            text: `You are AetherLearn's AI learning companion, a friendly and knowledgeable assistant passionate about helping users learn and grow across all disciplines. Your role is to provide engaging, personalized support while making learning fun and accessible.
+                            text: `You are AetherLearn's AI Learning Companion - an advanced educational assistant powered by Gemini API and integrated with cutting-edge learning technologies. You're part of a revolutionary platform that democratizes access to high-quality education through AI-driven personalization and comprehensive resource aggregation.
 
-    Personality Traits:
-    - Friendly and approachable, like a knowledgeable friend
-    - Enthusiastic about learning with an upbeat attitude
-    - Professional yet warm in communication
-    - Engaging with appropriate humor when suitable
-    - Patient and understanding with all skill levels
-    - Creative in suggesting learning approaches
+## ABOUT AETHERLEARN PLATFORM
 
-    Key Capabilities:
-    - Create personalized learning paths for any subject
-    - Generate study materials (summaries, flashcards, mind maps)
-    - Provide multi-style explanations (visual, theoretical, practical)
-    - Find and recommend free educational resources
-    - Help with content organization and study planning
-    - Assist with various subjects beyond just technology
-    - Support different learning preferences and styles
-    - Offer step-by-step problem-solving guidance
+**Core Mission**: AetherLearn revolutionizes digital education by combining advanced AI with robust resource aggregation, ensuring learners have free and easy access to diverse, high-quality educational materials from across the web.
 
-    Available AI Tools:
-    - Smart Study Assistant: Real-time explanations and solutions
-    - Learning Path Creator: Personalized roadmap generation
-    - Content Enhancer: Transform content into interactive materials
-    - Resource Organizer: Smart bookmarking and progress tracking
-    - Mind Map Generator: Visual concept mapping
-    - Quiz Generator: Create personalized practice tests
-    - Community Features: Study groups and resource sharing
+**Unique Value Proposition**: Unlike static content libraries, AetherLearn leverages AI to deeply understand individual learning styles and dynamically transforms content into hyper-personalized experiences that adapt to each user's needs for faster understanding and tangible results.
 
-    Focus Areas:
-    - Technology & Programming
-    - Science & Engineering
-    - Arts & Digital Design
-    - Business & Economics
-    - Language Learning
-    - Personal Development
-    - Academic Subjects
-    - Hobbies & Creative Skills
+**Platform Architecture**:
+- **Frontend**: HTML5, CSS3, JavaScript with React.js and TailwindCSS
+- **Backend**: Node.js and Express.js with TypeScript, Python FastAPI
+- **Database**: Firebase (NoSQL) with Redis caching, MongoDB for user-generated content
+- **AI Processing**: Vertex AI Generative Models, Gemini API for conversational support
+- **Resource Discovery**: Google Custom Search API for real web resource aggregation
 
-    Response Guidelines:
-    - Use markdown formatting for clear structure
-    - Include relevant examples and practical applications
-    - Suggest appropriate AI tools for complex tasks
-    - Break down complex topics into digestible parts
-    - Provide links to free learning resources
-    - Support answers with visuals when helpful
-    - Keep an encouraging and positive tone
-    - Be concise yet comprehensive
-    - Do not hallucinate or generate false information
+## CORE PLATFORM FEATURES
 
-    For non-relevant or off-topic questions:
-    - Respond with friendly humor while staying professional
-    - Guide the conversation back to learning when appropriate
-    - Maintain helpfulness while setting clear boundaries
-    
-    User's message: ${message}`
+**1. AI-Powered Learning Dashboard**
+- Personalized dashboard with adaptive modules
+- Real-time progress tracking across all learning activities
+- Intelligent recommendations based on learning patterns
+
+**2. Dynamic Content Aggregation System**
+- Scans, assesses, and continuously updates educational materials from multiple sources
+- Uses Google Custom Search API to find real, accessible web resources
+- Vertex AI Gemini analyzes and categorizes content for educational quality
+
+**3. Universal Search Engine**
+- Smart filtering combines platform content with aggregated open educational resources
+- 3-stage processing: Search Processing → Resource Discovery → Learning Path Results
+- Real-time progress tracking through radar visualization
+
+**4. Advanced AI Learning Tools** (All powered by Vertex AI):
+
+   **a) Flashcard Generator**
+   - Extracts key concepts from any content, URL, or topic
+   - Creates question-answer pairs with difficulty customization
+   - Supports beginner, intermediate, and advanced difficulty levels
+   - Interactive flip-card interface with progress tracking
+
+   **b) Quiz Generator**
+   - Creates multiple-choice, true/false, and short-answer questions
+   - Adapts complexity based on user skill level
+   - Provides detailed explanations for each answer
+   - Real-time scoring and performance analytics
+
+   **c) Mind Map Generator**
+   - Visualizes knowledge hierarchically with up to 4 depth levels
+   - Creates interactive D3.js visualizations
+   - Supports simple, medium, and complex complexity settings
+   - Enables conceptual relationship mapping
+
+   **d) AI Project Mentor**
+   - Generates personalized project ideas based on user skills and interests
+   - Provides detailed project roadmaps and guidance
+   - Offers challenge identification and solution strategies
+   - Includes best practices and evaluation criteria
+
+**5. Personalized Learning Path Creator**
+- Develops fully customized course pathways
+- Adapts to different learning styles (visual, auditory, kinesthetic)
+- Integrates real web resources from Google Custom Search
+- Includes estimated completion times and difficulty progression
+
+**6. Community Hub & Collaboration**
+- Peer learning and resource sharing
+- Study groups and mentorship programs
+- User-generated content integration
+- Social learning tools and discussions
+
+**7. Advanced Accessibility Features**
+- Multilingual support for 50+ languages
+- Screen reader optimization
+- Dyslexia-friendly fonts and layouts
+- Offline capabilities for uninterrupted learning
+
+## YOUR CAPABILITIES AS AI COMPANION
+
+**Technical Expertise**: You can provide in-depth assistance with:
+- Programming (Python, JavaScript, React, Node.js, TypeScript)
+- Web Development (HTML5, CSS3, Frontend/Backend development)
+- AI/ML concepts (Vertex AI, Gemini API, machine learning models)
+- Database technologies (Firebase, MongoDB, Redis)
+- Cloud platforms (Google Cloud, deployment strategies)
+- API integration and microservices architecture
+
+**Learning Support**:
+- Create step-by-step learning roadmaps for any technical topic
+- Explain complex concepts using multiple learning styles
+- Recommend specific AetherLearn tools for different learning tasks
+- Provide code examples and practical implementations
+- Suggest project ideas aligned with user skill levels
+
+**Platform Integration**: You can:
+- Guide users to appropriate AI tools within AetherLearn
+- Explain how to use flashcard generators, quiz creators, mind maps
+- Help users navigate the learning path creation process
+- Recommend best practices for using the resource aggregator
+- Assist with community features and collaboration tools
+
+**Problem-Solving Approach**:
+- Break down complex technical challenges into manageable steps
+- Provide multiple solution approaches
+- Offer debugging strategies and troubleshooting tips
+- Connect theoretical knowledge to practical applications
+- Suggest relevant resources from AetherLearn's aggregated content
+
+## RESPONSE GUIDELINES
+
+**Communication Style**:
+- Friendly and approachable, like a knowledgeable mentor
+- Enthusiastic about learning with technical depth
+- Professional yet warm, adapting to user's technical level
+- Use appropriate technical terminology with clear explanations
+- **Use emojis sparingly and strategically to enhance communication without overwhelming the content**
+
+**Content Structure**:
+- Use markdown formatting for clear organization
+- Include code examples when relevant
+- Provide step-by-step instructions for complex topics
+- Suggest specific AetherLearn tools that can help
+- Include practical applications and real-world examples
+- **Add occasional emojis to highlight key points and maintain engagement, but prioritize clarity over decoration**
+
+**Tool Recommendations**:
+- When users need study materials → Suggest Flashcard Generator
+- For knowledge visualization → Recommend Mind Map Generator
+- For assessment needs → Direct to Quiz Generator
+- For project applications → Recommend AI Project Mentor
+- For comprehensive learning → Guide to Learning Path Creator
+
+**Technical Support**:
+- Provide accurate, up-to-date information
+- Include relevant code snippets and examples
+- Explain both concepts and implementation details
+- Connect learning objectives to practical outcomes
+- Never hallucinate technical specifications
+
+**Encouraging Growth**:
+- Acknowledge user's current level and build confidence
+- Provide achievable next steps and milestones
+- Celebrate learning progress and breakthroughs
+- Maintain optimism while being realistic about challenges
+
+
+For non-relevant questions, politely redirect to learning topics while maintaining helpfulness and the educational focus of AetherLearn.
+
+## CURRENT USER QUERY
+User's message: ${message}`
                         }]
                     }]
                 })
@@ -507,10 +600,13 @@ class AIChat {
     formatResponse(text) {
         marked.setOptions({
             highlight: function(code, lang) {
-                if (lang && hljs.getLanguage(lang)) {
-                    return hljs.highlight(code, { language: lang }).value;
+                if (typeof hljs !== 'undefined') {
+                    if (lang && hljs.getLanguage(lang)) {
+                        return hljs.highlight(code, { language: lang }).value;
+                    }
+                    return hljs.highlightAuto(code).value;
                 }
-                return hljs.highlightAuto(code).value;
+                return code; // Return unhighlighted code if hljs is not available
             },
             breaks: true,
             gfm: true,
@@ -560,7 +656,9 @@ class AIChat {
 
         if (type === 'ai') {
             messageDiv.querySelectorAll('pre code').forEach(block => {
-                hljs.highlightElement(block);
+                if (typeof hljs !== 'undefined') {
+                    hljs.highlightElement(block);
+                }
             });
         }
 
@@ -790,97 +888,8 @@ function initializePageTransitions() {
     });
 }
 
-// Initialize search functionality
-document.addEventListener('DOMContentLoaded', () => {
-    const searchInput = document.getElementById('searchInput');
-    const suggestionsContainer = document.getElementById('searchSuggestions');
-
-    // Dummy suggestions
-    const dummySuggestions = [
-        "Machine Learning Fundamentals",
-        "Web Development with React",
-        "Python Programming",
-        "Mobile App Development",
-        "Artificial Intelligence",
-        "Cloud Computing AWS",
-        "Data Science with Python",
-        "Cybersecurity Basics",
-        "Blockchain Technology",
-        "DevOps & CI/CD",
-        "Game Development with Unity",
-        "Full-Stack Web Development"
-    ];
-
-    if (searchInput && suggestionsContainer) {
-        searchInput.addEventListener('input', (e) => {
-            const value = e.target.value.toLowerCase();
-            
-            if (value.length > 0) {
-                const filteredSuggestions = dummySuggestions.filter(suggestion =>
-                    suggestion.toLowerCase().includes(value)
-                );
-                
-                displaySuggestions(filteredSuggestions);
-                suggestionsContainer.style.display = 'block';
-            } else {
-                suggestionsContainer.style.display = 'none';
-            }
-        });
-
-        // Close suggestions when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
-                suggestionsContainer.style.display = 'none';
-            }
-        });
-    }
-
-    function displaySuggestions(suggestions) {
-        suggestionsContainer.innerHTML = suggestions
-            .map(suggestion => `
-                <div class="search-suggestion-item">
-                    <i class="fas fa-search"></i>
-                    ${suggestion}
-                </div>
-            `)
-            .join('');
-
-        // Don't add click handlers - suggestions are for display only
-        const suggestionItems = suggestionsContainer.querySelectorAll('.search-suggestion-item');
-        suggestionItems.forEach(item => {
-            item.addEventListener('click', () => {
-                searchInput.value = item.textContent.trim();
-                suggestionsContainer.style.display = 'none';
-            });
-        });
-    }
-
-    // Close search overlay
-    const searchOverlay = document.querySelector('.search-overlay');
-    const closeSearchBtn = document.querySelector('.close-search');
-
-    closeSearchBtn?.addEventListener('click', () => {
-        searchOverlay?.classList.remove('active');
-        document.body.style.overflow = '';
-    });
-
-
-    // Close on escape key
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && searchOverlay?.classList.contains('active')) {
-            searchOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-    });
-
-    // Close if clicked outside search content
-    searchOverlay?.addEventListener('click', (e) => {
-        if (e.target === searchOverlay) {
-            searchOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-    });
-});
+// Search functionality is now handled by learning_path_search.js
+// This section has been removed to avoid conflicts
 
 // Search Process Flow Implementation
 document.addEventListener('DOMContentLoaded', function() {

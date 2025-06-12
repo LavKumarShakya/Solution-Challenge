@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  # MongoDB Service
+  mongodb:
+    image: mongo:6.0
+    container_name: aetherlearn-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - aetherlearn-network
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+  
+  # Backend FastAPI Service
+  backend:
+    build: 
+      context: ./AetherLearn/backend
+      dockerfile: Dockerfile
+    container_name: aetherlearn-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./AetherLearn/backend:/app
+    networks:
+      - aetherlearn-network
+    environment:
+      - MONGODB_URL=mongodb://admin:password@mongodb:27017
+      - MONGODB_DB=aetherlearn
+    depends_on:
+      - mongodb
+
+  # Frontend Service (if needed later)
+  # frontend:
+  #   image: nginx:alpine
+  #   container_name: aetherlearn-frontend
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - .:/usr/share/nginx/html
+  #   networks:
+  #     - aetherlearn-network
+  #   depends_on:
+  #     - backend
+
+volumes:
+  mongodb_data:
+
+networks:
+  aetherlearn-network:
+    driver: bridge

@@ -1,25 +1,48 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
+import { app, auth } from "./firebase-init.js";
 import {
-  getAuth,
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
   GithubAuthProvider,
 } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-auth.js";
-const firebaseConfig = {
-  apiKey: "AIzaSyBicWD9ppun6U9muhLJM3oESrhNGybS_O8",
-  authDomain: "aetherlearn-5c389.firebaseapp.com",
-  projectId: "aetherlearn-5c389",
-  storageBucket: "aetherlearn-5c389.firebasestorage.app",
-  messagingSenderId: "322278188019",
-  appId: "1:322278188019:web:109af65c86035cb424e886",
-  measurementId: "G-08XLBFTXS9",
-};
+import {
+  getFirestore,
+  doc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/11.5.0/firebase-firestore.js";
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+// Initialize Firestore
+const db = getFirestore();
+
+// Function to check if user has completed preferences setup
+async function checkUserPreferences(userId) {
+  try {
+    const preferencesRef = doc(db, 'users', userId, 'preferences', 'current');
+    const preferencesDoc = await getDoc(preferencesRef);
+    
+    if (preferencesDoc.exists() && preferencesDoc.data().completed) {
+      return true; // User has completed preferences
+    }
+    return false; // User needs to complete preferences
+  } catch (error) {
+    console.error('Error checking user preferences:', error);
+    return false; // Default to preferences setup on error
+  }
+}
+
+// Function to handle successful authentication
+async function handleAuthSuccess(user) {
+  const hasPreferences = await checkUserPreferences(user.uid);
+  
+  if (hasPreferences) {
+    // User has completed preferences - redirect to dashboard
+    window.location.href = "../html/dashboard.html";
+  } else {
+    // New user or user hasn't completed preferences - redirect to preferences overlay
+    window.location.href = "../html/preferences-overlay.html";
+  }
+}
 
 const login = document.getElementById("login-submit");
 
@@ -28,12 +51,9 @@ login.addEventListener("click", function (event) {
 
   const email = document.getElementById("login-email").value;
   const password = document.getElementById("login-password").value;
-
-  signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
+  signInWithEmailAndPassword(auth, email, password)    .then((userCredential) => {
       const user = userCredential.user;
-      alert("Logged in successfully");
-      // ...
+      handleAuthSuccess(user);
     })
     .catch((error) => {
       const errorCode = error.code;
@@ -47,14 +67,12 @@ const provider = new GoogleAuthProvider();
 const google_login = document.getElementById("google-login");
 
 google_login.addEventListener("click", function (event) {
-  event.preventDefault();
-  signInWithPopup(auth, provider)
+  event.preventDefault();  signInWithPopup(auth, provider)
     .then((result) => {
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const user = result.user;
       console.log(user);
-      alert("Logged in successfully");
-      window.location.href = "../../index.html";
+      handleAuthSuccess(user);
     })
     .catch((error) => {
       const errorCode = error.code;
@@ -67,14 +85,12 @@ const provider1 = new GithubAuthProvider();
 const github_login = document.getElementById("github-login");
 
 github_login.addEventListener("click", function (event) {
-  event.preventDefault();
-  signInWithPopup(auth, provider1)
+  event.preventDefault();  signInWithPopup(auth, provider1)
     .then((result) => {
       const credential = GithubAuthProvider.credentialFromResult(result);
       const user = result.user;
       console.log(user);
-      alert("Logged in successfully");
-      window.location.href = "../../index.html";  
+      handleAuthSuccess(user);
     })
     .catch((error) => {
       const errorCode = error.code;

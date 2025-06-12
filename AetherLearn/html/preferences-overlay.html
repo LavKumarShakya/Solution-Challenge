@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AetherLearn - Learning Preferences Setup">
+    <title>Personalize Your Learning - AetherLearn</title>
+    
+    <!-- Core Styles -->
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    
+    <!-- Page Specific Styles -->
+    <link rel="stylesheet" href="../css/preferences-overlay.css">
+    
+    <!-- External Resources -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="preferences-page">
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-content">
+            <div class="loading-spinner">
+                <i class="fas fa-brain fa-spin"></i>
+            </div>
+            <h3>Setting up your personalized learning experience...</h3>
+            <p>This will only take a moment!</p>
+        </div>
+    </div>
+
+    <!-- Navbar Placeholder -->
+    <div id="navbar-placeholder"></div>
+
+    <main class="preferences-container">
+        <div class="preferences-card">
+            <!-- Header -->
+            <div class="preferences-header">
+                <div class="header-icon">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <h1>Let's Personalize Your Learning</h1>
+                <p>Tell us about yourself so we can create the perfect learning experience for you!</p>
+                <button id="skip-btn" class="skip-button">
+                    <i class="fas fa-forward"></i>
+                    Skip for now
+                </button>
+            </div>
+
+            <!-- Single Form with All Preferences -->
+            <form id="preferences-form" class="preferences-form">
+                
+                <!-- Learning Goals Section -->
+                <div class="section">
+                    <h3><i class="fas fa-target"></i> What's your main learning goal?</h3>
+                    <div class="options-grid goals-grid">
+                        <label class="option-card">
+                            <input type="radio" name="primary-goal" value="career-change">
+                            <div class="card-content">
+                                <i class="fas fa-briefcase"></i>
+                                <h4>Career Change</h4>
+                                <p>Switch to a new field</p>
+                            </div>
+                        </label>
+                        
+                        <label class="option-card">
+                            <input type="radio" name="primary-goal" value="skill-enhancement">
+                            <div class="card-content">
+                                <i class="fas fa-arrow-up"></i>
+                                <h4>Skill Enhancement</h4>
+                                <p>Improve current skills</p>
+                            </div>
+                        </label>
+                        
+                        <label class="option-card">
+                            <input type="radio" name="primary-goal" value="academic">
+                            <div class="card-content">
+                                <i class="fas fa-graduation-cap"></i>
+                                <h4>Academic</h4>
+                                <p>School or university</p>
+                            </div>
+                        </label>
+                        
+                        <label class="option-card">
+                            <input type="radio" name="primary-goal" value="hobby">
+                            <div class="card-content">
+                                <i class="fas fa-heart"></i>
+                                <h4>Personal Interest</h4>
+                                <p>Learning for fun</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Learning Style Section -->
+                <div class="section">
+                    <h3><i class="fas fa-lightbulb"></i> How do you prefer to learn? (Select all that apply)</h3>
+                    <div class="options-grid learning-styles-grid">
+                        <label class="option-card">
+                            <input type="checkbox" name="learning-style" value="visual">
+                            <div class="card-content">
+                                <i class="fas fa-eye"></i>
+                                <h4>Visual</h4>
+                                <p>Images, charts, videos</p>
+                            </div>
+                        </label>
+                        
+                        <label class="option-card">
+                            <input type="checkbox" name="learning-style" value="auditory">
+                            <div class="card-content">
+                                <i class="fas fa-volume-up"></i>
+                                <h4>Auditory</h4>
+                                <p>Listening, discussions</p>
+                            </div>
+                        </label>
+                        
+                        <label class="option-card">
+                            <input type="checkbox" name="learning-style" value="kinesthetic">
+                            <div class="card-content">
+                                <i class="fas fa-hands"></i>
+                                <h4>Hands-on</h4>
+                                <p>Practice, experiments</p>
+                            </div>
+                        </label>
+                        
+                        <label class="option-card">
+                            <input type="checkbox" name="learning-style" value="reading-writing">
+                            <div class="card-content">
+                                <i class="fas fa-book"></i>
+                                <h4>Reading</h4>
+                                <p>Text, notes, articles</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Interests Section -->
+                <div class="section">
+                    <h3><i class="fas fa-star"></i> What subjects interest you? (Select up to 5)</h3>
+                    <div class="interests-container">
+                        <div class="interest-tags">
+                            <label class="interest-tag">
+                                <input type="checkbox" name="interests" value="web-development">
+                                <span><i class="fas fa-globe"></i> Web Development</span>
+                            </label>
+                            <label class="interest-tag">
+                                <input type="checkbox" name="interests" value="mobile-development">
+                                <span><i class="fas fa-mobile-alt"></i> Mobile Apps</span>
+                            </label>
+                            <label class="interest-tag">
+                                <input type="checkbox" name="interests" value="data-science">
+                                <span><i class="fas fa-chart-line"></i> Data Science</span>
+                            </label>
+                            <label class="interest-tag">
+                                <input type="checkbox" name="interests" value="ai-ml">
+                                <span><i class="fas fa-robot"></i> AI & Machine Learning</span>
+                            </label>
+                            <label class="interest-tag">
+                                <input type="checkbox" name="interests" value="cybersecurity">
+                                <span><i class="fas fa-shield-alt"></i> Cybersecurity</span>
+                            </label>
+                            <label class="interest-tag">
+                                <input type="checkbox" name="interests" value="cloud-computing">
+                                <span><i class="fas fa-cloud"></i> Cloud Computing</span>
+                            </label>
+                            <label class="interest-tag">
+                                <input type="checkbox" name="interests" value="game-development">
+                                <span><i class="fas fa-gamepad"></i> Game Development</span>
+                            </label>
+                            <label class="interest-tag">
+                                <input type="checkbox" name="interests" value="mathematics">
+                                <span><i class="fas fa-calculator"></i> Mathematics</span>
+                            </label>
+                            <label class="interest-tag">
+                                <input type="checkbox" name="interests" value="science">
+                                <span><i class="fas fa-flask"></i> Science</span>
+                            </label>
+                            <label class="interest-tag">
+                                <input type="checkbox" name="interests" value="business">
+                                <span><i class="fas fa-briefcase"></i> Business</span>
+                            </label>
+                            <label class="interest-tag">
+                                <input type="checkbox" name="interests" value="design">
+                                <span><i class="fas fa-paint-brush"></i> Design</span>
+                            </label>
+                            <label class="interest-tag">
+                                <input type="checkbox" name="interests" value="languages">
+                                <span><i class="fas fa-language"></i> Languages</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Time Commitment Section -->
+                <div class="section">
+                    <h3><i class="fas fa-clock"></i> How much time can you dedicate per week?</h3>
+                    <div class="options-grid time-grid">
+                        <label class="option-card">
+                            <input type="radio" name="time-commitment" value="1-3hours">
+                            <div class="card-content">
+                                <i class="fas fa-clock"></i>
+                                <h4>1-3 hours</h4>
+                                <p>Light learning</p>
+                            </div>
+                        </label>
+                        
+                        <label class="option-card">
+                            <input type="radio" name="time-commitment" value="4-6hours">
+                            <div class="card-content">
+                                <i class="fas fa-clock"></i>
+                                <h4>4-6 hours</h4>
+                                <p>Regular pace</p>
+                            </div>
+                        </label>
+                        
+                        <label class="option-card">
+                            <input type="radio" name="time-commitment" value="7-10hours">
+                            <div class="card-content">
+                                <i class="fas fa-clock"></i>
+                                <h4>7-10 hours</h4>
+                                <p>Intensive learning</p>
+                            </div>
+                        </label>
+                        
+                        <label class="option-card">
+                            <input type="radio" name="time-commitment" value="10+hours">
+                            <div class="card-content">
+                                <i class="fas fa-clock"></i>
+                                <h4>10+ hours</h4>
+                                <p>Full commitment</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Experience Level Section -->
+                <div class="section">
+                    <h3><i class="fas fa-chart-bar"></i> What's your overall experience level?</h3>
+                    <div class="options-grid experience-grid">
+                        <label class="option-card">
+                            <input type="radio" name="experience-level" value="beginner">
+                            <div class="card-content">
+                                <i class="fas fa-seedling"></i>
+                                <h4>Beginner</h4>
+                                <p>Just getting started</p>
+                            </div>
+                        </label>
+                        
+                        <label class="option-card">
+                            <input type="radio" name="experience-level" value="intermediate">
+                            <div class="card-content">
+                                <i class="fas fa-tree"></i>
+                                <h4>Intermediate</h4>
+                                <p>Some experience</p>
+                            </div>
+                        </label>
+                        
+                        <label class="option-card">
+                            <input type="radio" name="experience-level" value="advanced">
+                            <div class="card-content">
+                                <i class="fas fa-crown"></i>
+                                <h4>Advanced</h4>
+                                <p>Experienced learner</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form-actions">
+                    <button type="submit" class="submit-button">
+                        <i class="fas fa-rocket"></i>
+                        Start My Learning Journey
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script type="module" src="../js/navbar.js"></script>
+    <script src="../js/toasts.js"></script>
+    <script type="module" src="../js/preferences-overlay.js"></script>
+</body>
+</html>
+</html>

@@ -10,9 +10,14 @@
     <link rel="stylesheet" href="AetherLearn/css/styles.css">
     <link rel="stylesheet" href="AetherLearn/css/navbar.css">
     
+    
     <!-- External Resources -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Scripts -->
+    <script src="AetherLearn/js/learning_path.js" defer></script>
+    <script src="AetherLearn/js/learning_path_search.js" defer></script>
 </head>
 <body>
     <!-- Navbar Placeholder -->
@@ -24,8 +29,7 @@
             <div class="hero-content">
                 <h1>Transform Your Learning Journey with AI</h1>
                 <p>Our AI creates personalized learning paths using the best free resources across the internet, tailored just for you.</p>
-                
-                <div class="search-and-cta">
+                  <div class="search-and-cta">
                     <div class="ai-search-container">
                         <div style="position: relative;">
                             <input type="text" class="hero-search-input" id="searchInput" placeholder="What do you want to learn today? (e.g., 'Machine Learning', 'Web Development')">
@@ -33,7 +37,12 @@
                         </div>
                     </div>
                     <div class="cta-group">
-                        <button class="hero-search-button clean-button">Create Learning Path</button>
+                        <button class="hero-search-button clean-button" id="createLearningPathBtn">
+                            <i class="fas fa-brain"></i> Create Learning Path
+                        </button>
+                        <button class="hero-preferences-button clean-button secondary" id="openPreferencesModal">
+                            <i class="fas fa-cog"></i> Customize
+                        </button>
                     </div>
                 </div>
                 <a href="AetherLearn/html/ai-assistant.html" class="ai-assistant-btn">
@@ -270,6 +279,280 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <!-- Individual Resources Section -->
+                    <div class="individual-resources-container">
+                        <div class="resources-header">
+                            <h3><i class="fas fa-layer-group"></i> Individual Learning Resources</h3>
+                            <p>Explore and select from all the resources found for your learning journey</p>
+                        </div>
+                        
+                        <div class="resources-filters">
+                            <div class="filter-tabs">
+                                <button class="filter-tab active" data-filter="all">
+                                    <i class="fas fa-th-large"></i> All Resources
+                                </button>
+                                <button class="filter-tab" data-filter="video">
+                                    <i class="fas fa-play-circle"></i> Videos
+                                </button>
+                                <button class="filter-tab" data-filter="article">
+                                    <i class="fas fa-file-alt"></i> Articles
+                                </button>
+                                <button class="filter-tab" data-filter="interactive">
+                                    <i class="fas fa-laptop-code"></i> Interactive
+                                </button>
+                                <button class="filter-tab" data-filter="course">
+                                    <i class="fas fa-graduation-cap"></i> Courses
+                                </button>
+                            </div>
+                            
+                            <div class="sort-options">
+                                <select class="sort-select" id="resourceSort">
+                                    <option value="relevance">Sort by Relevance</option>
+                                    <option value="rating">Sort by Rating</option>
+                                    <option value="duration">Sort by Duration</option>
+                                    <option value="difficulty">Sort by Difficulty</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="resources-grid" id="individualResourcesGrid">
+                            <!-- Sample resource items - these will be populated dynamically via JavaScript -->
+                            <div class="individual-resource-card" data-type="video">
+                                <div class="resource-card-header">
+                                    <div class="resource-type-badge video">
+                                        <i class="fas fa-play-circle"></i>
+                                        <span>Video</span>
+                                    </div>
+                                    <div class="resource-actions">
+                                        <button class="resource-action-btn bookmark" title="Bookmark">
+                                            <i class="far fa-bookmark"></i>
+                                        </button>
+                                        <button class="resource-action-btn share" title="Share">
+                                            <i class="fas fa-share"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="resource-content">
+                                    <h4 class="resource-title">Introduction to Machine Learning Fundamentals</h4>
+                                    <p class="resource-description">A comprehensive overview of machine learning concepts, algorithms, and practical applications for beginners.</p>
+                                    
+                                    <div class="resource-metadata">
+                                        <div class="metadata-row">
+                                            <span class="metadata-item">
+                                                <i class="fas fa-clock"></i>
+                                                <span>45 minutes</span>
+                                            </span>
+                                            <span class="metadata-item">
+                                                <i class="fas fa-signal"></i>
+                                                <span>Beginner</span>
+                                            </span>
+                                            <span class="metadata-item quality-rating">
+                                                <i class="fas fa-star"></i>
+                                                <span>4.8</span>
+                                            </span>
+                                        </div>
+                                        <div class="metadata-row">
+                                            <span class="metadata-item source">
+                                                <i class="fas fa-external-link-alt"></i>
+                                                <span>Khan Academy</span>
+                                            </span>
+                                            <span class="metadata-item language">
+                                                <i class="fas fa-globe"></i>
+                                                <span>English</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="learning-styles">
+                                        <span class="learning-style-badge visual">
+                                            <i class="fas fa-eye"></i> Visual
+                                        </span>
+                                        <span class="learning-style-badge auditory">
+                                            <i class="fas fa-headphones"></i> Auditory
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <div class="resource-card-footer">
+                                    <button class="resource-action-btn primary">
+                                        <i class="fas fa-external-link-alt"></i>
+                                        Access Resource
+                                    </button>
+                                    <button class="resource-action-btn secondary add-to-course" title="Add to Custom Course">
+                                        <i class="fas fa-plus"></i>
+                                        Add to Course
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="individual-resource-card" data-type="article">
+                                <div class="resource-card-header">
+                                    <div class="resource-type-badge article">
+                                        <i class="fas fa-file-alt"></i>
+                                        <span>Article</span>
+                                    </div>
+                                    <div class="resource-actions">
+                                        <button class="resource-action-btn bookmark" title="Bookmark">
+                                            <i class="far fa-bookmark"></i>
+                                        </button>
+                                        <button class="resource-action-btn share" title="Share">
+                                            <i class="fas fa-share"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="resource-content">
+                                    <h4 class="resource-title">Understanding ML Algorithms: A Comprehensive Guide</h4>
+                                    <p class="resource-description">Deep dive into various machine learning algorithms, their applications, and when to use each type.</p>
+                                    
+                                    <div class="resource-metadata">
+                                        <div class="metadata-row">
+                                            <span class="metadata-item">
+                                                <i class="fas fa-clock"></i>
+                                                <span>20 minutes</span>
+                                            </span>
+                                            <span class="metadata-item">
+                                                <i class="fas fa-signal"></i>
+                                                <span>Intermediate</span>
+                                            </span>
+                                            <span class="metadata-item quality-rating">
+                                                <i class="fas fa-star"></i>
+                                                <span>4.6</span>
+                                            </span>
+                                        </div>
+                                        <div class="metadata-row">
+                                            <span class="metadata-item source">
+                                                <i class="fas fa-external-link-alt"></i>
+                                                <span>Medium</span>
+                                            </span>
+                                            <span class="metadata-item language">
+                                                <i class="fas fa-globe"></i>
+                                                <span>English</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="learning-styles">
+                                        <span class="learning-style-badge reading">
+                                            <i class="fas fa-book-open"></i> Reading
+                                        </span>
+                                        <span class="learning-style-badge visual">
+                                            <i class="fas fa-eye"></i> Visual
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <div class="resource-card-footer">
+                                    <button class="resource-action-btn primary">
+                                        <i class="fas fa-external-link-alt"></i>
+                                        Access Resource
+                                    </button>
+                                    <button class="resource-action-btn secondary add-to-course" title="Add to Custom Course">
+                                        <i class="fas fa-plus"></i>
+                                        Add to Course
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="individual-resource-card" data-type="interactive">
+                                <div class="resource-card-header">
+                                    <div class="resource-type-badge interactive">
+                                        <i class="fas fa-laptop-code"></i>
+                                        <span>Interactive</span>
+                                    </div>
+                                    <div class="resource-actions">
+                                        <button class="resource-action-btn bookmark" title="Bookmark">
+                                            <i class="far fa-bookmark"></i>
+                                        </button>
+                                        <button class="resource-action-btn share" title="Share">
+                                            <i class="fas fa-share"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="resource-content">
+                                    <h4 class="resource-title">Build Your First ML Model - Interactive Tutorial</h4>
+                                    <p class="resource-description">Hands-on coding experience building a machine learning model with Python and scikit-learn.</p>
+                                    
+                                    <div class="resource-metadata">
+                                        <div class="metadata-row">
+                                            <span class="metadata-item">
+                                                <i class="fas fa-clock"></i>
+                                                <span>90 minutes</span>
+                                            </span>
+                                            <span class="metadata-item">
+                                                <i class="fas fa-signal"></i>
+                                                <span>Intermediate</span>
+                                            </span>
+                                            <span class="metadata-item quality-rating">
+                                                <i class="fas fa-star"></i>
+                                                <span>4.9</span>
+                                            </span>
+                                        </div>
+                                        <div class="metadata-row">
+                                            <span class="metadata-item source">
+                                                <i class="fas fa-external-link-alt"></i>
+                                                <span>Codecademy</span>
+                                            </span>
+                                            <span class="metadata-item language">
+                                                <i class="fas fa-globe"></i>
+                                                <span>English</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="learning-styles">
+                                        <span class="learning-style-badge kinesthetic">
+                                            <i class="fas fa-hands"></i> Hands-on
+                                        </span>
+                                        <span class="learning-style-badge visual">
+                                            <i class="fas fa-eye"></i> Visual
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <div class="resource-card-footer">
+                                    <button class="resource-action-btn primary">
+                                        <i class="fas fa-external-link-alt"></i>
+                                        Access Resource
+                                    </button>
+                                    <button class="resource-action-btn secondary add-to-course" title="Add to Custom Course">
+                                        <i class="fas fa-plus"></i>
+                                        Add to Course
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="resources-pagination">
+                            <button class="pagination-btn" id="loadMoreResources">
+                                <i class="fas fa-plus-circle"></i>
+                                Load More Resources
+                            </button>
+                        </div>
+                        
+                        <div class="selected-resources-summary" id="selectedResourcesSummary" style="display: none;">
+                            <div class="summary-header">
+                                <h4><i class="fas fa-bookmark"></i> Selected Resources (<span id="selectedCount">0</span>)</h4>
+                                <div class="summary-actions">
+                                    <button class="summary-action-btn" id="createCustomCourse">
+                                        <i class="fas fa-graduation-cap"></i>
+                                        Create Custom Course
+                                    </button>
+                                    <button class="summary-action-btn secondary" id="clearSelection">
+                                        <i class="fas fa-times"></i>
+                                        Clear Selection
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="selected-resources-list" id="selectedResourcesList">
+                                <!-- Selected resources will be displayed here -->
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="results-actions">
                         <button class="action-button primary"><i class="fas fa-save"></i> Save Path</button>
                         <button class="action-button secondary"><i class="fas fa-share"></i> Share</button>
@@ -279,6 +562,281 @@
                 </div>
             </div>
         </div>
+
+        <!-- Preferences Modal -->
+        <div id="preferencesModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-header-content">
+                        <div>
+                            <h2><i class="fas fa-cog"></i> Customize Your Learning Path</h2>
+                            <p class="modal-subtitle">Tailor your learning experience with AI-powered personalization</p>
+                        </div>
+                        <button class="close-modal" id="closePreferencesModal">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <form class="preferences-form" id="preferencesForm">
+                        <!-- Quick Learning Preferences -->
+                        <div class="preference-section">
+                            <h3><i class="fas fa-rocket"></i> Quick Preferences</h3>
+                            <div class="quick-preferences">
+                                <label class="preference-toggle">
+                                    <input type="checkbox" id="visualLearner" checked>
+                                    <span class="toggle-slider"></span>
+                                    <div class="toggle-label">
+                                        <i class="fas fa-eye"></i>
+                                        Visual Learner
+                                    </div>
+                                </label>
+                                <label class="preference-toggle">
+                                    <input type="checkbox" id="practicalFocus">
+                                    <span class="toggle-slider"></span>
+                                    <div class="toggle-label">
+                                        <i class="fas fa-tools"></i>
+                                        Practical Focus
+                                    </div>
+                                </label>
+                                <label class="preference-toggle">
+                                    <input type="checkbox" id="includeExercises" checked>
+                                    <span class="toggle-slider"></span>
+                                    <div class="toggle-label">
+                                        <i class="fas fa-dumbbell"></i>
+                                        Include Exercises
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Learning Parameters -->
+                        <div class="preference-section">
+                            <h3><i class="fas fa-sliders-h"></i> Learning Parameters</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="difficultySelect">
+                                        <i class="fas fa-chart-line"></i> Difficulty Level
+                                    </label>
+                                    <select id="difficultySelect" class="enhanced-select">
+                                        <option value="beginner">🌱 Beginner - I'm just starting out</option>
+                                        <option value="intermediate" selected>🚀 Intermediate - I have some experience</option>
+                                        <option value="advanced">⚡ Advanced - I want expert-level content</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="timeCommitmentSelect">
+                                        <i class="fas fa-clock"></i> Time Commitment
+                                    </label>
+                                    <select id="timeCommitmentSelect" class="enhanced-select">
+                                        <option value="5-10 hours">⚡ Quick - 5-10 hours</option>
+                                        <option value="10-20 hours" selected>🎯 Standard - 10-20 hours</option>
+                                        <option value="20-40 hours">📚 Comprehensive - 20-40 hours</option>
+                                        <option value="40+ hours">🏆 Master - 40+ hours</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Content Formats -->
+                        <div class="preference-section">
+                            <h3><i class="fas fa-layer-group"></i> Preferred Content Formats</h3>
+                            <div class="content-format-grid">
+                                <label class="format-card">
+                                    <input type="checkbox" value="video" checked>
+                                    <div class="format-content">
+                                        <i class="fas fa-video"></i>
+                                        <span>Videos</span>
+                                        <small>Interactive video tutorials</small>
+                                    </div>
+                                </label>
+                                <label class="format-card">
+                                    <input type="checkbox" value="article" checked>
+                                    <div class="format-content">
+                                        <i class="fas fa-newspaper"></i>
+                                        <span>Articles</span>
+                                        <small>Written guides and blogs</small>
+                                    </div>
+                                </label>
+                                <label class="format-card">
+                                    <input type="checkbox" value="interactive" checked>
+                                    <div class="format-content">
+                                        <i class="fas fa-laptop-code"></i>
+                                        <span>Interactive</span>
+                                        <small>Hands-on coding exercises</small>
+                                    </div>
+                                </label>
+                                <label class="format-card">
+                                    <input type="checkbox" value="course" checked>
+                                    <div class="format-content">
+                                        <i class="fas fa-graduation-cap"></i>
+                                        <span>Courses</span>
+                                        <small>Structured online courses</small>
+                                    </div>
+                                </label>
+                                <label class="format-card">
+                                    <input type="checkbox" value="documentation">
+                                    <div class="format-content">
+                                        <i class="fas fa-book"></i>
+                                        <span>Documentation</span>
+                                        <small>Official docs and references</small>
+                                    </div>
+                                </label>
+                                <label class="format-card">
+                                    <input type="checkbox" value="academic">
+                                    <div class="format-content">
+                                        <i class="fas fa-university"></i>
+                                        <span>Academic</span>
+                                        <small>Research papers and studies</small>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- Learning Styles -->
+                        <div class="preference-section">
+                            <h3><i class="fas fa-brain"></i> Learning Styles</h3>
+                            <div class="learning-style-grid">
+                                <label class="style-card">
+                                    <input type="checkbox" value="visual" checked>
+                                    <div class="style-content">
+                                        <i class="fas fa-eye"></i>
+                                        <span>Visual</span>
+                                        <small>Charts, diagrams, images</small>
+                                    </div>
+                                </label>
+                                <label class="style-card">
+                                    <input type="checkbox" value="auditory">
+                                    <div class="style-content">
+                                        <i class="fas fa-headphones"></i>
+                                        <span>Auditory</span>
+                                        <small>Podcasts, lectures, audio</small>
+                                    </div>
+                                </label>
+                                <label class="style-card">
+                                    <input type="checkbox" value="reading">
+                                    <div class="style-content">
+                                        <i class="fas fa-book-open"></i>
+                                        <span>Reading</span>
+                                        <small>Text-based learning</small>
+                                    </div>
+                                </label>
+                                <label class="style-card">
+                                    <input type="checkbox" value="kinesthetic">
+                                    <div class="style-content">
+                                        <i class="fas fa-hands"></i>
+                                        <span>Hands-on</span>
+                                        <small>Practice and experimentation</small>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-buttons">
+                            <button type="button" class="form-button secondary" id="resetPreferences">
+                                <i class="fas fa-undo"></i> Reset to Defaults
+                            </button>
+                            <button type="button" class="form-button primary" id="savePreferences">
+                                <i class="fas fa-save"></i> Apply Preferences
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Tools Section -->
+        <section class="learning-paths" data-aos="fade-up">
+            <h2>AI-Powered Learning Tools</h2>
+            <p>Enhance your learning experience with our cutting-edge AI tools</p>
+            
+            <div class="learning-paths-grid" data-aos="fade-up" data-aos-delay="50">
+                <div class="learning-path-card">
+                    <div class="path-content">
+                        <i class="fas fa-robot"></i>
+                        <h3>Gemini AI Assistant</h3>
+                        <p>Get personalized tutoring and instant answers to your questions using advanced AI</p>
+                        <ul class="path-features">
+                            <li>24/7 Learning Support</li>
+                            <li>Detailed Explanations</li>
+                            <li>Multi-subject Expertise</li>
+                        </ul>
+                        <button type="button" class="cta-button" onclick="window.location.href='AetherLearn/html/ai-assistant.html'">Start Learning</button>
+                    </div>
+                </div>
+
+                <div class="learning-path-card">
+                    <div class="path-content">
+                        <i class="fas fa-route"></i>
+                        <h3>Learning Path Generator</h3>
+                        <p>Create customized learning paths tailored to your goals and current skill level</p>
+                        <ul class="path-features">
+                            <li>Personalized Curriculum</li>
+                            <li>Progress Tracking</li>
+                            <li>Adaptive Learning</li>
+                        </ul>
+                        <button type="button" class="cta-button" onclick="window.location.href = window.location.href.split('#')[0];">Generate Path</button>
+                    </div>
+                </div>
+
+                <div class="learning-path-card">
+                    <div class="path-content">
+                        <i class="fas fa-user-graduate"></i>
+                        <h3>AI Project Mentor</h3>
+                        <p>Get guided assistance for your coding projects and real-time problem-solving</p>
+                        <ul class="path-features">
+                            <li>Code Analysis</li>
+                            <li>Debug Support</li>
+                            <li>Best Practices Guide</li>
+                        </ul>
+                        <button type="button" class="cta-button" onclick="showComingSoonToast(event)">Start Project</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature Highlights Section -->
+        <section class="features" data-aos="fade-up">
+            <h2>Features That Empower Your Learning</h2>
+            <p>Experience the future of education with our AI-powered tools</p>
+
+            <div class="feature-grid" data-aos="fade-up" data-aos-delay="50">
+                <div class="feature-card">
+                    <i class="fas fa-robot"></i>
+                    <h3>AI Learning Assistant</h3>
+                    <p>Get instant help, explanations, and guidance 24/7 from our advanced AI tutor</p>
+                </div>
+
+                <div class="feature-card">
+                    <i class="fas fa-users"></i>
+                    <h3>Community Features</h3>
+                    <p>Learn together with peers, share resources, and grow with community support</p>
+                </div>
+
+                <div class="feature-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Progress Tracking</h3>
+                    <p>Visualize your learning journey with interactive progress dashboards</p>
+                </div>
+
+                <div class="feature-card">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h3>Personalized Learning</h3>
+                    <p>Get custom learning paths tailored to your goals and learning style</p>
+                </div>
+            </div>
+
+            <!-- Call to Action merged into Features Section -->
+            <div class="cta-content" data-aos="fade-up" data-aos-delay="100" style="margin-top: 60px; text-align: center;">
+                <h2>Ready to Transform Your Future?</h2>
+                <p>Join thousands of learners and start your personalized learning journey today</p>
+                <div class="cta-buttons">
+                    <a href="AetherLearn/html/login.html" class="cta-button">Get Started Free</a>
+                    <a href="AetherLearn/html/courses.html" class="cta-button secondary">Explore Courses</a>
+                </div>
+            </div>
+        </section>
 
         <!-- Learning Paths Section -->
         <section class="learning-paths" data-aos="fade-up">
@@ -296,7 +854,7 @@
                             <li>Industry-standard tools</li>
                             <li>Expert-curated content</li>
                         </ul>
-                        <a href="AetherLearn/html/courses.html?category=technology" class="cta-button">Explore Technology</a>
+                        <button type="button" class="cta-button" onclick="showComingSoonToast(event)">Explore Technology</button>
                     </div>
                 </div>
 
@@ -310,7 +868,7 @@
                             <li>Professional tools</li>
                             <li>Portfolio building</li>
                         </ul>
-                        <a href="AetherLearn/html/courses.html?category=digital-arts" class="cta-button">Explore Digital Arts</a>
+                        <button type="button" class="cta-button" onclick="showComingSoonToast(event)">Explore Digital Arts</button>
                     </div>
                 </div>
 
@@ -324,91 +882,8 @@
                             <li>Popular game engines</li>
                             <li>Interactive projects</li>
                         </ul>
-                        <a href="AetherLearn/html/courses.html?category=game-design" class="cta-button">Explore Game Design</a>
+                        <button type="button" class="cta-button" onclick="showComingSoonToast(event)">Explore Game Design</button>
                     </div>
-                </div>
-            </div>
-
-        <!-- AI Tools Section -->
-        <section class="learning-paths" data-aos="fade-up">
-            <h2>AI-Powered Learning Tools</h2>
-            <p>Enhance your learning experience with our cutting-edge AI tools</p>
-            
-            <div class="learning-paths-grid" data-aos="fade-up" data-aos-delay="50">
-                <div class="learning-path-card">
-                    <div class="path-content">
-                        <i class="fas fa-brain"></i>
-                        <h3>Gemini AI Tutor</h3>
-                        <p>Get personalized tutoring and instant answers to your questions using advanced AI</p>
-                        <ul class="path-features">
-                            <li>24/7 Learning Support</li>
-                            <li>Detailed Explanations</li>
-                            <li>Multi-subject Expertise</li>
-                        </ul>
-                        <a href="AetherLearn/html/ai-assistant.html" class="cta-button">Start Learning</a>
-                    </div>
-                </div>
-
-                <div class="learning-path-card">
-                    <div class="path-content">
-                        <i class="fas fa-graduation-cap"></i>
-                        <h3>Study Path Generator</h3>
-                        <p>Create customized learning paths tailored to your goals and current skill level</p>
-                        <ul class="path-features">
-                            <li>Personalized Curriculum</li>
-                            <li>Progress Tracking</li>
-                            <li>Adaptive Learning</li>
-                        </ul>
-                        <a href="AetherLearn/html/courses.html" class="cta-button">Generate Path</a>
-                    </div>
-                </div>
-
-                <div class="learning-path-card">
-                    <div class="path-content">
-                        <i class="fas fa-robot"></i>
-                        <h3>AI Project Assistant</h3>
-                        <p>Get guided assistance for your coding projects and real-time problem-solving</p>
-                        <ul class="path-features">
-                            <li>Code Analysis</li>
-                            <li>Debug Support</li>
-                            <li>Best Practices Guide</li>
-                        </ul>
-                        <a href="AetherLearn/html/ai-assistant.html?mode=project" class="cta-button">Start Project</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        </section>
-
-        <!-- Feature Highlights Section -->
-        <section class="features" data-aos="fade-up">
-            <h2>Features That Empower Your Learning</h2>
-            <p>Experience the future of education with our AI-powered tools</p>
-
-            <div class="feature-grid" data-aos="fade-up" data-aos-delay="50">
-                <div class="feature-card">
-                    <i class="fas fa-robot"></i>
-                    <h3>AI Learning Assistant</h3>
-                    <p>Get instant help, explanations, and guidance 24/7 from our advanced AI tutor</p>
-                </div>
-
-                <div class="feature-card">
-                    <i class="fas fa-users"></i>
-                    <h3>Collaborative Community</h3>
-                    <p>Learn together with peers, share resources, and grow with community support</p>
-                </div>
-
-                <div class="feature-card">
-                    <i class="fas fa-chart-line"></i>
-                    <h3>Progress Tracking</h3>
-                    <p>Visualize your learning journey with interactive progress dashboards</p>
-                </div>
-
-                <div class="feature-card">
-                    <i class="fas fa-graduation-cap"></i>
-                    <h3>Personalized Learning</h3>
-                    <p>Get custom learning paths tailored to your goals and learning style</p>
                 </div>
             </div>
         </section>
@@ -466,7 +941,7 @@
                             </div>
                             <span class="students"><i class="fas fa-user-graduate"></i> 15k students</span>
                         </div>
-                        <a href="AetherLearn/html/course-details.html?id=web-dev-101" class="cta-button">View Course</a>
+                        <button type="button" class="cta-button" onclick="showComingSoonToast(event)">View Course</button>
                     </div>
                 </div>
 
@@ -488,7 +963,7 @@
                             </div>
                             <span class="students"><i class="fas fa-user-graduate"></i> 12k students</span>
                         </div>
-                        <a href="AetherLearn/html/course-details.html?id=uiux-101" class="cta-button">View Course</a>
+                        <button type="button" class="cta-button" onclick="showComingSoonToast(event)">View Course</button>
                     </div>
                 </div>
 
@@ -510,13 +985,13 @@
                             </div>
                             <span class="students"><i class="fas fa-user-graduate"></i> 10k students</span>
                         </div>
-                        <a href="AetherLearn/html/course-details.html?id=ml-ai-101" class="cta-button">View Course</a>
+                        <button type="button" class="cta-button" onclick="showComingSoonToast(event)">View Course</button>
                     </div>
                 </div>
             </div>
 
             <div class="view-all-courses">
-                <a href="AetherLearn/html/courses.html" class="cta-button secondary">View All Courses</a>
+                <button type="button" class="cta-button secondary" onclick="window.location.href='AetherLearn/html/courses.html'">View All Courses</button>
             </div>
         </section>
 
@@ -628,17 +1103,6 @@
             </div>
         </section>
 
-        <!-- Call to Action Section -->
-        <section class="cta">
-            <div class="cta-content">
-                <h2>Ready to Transform Your Future?</h2>
-                <p>Join thousands of learners and start your personalized learning journey today</p>
-                <div class="cta-buttons">
-                    <a href="AetherLearn/html/login.html" class="cta-button">Get Started Free</a>
-                    <a href="AetherLearn/html/courses.html" class="cta-button secondary">Explore Courses</a>
-                </div>
-            </div>
-        </section>
     </main>
 
     <!-- Footer -->
@@ -648,54 +1112,178 @@
                 <h3>AetherLearn</h3>
                 <p>Transforming education through AI-powered personalized learning paths and free resources.</p>
                 <div class="social-icons">
-                    <a href="#" title="GitHub"><i class="fab fa-github"></i></a>
-                    <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
-                    <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                    <a href="#" title="Discord"><i class="fab fa-discord"></i></a>
+                    <a href="https://github.com/LavKumarShakya/Solution-Challenge" title="GitHub" target="_blank"><i class="fab fa-github"></i></a>
+                    <a title="Twitter" onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;"><i class="fab fa-twitter"></i></a>
+                    <a title="LinkedIn" onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;"><i class="fab fa-linkedin"></i></a>
+                    <a title="Discord" onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;"><i class="fab fa-discord"></i></a>
                 </div>
             </div>
 
             <div class="footer-section">
                 <h3>Quick Links</h3>
-                <a href="courses.html">Courses</a>
-                <a href="ai-assistant.html">AI Assistant</a>
-                <a href="community.html">Community</a>
-                <a href="about.html">About Us</a>
+                <a href="AetherLearn/html/courses.html">Courses</a>
+                <a href="AetherLearn/html/ai-assistant.html">AI Assistant</a>
+                <a href="AetherLearn/html/community.html">Community</a>
+                <a href="https://github.com/LavKumarShakya/Solution-Challenge" target="_blank">About Us</a>
             </div>
 
             <div class="footer-section">
                 <h3>Resources</h3>
-                <a href="blog.html">Blog</a>
-                <a href="faq.html">FAQs</a>
-                <a href="support.html">Support</a>
-                <a href="privacy.html">Privacy Policy</a>
+                <a onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;">Blog</a>
+                <a onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;">FAQs</a>
+                <a onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;">Support</a>
+                <a onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;">Privacy Policy</a>
             </div>
 
             <div class="footer-section">
                 <h3>Contact Us</h3>
-                <a href="mailto:support@aetherlearn.com">support@aetherlearn.com</a>
-                <a href="tel:+1234567890">+1 (234) 567-890</a>
+                <a onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;">support@aetherlearn.com</a>
+                <a onclick="showCurrentlyUnavailableToast(event)" style="cursor: pointer;">+1 (234) 567-890</a>
             </div>
         </div>
         <div class="footer-bottom">
             <p>&copy; 2025 AetherLearn. All rights reserved.</p>
         </div>
     </footer>
-
-    <!-- Scripts -->
-    <script src="AetherLearn/js/navbar.js"></script>
+        <!-- Scripts -->
+    <script type="module" src="AetherLearn/js/navbar.js"></script>
+    <script src="AetherLearn/js/utils.js"></script>
+    <script src="AetherLearn/js/toasts.js"></script>
+    <script>
+        // Set API Base URL for backend communication
+        window.API_BASE_URL = 'https://aetherlearn-backend-368355418522.us-central1.run.app/api';
+    </script>
+    <script src="AetherLearn/js/learning_path.js"></script>
+    <script src="AetherLearn/js/learning_path_search.js"></script>
+    <script src="AetherLearn/js/individual_resources.js"></script>
+    <script src="AetherLearn/js/resource_integration.js"></script>
     <script src="AetherLearn/js/script.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init({
-            duration: 600,
-            easing: 'ease-out',
-            once: true,
-            offset: 50,
-            delay: 50,
-            mirror: false,
-            anchorPlacement: 'top-bottom',
-            disable: window.location.pathname.includes('courses.html') // Disable AOS on courses page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize AOS animations
+            AOS.init({
+                duration: 800,
+                easing: 'ease-in-out',
+                once: true
+            });
+            
+            // Modal functionality
+            const preferencesModal = document.getElementById('preferencesModal');
+            const customizationModal = document.getElementById('customizationModal');
+            const modalCloseBtns = document.querySelectorAll('.close-modal');
+            const openPreferencesBtn = document.getElementById('openPreferencesModal');
+            const savePreferencesBtn = document.getElementById('savePreferences');
+            
+            // Open preferences modal
+            if (openPreferencesBtn && preferencesModal) {
+                openPreferencesBtn.addEventListener('click', () => {
+                    preferencesModal.style.display = 'block';
+                });
+            }
+            
+            // Close modals
+            modalCloseBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const modal = e.target.closest('.modal');
+                    if (modal) {
+                        modal.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', (e) => {
+                if (e.target.classList.contains('modal')) {
+                    e.target.style.display = 'none';
+                }
+            });
+            
+            // Save preferences
+            if (savePreferencesBtn) {
+                savePreferencesBtn.addEventListener('click', () => {
+                    // Collect preferences from form and save to localStorage
+                    const formData = new FormData(document.getElementById('preferencesForm'));
+                    const preferences = {};
+                    
+                    // Get select values
+                    preferences.difficulty = document.getElementById('difficultySelect').value;
+                    preferences.time_commitment = document.getElementById('timeCommitmentSelect').value;
+                    
+                    // Get checkbox values
+                    const formatCheckboxes = document.querySelectorAll('#preferencesModal input[type="checkbox"]');
+                    preferences.formats = [];
+                    preferences.learning_styles = [];
+                    
+                    formatCheckboxes.forEach(checkbox => {
+                        if (checkbox.checked) {
+                            if (['video', 'article', 'interactive', 'course', 'documentation', 'academic'].includes(checkbox.value)) {
+                                preferences.formats.push(checkbox.value);
+                            } else if (['visual', 'auditory', 'reading', 'kinesthetic'].includes(checkbox.value)) {
+                                preferences.learning_styles.push(checkbox.value);
+                            }
+                        }
+                    });
+                    
+                    // Save to localStorage
+                    localStorage.setItem('aetherlearn_preferences', JSON.stringify(preferences));
+                    
+                    // Close modal
+                    preferencesModal.style.display = 'none';
+                    
+                    // Show confirmation
+                    const toast = document.createElement('div');
+                    toast.className = 'toast-message';
+                    toast.textContent = 'Preferences saved successfully!';
+                    toast.style.cssText = `
+                        position: fixed;
+                        top: 20px;
+                        right: 20px;
+                        background: var(--accent-primary);
+                        color: white;
+                        padding: 12px 20px;
+                        border-radius: 6px;
+                        z-index: 10000;
+                        animation: slideInRight 0.3s ease;
+                    `;
+                    document.body.appendChild(toast);
+                    
+                    setTimeout(() => {
+                        toast.remove();
+                    }, 3000);
+                });
+            }
+            
+            
+            // Function to scroll to hero section safely
+            window.scrollToHero = function(event) {
+                if (event) {
+                    event.preventDefault();
+                }
+                
+                const heroSection = document.querySelector('.hero');
+                if (heroSection) {
+                    heroSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            };
+            
+            // Quick search options in hero section
+            const searchOptions = document.querySelectorAll('.search-options .option input');
+            searchOptions.forEach(option => {
+                option.addEventListener('change', () => {
+                    // Store preferences in localStorage for use in learning path generation
+                    localStorage.setItem(option.id, option.checked);
+                });
+                
+                // Initialize from localStorage if available
+                const savedValue = localStorage.getItem(option.id);
+                if (savedValue !== null) {
+                    option.checked = savedValue === 'true';
+                }
+            });
         });
     </script>
 </body>
