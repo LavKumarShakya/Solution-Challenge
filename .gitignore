@@ -5,3 +5,4 @@ AetherLearn/backend/.env
 credentials/service-account.json
 .vscode/settings.json
 *.pyc
+*.pyc
