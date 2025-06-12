@@ -418,33 +418,65 @@ window.LearningPathUI = class LearningPathUI {
      * @param {Object} learningPath - The learning path data from backend
      */
     static populateStage3WithData(learningPath) {
-        console.log('📚 Populating Stage 3 with learning path data:', learningPath);
+        console.log('📚 [STAGE3 POPULATION] populateStage3WithData called with learning path:', learningPath);
+        console.log('🔍 [STAGE3 POPULATION] Learning path structure check:');
+        console.log('  - ID:', learningPath.id);
+        console.log('  - Title:', learningPath.title);
+        console.log('  - Query:', learningPath.query);
+        console.log('  - Modules:', learningPath.modules);
+        console.log('  - Module count:', learningPath.modules?.length);
+        console.log('  - Timestamp:', new Date().toISOString());
         
-        // Update query display
-        const resultQueryText = document.getElementById('resultQueryText');
-        if (resultQueryText && learningPath.query) {
-            resultQueryText.textContent = learningPath.query;
+        try {
+            // Update query display
+            const resultQueryText = document.getElementById('resultQueryText');
+            if (resultQueryText && learningPath.query) {
+                resultQueryText.textContent = learningPath.query;
+                console.log('✅ [STAGE3 POPULATION] Updated query text to:', learningPath.query);
+            }
+            
+            // Update result statistics
+            const totalResourcesCount = document.getElementById('totalResourcesCount');
+            const estimatedTime = document.getElementById('estimatedTime');
+            const difficultyLevel = document.getElementById('difficultyLevel');
+            
+            if (totalResourcesCount) {
+                const resourceCount = learningPath.total_resources || learningPath.modules?.length || 0;
+                totalResourcesCount.textContent = resourceCount;
+                console.log('✅ [STAGE3 POPULATION] Updated total resources count to:', resourceCount);
+            }
+            
+            if (estimatedTime) {
+                const timeEstimate = learningPath.estimated_hours || this.calculateTotalTime(learningPath);
+                estimatedTime.textContent = timeEstimate;
+                console.log('✅ [STAGE3 POPULATION] Updated estimated time to:', timeEstimate);
+            }
+            
+            if (difficultyLevel) {
+                const difficulty = learningPath.difficulty || 'Intermediate';
+                difficultyLevel.textContent = difficulty;
+                console.log('✅ [STAGE3 POPULATION] Updated difficulty level to:', difficulty);
+            }
+            
+            // Populate learning modules in the existing overlay structure
+            console.log('🎯 [STAGE3 POPULATION] About to call populateModulesInOverlay...');
+            console.log('🎯 [STAGE3 POPULATION] Current DOM state check:');
+            console.log('  - learningPathResultsStage display:', document.getElementById('learningPathResultsStage')?.style.display);
+            console.log('  - modules-container exists:', !!document.querySelector('.modules-container'));
+            console.log('  - modules-grid exists:', !!document.querySelector('.modules-grid'));
+            
+            const populationResult = this.populateModulesInOverlay(learningPath);
+            
+            if (populationResult) {
+                console.log('✅ [STAGE3 POPULATION] Module population completed successfully');
+            } else {
+                console.error('❌ [STAGE3 POPULATION] Module population failed!');
+            }
+            
+        } catch (error) {
+            console.error('❌ [STAGE3 POPULATION] Error in populateStage3WithData:', error);
+            console.error('❌ [STAGE3 POPULATION] Stack trace:', error.stack);
         }
-        
-        // Update result statistics
-        const totalResourcesCount = document.getElementById('totalResourcesCount');
-        const estimatedTime = document.getElementById('estimatedTime');
-        const difficultyLevel = document.getElementById('difficultyLevel');
-        
-        if (totalResourcesCount) {
-            totalResourcesCount.textContent = learningPath.total_resources || learningPath.modules?.length || 0;
-        }
-        
-        if (estimatedTime) {
-            estimatedTime.textContent = learningPath.estimated_hours || this.calculateTotalTime(learningPath);
-        }
-        
-        if (difficultyLevel) {
-            difficultyLevel.textContent = learningPath.difficulty || 'Intermediate';
-        }
-        
-        // Populate learning modules in the existing overlay structure
-        this.populateModulesInOverlay(learningPath);
     }
 
     /**
@@ -477,17 +509,113 @@ window.LearningPathUI = class LearningPathUI {
      * @param {Object} learningPath - The learning path data
      */
     static populateModulesInOverlay(learningPath) {
-        const modulesContainer = document.querySelector('.modules-container .modules-grid');
-        if (!modulesContainer || !learningPath.modules) return;
+        console.log('🔍 [MODULE POPULATION] populateModulesInOverlay called with:', learningPath);
         
-        // Clear existing modules
-        modulesContainer.innerHTML = '';
-        
-        // Add each module to the overlay
-        learningPath.modules.forEach((module, index) => {
-            const moduleCard = this.createModuleCard(module, index);
-            modulesContainer.appendChild(moduleCard);
-        });
+        // Enhanced defensive checks
+        try {
+            // Wait for DOM to be ready and check multiple selectors
+            const modulesContainer = document.querySelector('.modules-container .modules-grid') ||
+                                   document.querySelector('.modules-grid') ||
+                                   document.getElementById('modulesGrid');
+            
+            console.log('🔍 [MODULE POPULATION] modulesContainer found:', !!modulesContainer);
+            console.log('🔍 [MODULE POPULATION] modulesContainer selector used:', modulesContainer ? modulesContainer.className : 'none');
+            
+            if (!modulesContainer) {
+                console.error('❌ [MODULE POPULATION] CRITICAL: modulesContainer not found!');
+                console.error('❌ [MODULE POPULATION] Available .modules-container elements:', document.querySelectorAll('.modules-container').length);
+                console.error('❌ [MODULE POPULATION] Available .modules-grid elements:', document.querySelectorAll('.modules-grid').length);
+                
+                // Try to find the container and log its structure
+                const containers = document.querySelectorAll('.modules-container');
+                containers.forEach((container, index) => {
+                    console.log(`🔍 [MODULE POPULATION] Container ${index}:`, container.innerHTML.substring(0, 200));
+                });
+                return false;
+            }
+            
+            // Validate learning path data with detailed logging
+            if (!learningPath) {
+                console.error('❌ [MODULE POPULATION] learningPath is null/undefined!');
+                return false;
+            }
+            
+            if (!learningPath.modules) {
+                console.error('❌ [MODULE POPULATION] learningPath.modules is null/undefined!', learningPath);
+                console.error('❌ [MODULE POPULATION] Available learningPath keys:', Object.keys(learningPath));
+                return false;
+            }
+            
+            if (!Array.isArray(learningPath.modules)) {
+                console.error('❌ [MODULE POPULATION] learningPath.modules is not an array!', typeof learningPath.modules);
+                return false;
+            }
+            
+            if (learningPath.modules.length === 0) {
+                console.warn('⚠️ [MODULE POPULATION] learningPath.modules is empty array!');
+                // Show empty state message
+                modulesContainer.innerHTML = `
+                    <div class="empty-modules-message">
+                        <i class="fas fa-info-circle"></i>
+                        <p>No learning modules found. The AI is still processing your request.</p>
+                    </div>
+                `;
+                return false;
+            }
+            
+            console.log(`📦 [MODULE POPULATION] Processing ${learningPath.modules.length} modules`);
+            
+            // Clear existing modules with error handling
+            try {
+                modulesContainer.innerHTML = '';
+                console.log('🔄 [MODULE POPULATION] Successfully cleared existing modules');
+            } catch (clearError) {
+                console.error('❌ [MODULE POPULATION] Error clearing modules:', clearError);
+                return false;
+            }
+            
+            // Add each module with individual error handling
+            let successCount = 0;
+            learningPath.modules.forEach((module, index) => {
+                try {
+                    console.log(`📦 [MODULE POPULATION] Creating module card ${index + 1}:`, module.title || 'Untitled');
+                    
+                    if (!module.title) {
+                        console.warn(`⚠️ [MODULE POPULATION] Module ${index + 1} missing title, using default`);
+                        module.title = `Learning Module ${index + 1}`;
+                    }
+                    
+                    const moduleCard = this.createModuleCard(module, index);
+                    if (moduleCard) {
+                        modulesContainer.appendChild(moduleCard);
+                        successCount++;
+                        console.log(`✅ [MODULE POPULATION] Module ${index + 1} added successfully`);
+                    } else {
+                        console.error(`❌ [MODULE POPULATION] Failed to create module card ${index + 1}`);
+                    }
+                } catch (moduleError) {
+                    console.error(`❌ [MODULE POPULATION] Error creating module ${index + 1}:`, moduleError);
+                }
+            });
+            
+            console.log(`✅ [MODULE POPULATION] Module population completed: ${successCount}/${learningPath.modules.length} modules added`);
+            
+            // Verify the modules were actually added to the DOM
+            const addedModules = modulesContainer.querySelectorAll('.course-module-card, .module-card');
+            console.log(`🔍 [MODULE POPULATION] DOM verification: ${addedModules.length} module elements found in container`);
+            
+            if (addedModules.length === 0) {
+                console.error('❌ [MODULE POPULATION] CRITICAL: No module elements found in DOM after population!');
+                return false;
+            }
+            
+            return true;
+            
+        } catch (error) {
+            console.error('❌ [MODULE POPULATION] CRITICAL ERROR in populateModulesInOverlay:', error);
+            console.error('❌ [MODULE POPULATION] Stack trace:', error.stack);
+            return false;
+        }
     }
 
     /**
@@ -1019,26 +1147,39 @@ window.LearningPathUI = class LearningPathUI {
      * @param {string} learningPathId - The learning path ID
      */    static async showLearningPathResults(learningPathId) {
         try {
+            console.log('🚀 [DEBUG] showLearningPathResults called with ID:', learningPathId);
+            
             // Single Result Display Logic (Step 3 from plan)
             const resultsStage = document.getElementById('learningPathResultsStage');
+            console.log('🔍 [DEBUG] resultsStage element found:', !!resultsStage);
+            console.log('🔍 [DEBUG] resultsStage already populated?', resultsStage?.dataset.populated);
+            
             if (resultsStage.dataset.populated === 'true') {
-                console.log('Learning path results already displayed, preventing duplicate');
+                console.log('⚠️ [DEBUG] Learning path results already displayed, preventing duplicate');
                 return;
             }
             
             // Get the learning path data
+            console.log('📡 [DEBUG] Fetching learning path data from API...');
             const learningPath = await LearningPathAPI.getLearningPath(learningPathId);
+            console.log('📡 [DEBUG] API response received:', learningPath);
+            console.log('📡 [DEBUG] API response type:', typeof learningPath);
+            console.log('📡 [DEBUG] API response keys:', Object.keys(learningPath || {}));
             
             // Transition to Stage 3: Results
+            console.log('🔄 [DEBUG] Transitioning to Stage 3...');
             this.transitionToStage3();
             
             // Mark as populated to prevent duplicates
             resultsStage.dataset.populated = 'true';
+            console.log('✅ [DEBUG] Marked results stage as populated');
             
             // Populate the existing Stage 3 overlay components with real data
+            console.log('🎯 [DEBUG] About to populate Stage 3 with data...');
             this.populateStage3WithData(learningPath);
         } catch (error) {
-            console.error('Error showing learning path results:', error);
+            console.error('❌ [DEBUG] Error in showLearningPathResults:', error);
+            console.error('❌ [DEBUG] Error stack:', error.stack);
             this.showErrorMessage('Failed to load learning path results. Please try again.');
         }
     }

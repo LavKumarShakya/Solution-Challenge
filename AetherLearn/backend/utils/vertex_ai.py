@@ -8,9 +8,8 @@ import logging
 import re
 from urllib.parse import urlparse
 
-# Google Cloud imports - Gemini only (removed Discovery Engine)
-import vertexai
-from vertexai.generative_models import GenerativeModel, GenerationConfig
+# Direct Gemini API imports (more reliable than Vertex AI)
+import google.generativeai as genai
 
 load_dotenv()
 
@@ -24,10 +23,9 @@ class VertexAIClient:
     Uses Google Custom Search results to create intelligent course structures.
     """
     def __init__(self):
-        # Initialize GCP AI Platform
-        self.project_id = os.getenv("VERTEX_AI_PROJECT_ID")
-        self.location = os.getenv("VERTEX_AI_LOCATION", "global")
-        self.model_id = os.getenv("VERTEX_AI_MODEL", "gemini-2.0-flash-001")
+        # Initialize Direct Gemini API (more reliable than Vertex AI)
+        self.api_key = os.getenv("GEMINI_API_KEY")
+        self.model_id = os.getenv("GEMINI_MODEL", "gemini-2.0-flash-001")
         
         # Enhanced Content Filtering and Ranking Configuration
         self.content_filters = {
@@ -104,18 +102,18 @@ class VertexAIClient:
         # Set up credentials
         try:
             # Validate required environment variables
-            if not self.project_id:
-                raise ValueError("VERTEX_AI_PROJECT_ID environment variable is required")
+            if not self.api_key:
+                raise ValueError("GEMINI_API_KEY environment variable is required")
             
-            # Initialize Vertex AI
-            vertexai.init(project=self.project_id, location=self.location)
+            # Configure direct Gemini API
+            genai.configure(api_key=self.api_key)
             
             # Initialize the generative model
-            self.model = GenerativeModel(self.model_id)
+            self.model = genai.GenerativeModel(self.model_id)
             
-            logger.info(f"Successfully initialized Vertex AI Gemini with project {self.project_id} and model {self.model_id}")
+            logger.info(f"Successfully initialized Direct Gemini API with model {self.model_id}")
         except Exception as e:
-            logger.error(f"Error initializing Vertex AI Gemini: {e}")
+            logger.error(f"Error initializing Direct Gemini API: {e}")
             raise
             
         # Initialize usage tracking and caching
@@ -174,7 +172,7 @@ class VertexAIClient:
             Return only valid JSON format with filtered educational content.
             """
 
-            response = await self.model.generate_content_async(categorization_prompt)
+            response = self.model.generate_content(categorization_prompt)
             
             try:
                 categorized = json.loads(response.text)
@@ -376,7 +374,7 @@ class VertexAIClient:
             Ensure the course follows a logical learning progression and uses the actual search results provided.
             """
 
-            response = await self.model.generate_content_async(course_prompt)
+            response = self.model.generate_content(course_prompt)
             
             try:
                 course_structure = json.loads(response.text)

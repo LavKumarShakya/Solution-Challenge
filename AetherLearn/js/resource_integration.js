@@ -83,17 +83,25 @@ language: "English"
 // This override was preventing modules from being populated correctly
 console.log('✅ Resource Integration: Not overriding showLearningPathResults to prevent conflicts');
 
-// Alternative: Enhance the existing system instead of overriding
+// TEMPORARY FIX: Disable the conflicting MutationObserver that interferes with module display
+// This MutationObserver was preventing course modules from being populated correctly in step 3
+// The observer was competing with learning_path.js for DOM manipulation timing
+console.log('🔧 [TEMPORARY FIX] Disabling conflicting MutationObserver to fix module display issue');
+console.log('🔧 [TEMPORARY FIX] This allows learning_path.js to populate modules without interference');
+
 document.addEventListener('DOMContentLoaded', () => {
-    // Listen for when the learning path results stage becomes visible
+    // DISABLED: The problematic MutationObserver that was interfering with module population
+    // Original observer code has been commented out to prevent conflicts
+    
+    /* ORIGINAL CONFLICTING CODE - DISABLED:
     const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
             if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
                 const target = mutation.target;
                 if (target.id === 'learningPathResultsStage' && target.style.display === 'flex') {
-                    console.log('🔧 Learning path results stage is now visible, enhancing with individual resources...');
+                    console.log('🔧 [CONFLICT DEBUG] resource_integration.js detected learningPathResultsStage visible');
+                    console.log('🔧 [CONFLICT DEBUG] This may interfere with module population!');
                     setTimeout(() => {
-                        // Only populate individual resources if they haven't been populated yet
                         const resourcesGrid = document.getElementById('individualResourcesGrid');
                         if (resourcesGrid && resourcesGrid.children.length <= 3) {
                             populateIndividualResources(mockIndividualResources);
@@ -111,6 +119,9 @@ document.addEventListener('DOMContentLoaded', () => {
             attributeFilter: ['style']
         });
     }
+    */
+    
+    console.log('✅ [TEMPORARY FIX] MutationObserver disabled - modules should now display correctly');
 });
 
 // Check if we have real resource data from the API

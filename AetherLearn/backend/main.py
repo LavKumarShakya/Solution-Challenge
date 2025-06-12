@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings
 from typing import List, Optional
@@ -38,20 +39,40 @@ class SearchResponse(BaseModel):
     resources: List[SearchResource]
     searchInformation: Optional[dict] = None
 
+# Create FastAPI app with production settings
 app = FastAPI(
     title="AetherLearn API - Google Custom Search + Vertex AI Integration",
     description="API for AetherLearn AI-Powered Learning Platform with Google Custom Search and Vertex AI Gemini",
     version="3.0.0",
+    docs_url="/docs" if os.getenv("ENVIRONMENT") != "production" else None,
+    redoc_url="/redoc" if os.getenv("ENVIRONMENT") != "production" else None,
 )
 
-# Configure CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins
-    allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods
-    allow_headers=["*"],  # Allows all headers
-)
+# Configure CORS for production
+allowed_origins = os.getenv("CORS_ORIGINS", "*").split(",")
+if os.getenv("ENVIRONMENT") == "production":
+    # Strict CORS for production
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=allowed_origins,
+        allow_credentials=True,
+        allow_methods=["GET", "POST", "PUT", "DELETE"],
+        allow_headers=["*"],
+    )
+    # Trusted host middleware for production
+    app.add_middleware(
+        TrustedHostMiddleware,
+        allowed_hosts=["*.run.app", "*.googleapis.com", "localhost"]
+    )
+else:
+    # Permissive CORS for development
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
 # Include routers
 app.include_router(auth.router, tags=["Authentication"], prefix="/api/auth")
@@ -133,7 +154,19 @@ async def read_root():
     return {
         "message": "Welcome to AetherLearn API!",
         "version": "3.0.0",
-        "features": ["Google Custom Search API", "Vertex AI Gemini", "Learning Path Generation"]
+        "features": ["Google Custom Search API", "Vertex AI Gemini", "Learning Path Generation"],
+        "environment": os.getenv("ENVIRONMENT", "development"),
+        "status": "healthy"
+    }
+
+@app.get("/health", tags=["Health"])
+async def health_check():
+    """Health check endpoint for monitoring and load balancers"""
+    return {
+        "status": "healthy",
+        "environment": os.getenv("ENVIRONMENT", "development"),
+        "version": "3.0.0",
+        "timestamp": "2025-01-06T00:07:02Z"
     }
 
 if __name__ == "__main__":
