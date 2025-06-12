@@ -51,18 +51,29 @@ app = FastAPI(
 # Configure CORS for production
 allowed_origins = os.getenv("CORS_ORIGINS", "*").split(",")
 if os.getenv("ENVIRONMENT") == "production":
-    # Strict CORS for production
+    # More permissive CORS for production to allow GitHub Pages
+    production_origins = [
+        "https://aethernoxm.github.io",
+        "https://aetherlearn-backend-368355418522.us-central1.run.app",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:5500",
+        "http://127.0.0.1:5500"
+    ]
+    if allowed_origins != ["*"]:
+        production_origins.extend(allowed_origins)
+    
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=allowed_origins,
+        allow_origins=production_origins + ["*"],  # Allow all origins for now
         allow_credentials=True,
-        allow_methods=["GET", "POST", "PUT", "DELETE"],
+        allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         allow_headers=["*"],
     )
     # Trusted host middleware for production
     app.add_middleware(
         TrustedHostMiddleware,
-        allowed_hosts=["*.run.app", "*.googleapis.com", "localhost"]
+        allowed_hosts=["*.run.app", "*.googleapis.com", "*.github.io", "localhost", "127.0.0.1"]
     )
 else:
     # Permissive CORS for development

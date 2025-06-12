@@ -5,7 +5,7 @@
  */
 
 // API URL Configuration (only declare if not already defined)
-window.API_BASE_URL = window.API_BASE_URL || 'http://localhost:8000/api';
+window.API_BASE_URL = window.API_BASE_URL || 'https://aetherlearn-backend-368355418522.us-central1.run.app/api';
 
 // Learning Path API Functions
 window.LearningPathAPI = class LearningPathAPI {

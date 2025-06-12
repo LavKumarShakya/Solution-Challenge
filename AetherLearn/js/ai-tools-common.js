@@ -7,7 +7,14 @@ class AIToolsAPI {
     constructor() {
         // Check if we're in development (Live Server) or production
         const isDevelopment = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
-        this.baseURL = isDevelopment ? 'http://localhost:8000/api/tools' : '/api/tools';
+        this.baseURL = isDevelopment ? 'http://localhost:8000/api/tools' : 'https://aetherlearn-backend-368355418522.us-central1.run.app/api/tools';
+        
+        // Debug logging to see which URL is being used
+        console.log('🌐 Environment Detection:', {
+            hostname: window.location.hostname,
+            isDevelopment: isDevelopment,
+            baseURL: this.baseURL
+        });
         this.authToken = this.getAuthToken();
     }
 
@@ -40,16 +47,35 @@ class AIToolsAPI {
         };
 
         try {
+            console.log('🚀 Making API request:', {
+                url: url,
+                method: requestOptions.method || 'GET',
+                headers: requestOptions.headers
+            });
+            
             const response = await fetch(url, requestOptions);
+            
+            console.log('📡 API Response:', {
+                status: response.status,
+                statusText: response.statusText,
+                url: response.url
+            });
             
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
+                console.error('❌ API Error Response:', errorData);
                 throw new Error(errorData.detail || `HTTP ${response.status}: ${response.statusText}`);
             }
 
-            return await response.json();
+            const data = await response.json();
+            console.log('✅ API Success Response:', data);
+            return data;
         } catch (error) {
-            console.error('API Request failed:', error);
+            console.error('💥 API Request failed:', {
+                error: error.message,
+                url: url,
+                requestOptions: requestOptions
+            });
             throw error;
         }
     }

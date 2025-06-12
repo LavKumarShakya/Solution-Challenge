@@ -1,7 +1,7 @@
 // Configuration
 const CONFIG = {
     GEMINI_API_KEY: 'AIzaSyCTXQs7wWnAsekXkYban3EJvuBPwm0qDRM',
-    API_BASE_URL: 'http://localhost:8000/api'
+    API_BASE_URL: 'https://aetherlearn-backend-368355418522.us-central1.run.app/api'
 };
 
 // Learning path functions will be available from learning_path.js script

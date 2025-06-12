@@ -2,7 +2,6 @@ import asyncio
 from datetime import datetime
 import os
 import logging
-import httpx
 from app.database import db
 from models.learning_path import SearchStatusUpdate
 from utils.vertex_ai import VertexAIClient
@@ -24,23 +23,40 @@ class SearchManager:
         self.search_cache = {}
 
     async def _call_google_search(self, query: str, num_results: int = 10):
-        """Call Google Custom Search API to get web search results"""
+        """Call Google Custom Search API directly to get web search results"""
         try:
-            # Use the same endpoint we created in main.py but call it internally
-            async with httpx.AsyncClient() as client:
-                response = await client.post(
-                    "http://localhost:8000/api/v1/search-resources",
-                    json={"query": query},
-                    timeout=30.0
-                )
-                
-                if response.status_code == 200:
-                    search_data = response.json()
-                    return search_data.get("resources", [])
-                else:
-                    logger.error(f"Google Search API error: {response.status_code}")
-                    return []
+            from googleapiclient.discovery import build
+            from googleapiclient.errors import HttpError
+            
+            # Build the service object for the Custom Search API
+            service = build("customsearch", "v1", developerKey=self.search_api_key)
+            
+            # Execute the search query (Google Custom Search API has a maximum of 10 results per request)
+            num_results = min(num_results, 10)
+            
+            result = service.cse().list(
+                q=query,
+                cx=self.search_engine_id,
+                num=num_results
+            ).execute()
+            
+            # Parse and format the results
+            items = result.get('items', [])
+            formatted_resources = []
+            
+            for item in items:
+                formatted_resources.append({
+                    'title': item.get('title', ''),
+                    'link': item.get('link', ''),
+                    'snippet': item.get('snippet', ''),
+                    'displayLink': item.get('displayLink', '')
+                })
+            
+            return formatted_resources
                     
+        except HttpError as e:
+            logger.error(f"Google Custom Search API HttpError: {e}")
+            return []
         except Exception as e:
             logger.error(f"Error calling Google Custom Search API: {e}")
             # Return empty list if search fails
