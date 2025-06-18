@@ -285,7 +285,7 @@ Our comprehensive future plan includes:
   
 [![GitHub](https://img.shields.io/badge/GitHub_Repo-View_Code-2ea44f?style=for-the-badge&logo=github)](https://github.com/LavKumarShakya/Solution-Challenge)
 [![Demo](https://img.shields.io/badge/Live_Demo-Try_It_Now-8A2BE2?style=for-the-badge&logo=google-chrome)](https://aetherlearn.tech)
-[![YouTube](https://img.shields.io/badge/Demo_Video-Watch_Now-FF0000?style=for-the-badge&logo=youtube)](https://youtu.be/kfSTDrEY-eQ)
+[![YouTube](https://img.shields.io/badge/Demo_Video-Watch_Now-FF0000?style=for-the-badge&logo=youtube)](https://youtu.be/CiHducgybJA?si=hUkKmwVEH8JDT6vk)
   
 </div>
 
